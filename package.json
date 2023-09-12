@@ -1,0 +1,11 @@
+{
+  "name": "budgetapp",
+  "version": "1.0.0",
+  "description": "Budget App Portfolio Build",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "pedroavpereira",
+  "license": "ISC"
+}
