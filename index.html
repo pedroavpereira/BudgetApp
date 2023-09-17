@@ -16,48 +16,117 @@
     <!-- <link rel="stylesheet" href="./style.css" /> -->
   </head>
 
-  <body style="width: 80%; margin: auto">
+  <body>
     <header>
       <h1 class="h1 text-center">Irrelevant</h1>
     </header>
 
     <main>
-      <div class="container-fluid">
-        <div class="row justify-content-end">
-          <div class="col-4 g-2">
-            <button type="button" class="btn btn-sm btn-light">
+      <div class="container-lg">
+        <div class="row justify-content-start g-0">
+          <div class="col col-lg-8">
+            <button class="btn btn-sm btn-outline-secondary">
               Add movement
             </button>
           </div>
-
-          <div class="col-2 col-sm-auto g-2">
-            <button type="button" class="btn btn-sm btn-light">Filter</button>
+          <div class="col col-lg-1">
+            <div class="btn-group" role="group" aria-label="Sort and Filter">
+              <button type="button" class="btn btn-outline-secondary btn-sm">
+                Sort
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm">
+                Filter
+              </button>
+            </div>
           </div>
-          <div class="col-2 col-sm-auto g-2">
-            <button type="button" class="btn btn-sm btn-light">Sort</button>
-          </div>
-          <div class="col-4"></div>
         </div>
       </div>
 
-      <div class="container-fluid border my-2">
+      <div class="container-lg my-3">
         <div class="row">
-          <div class="col-8">
+          <div class="col col-lg-9 border" style="height: 600px">
             <div class="row text-center">
-              <div class="col-12">
-                <div class="row text-body-secondary">
-                  <div class="col-4">10/12/2023</div>
-                  <div class="col-4">Groceries</div>
-                  <div class="col-4">10£</div>
-                </div>
-              </div>
+              <div class="col-4 p-3">Date</div>
+              <div class="col-4 p-3">Category</div>
+              <div class="col-4 p-3">Value</div>
             </div>
           </div>
-          <div class="col-4">
-            <div class="row text-center">
-              <div class="col-12 border">Overview</div>
-              <div class="col-12 border">Accounts</div>
-              <div class="col-12 border">Goals</div>
+          <div class="col col-lg-3">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseOne"
+                    aria-expanded="false"
+                    aria-controls="flush-collapseOne"
+                  >
+                    Overview
+                  </button>
+                </h2>
+                <div
+                  id="flush-collapseOne"
+                  class="accordion-collapse collapse"
+                  data-bs-parent="#accordionFlushExample"
+                >
+                  <div class="accordion-body">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ut
+                    explicabo facilis quis corrupti dolores eveniet eaque.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseTwo"
+                    aria-expanded="false"
+                    aria-controls="flush-collapseTwo"
+                  >
+                    Accounts
+                  </button>
+                </h2>
+                <div
+                  id="flush-collapseTwo"
+                  class="accordion-collapse collapse"
+                  data-bs-parent="#accordionFlushExample"
+                >
+                  <div class="accordion-body">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Cumque reprehenderit sint ipsam autem, atque blanditiis
+                    cupiditate!
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseThree"
+                    aria-expanded="false"
+                    aria-controls="flush-collapseThree"
+                  >
+                    Goals
+                  </button>
+                </h2>
+                <div
+                  id="flush-collapseThree"
+                  class="accordion-collapse collapse"
+                  data-bs-parent="#accordionFlushExample"
+                >
+                  <div class="accordion-body">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                    Deserunt quibusdam ullam reiciendis ex quasi aspernatur
+                    perferendis?
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
