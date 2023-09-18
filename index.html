@@ -12,6 +12,15 @@
       rel="stylesheet"
       href="./node_modules/bootstrap/dist/css/bootstrap.css"
     />
+
+    <style>
+      .movement--row {
+        overflow: visible;
+      }
+      .movement--row:hover {
+        background-color: #eee;
+      }
+    </style>
   </head>
 
   <body>
@@ -51,9 +60,7 @@
             style="height: 600px"
           >
             <div class="row text-center">
-              <div class="col-6 col-md-4 p-3">Date</div>
-              <div class="col-4 p-3 d-none d-md-block">Category</div>
-              <div class="col-6 col-md-4 p-3">Value</div>
+              <div class="col-12 p-3 text-muted">No more transactions</div>
             </div>
           </div>
 
@@ -176,7 +183,7 @@
           <div class="modal-footer">
             <button
               type="button"
-              class="btn btn-danger submitModal d-none btn--deleteTransaction"
+              class="btn btn-danger d-none btn--deleteTransaction"
               data-bs-dismiss="modal"
             >
               Delete

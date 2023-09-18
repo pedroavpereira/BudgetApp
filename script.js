@@ -5,6 +5,7 @@ const modal = document.querySelector("#addTransactionModal");
 const transactionModal = new bootstrap.Modal(modal);
 
 const btnSubmitModal = document.querySelector(".btn--submitModal");
+const btnDeleteTrans = document.querySelector(".btn--deleteTransaction");
 
 let state = { currentAccount: { movements: [] } };
 
@@ -28,20 +29,21 @@ const createTransaction = (amount, category) => {
 const updateTransaction = (mov, amount, category) => {
   mov.amount = amount;
   mov.category = category;
+  return mov;
 };
 
-const renderTransaction = (mov) => {
-  const markup = `<div class="row text-center movement--row" data-index="${state.currentAccount.movements.indexOf(
+const renderTransaction = (mov, selectorDOM = ".movement--container") => {
+  const markup = `<div class="movement--row" data-index="${state.currentAccount.movements.indexOf(
     mov
   )}">
+  <div class="row text-center" >
   <div class="col-6 col-md-4 p-3">${mov.date}</div>
   <div class="col-4 p-3 d-none d-md-block">${mov.category}</div>
   <div class="col-6 col-md-4 p-3">${mov.amount}</div>
+</div>
 </div>`;
 
-  document
-    .querySelector(".movement--container")
-    .insertAdjacentHTML("afterbegin", markup);
+  document.querySelector(selectorDOM).insertAdjacentHTML("afterbegin", markup);
 };
 
 const updateModalInfo = (
@@ -74,7 +76,14 @@ btnSubmitModal.addEventListener("click", function (e) {
     const newTransaction = createTransaction(amount, category);
     renderTransaction(newTransaction);
   } else {
-    updateTransaction(state.currentAccount.movements[index], amount, category);
+    const newTransaction = updateTransaction(
+      state.currentAccount.movements[index],
+      amount,
+      category
+    );
+    document.querySelector(`.movement--row[data-index="${index}"]`).innerHTML =
+      "";
+    renderTransaction(newTransaction, `.movement--row[data-index="${index}"]`);
   }
 
   document.querySelector("#newTransactionAmount").value = "";
@@ -105,6 +114,13 @@ document
     updateModalInfo();
     transactionModal.show();
   });
+
+btnDeleteTrans.addEventListener("click", function () {
+  const index = modal.dataset.index;
+  state.currentAccount.movements.splice(index, 1);
+  document.querySelector(`.movement--row[data-index="${index}"]`).remove();
+  saveLocalStorage();
+});
 
 (function () {
   if (localStorage.getItem("state")) {
