@@ -16,7 +16,7 @@
 
   <body>
     <header>
-      <h1 class="h1 text-center text-uppercase">Irrelevant text</h1>
+      <h1 class="h1 text-center text-uppercase">Relevant text</h1>
     </header>
 
     <main>
@@ -25,11 +25,9 @@
         <div class="row justify-content-start g-0">
           <div class="col-10 col-lg-8">
             <button
-              class="btn btn-sm btn-outline-secondary"
-              data-bs-toggle="modal"
-              data-bs-target="#addTransactionModal"
+              class="btn btn-sm btn-outline-secondary btn--addTransaction"
             >
-              Add movement
+              Add transaction
             </button>
           </div>
           <div class="col-2 col-lg-1">
@@ -178,14 +176,14 @@
           <div class="modal-footer">
             <button
               type="button"
-              class="btn btn-secondary"
+              class="btn btn-danger submitModal d-none btn--deleteTransaction"
               data-bs-dismiss="modal"
             >
-              Close
+              Delete
             </button>
             <button
               type="button"
-              class="btn btn-primary submitModal"
+              class="btn btn-primary btn--submitModal"
               data-bs-dismiss="modal"
             >
               Save changes
@@ -195,7 +193,17 @@
       </div>
     </div>
 
-    <script src="./script.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@popperjs/core": "./node_modules/@popperjs/core/dist/esm/popper.js",
+          "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.esm.min.js"
+        }
+      }
+    </script>
+
+    <script src="./script.js" type="module"></script>
   </body>
 </html>
