@@ -7,7 +7,21 @@ const transactionModal = new bootstrap.Modal(modal);
 const btnSubmitModal = document.querySelector(".btn--submitModal");
 const btnDeleteTrans = document.querySelector(".btn--deleteTransaction");
 
-let state = { currentAccount: { movements: [] } };
+let state = {
+  currentAccount: {
+    movements: [],
+    budget: [
+      { name: "Housing", value: 0, native: true },
+      { name: "Transportation", value: 0, native: true },
+      { name: "Groceries", value: 0, native: true },
+      { name: "Food", value: 0, native: true },
+      { name: "Utilities", value: 0, native: true },
+      { name: "Subscriptions", value: 0, native: true },
+      { name: "Savings / Investing", value: 0, native: true },
+      { name: "Misc", value: 0, native: true },
+    ],
+  },
+};
 
 const saveLocalStorage = () => {
   localStorage.setItem("state", JSON.stringify(state));
@@ -47,27 +61,64 @@ const renderTransaction = (mov, selectorDOM = ".movement--container") => {
 };
 
 const updateModalInfo = (
-  header = "Add new transaction",
-  values = ["", ""],
-  type = "new",
-  index = null
+  mov = { category: "Housing", amount: 0, date: "null" }
 ) => {
+  const index =
+    mov.date == "null" ? "null" : state.currentAccount.movements.indexOf(mov);
+
   modal.setAttribute("data-index", index);
-  document.querySelector(".modal-title").textContent = header;
-  document.querySelector("#newTransactionCategory").value = values[0];
-  document.querySelector("#newTransactionAmount").value = values[1];
-  if (type === "new") {
-    document.querySelector(".btn--deleteTransaction").classList.add("d-none");
-  } else {
-    document
-      .querySelector(".btn--deleteTransaction")
-      .classList.remove("d-none");
-  }
+
+  const markup = `<div class="col">
+  <div class="form-check">
+  ${state.currentAccount.budget
+    .map((el) => {
+      return `<div class="form-check">
+      <input
+    class="form-check-input radioTransModal"
+    type="radio"
+    name="radioCategory"
+    id="cat${el.name}"
+    ${mov.category === el.name ? "checked" : ""}
+    data-category="${el.name}"
+  />
+  <label class="form-check-label" for="cat${el.name}">
+  ${el.name}
+  </label>
+  </div>`;
+    })
+    .join(" ")}
+    
+<div class="col my-2">
+  <label for="newTransactionAmount">Amount: </label>
+  <input type="number" id="newTransactionAmount" value="${mov.amount}" />
+</div>
+</div>
+</div>
+  `;
+  document.querySelector(".modalContent").innerHTML = "";
+
+  document
+    .querySelector(".modalContent")
+    .insertAdjacentHTML("afterbegin", markup);
+
+  // document.querySelector(".modal-title").textContent = header;
+  // document.querySelector(`#cat${values[0]}`).checked = true;
+  // document.querySelector("#newTransactionAmount").value = values[1];
+
+  // if (type === "new") {
+  //   document.querySelector(".btn--deleteTransaction").classList.add("d-none");
+  // } else {
+  //   document
+  //     .querySelector(".btn--deleteTransaction")
+  //     .classList.remove("d-none");
+  // }
 };
 
 btnSubmitModal.addEventListener("click", function (e) {
   const amount = document.querySelector("#newTransactionAmount").value;
-  const category = document.querySelector("#newTransactionCategory").value;
+  const category = document.querySelector(".radioTransModal:checked").dataset
+    .category;
+  console.log(category);
 
   if (!amount || !category) return;
 
@@ -87,7 +138,6 @@ btnSubmitModal.addEventListener("click", function (e) {
   }
 
   document.querySelector("#newTransactionAmount").value = "";
-  document.querySelector("#newTransactionCategory").value = "";
 
   saveLocalStorage();
 });
@@ -99,11 +149,7 @@ document
     if (!target) return;
 
     const mov = state.currentAccount.movements[target.dataset.index];
-    updateModalInfo(
-      `Transaction in ${mov.date}`,
-      [mov.category, mov.amount],
-      "edit"
-    );
+    updateModalInfo(mov);
     modal.setAttribute("data-index", target.dataset.index);
     transactionModal.show();
   });

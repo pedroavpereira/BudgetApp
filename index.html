@@ -14,9 +14,6 @@
     />
 
     <style>
-      .movement--row {
-        overflow: visible;
-      }
       .movement--row:hover {
         background-color: #eee;
       }
@@ -169,16 +166,7 @@
             ></button>
           </div>
           <div class="modal-body">
-            <div class="container-fluid">
-              <div class="col">
-                <label for="newTransactionCategory">Category:</label>
-                <input type="text" id="newTransactionCategory" />
-              </div>
-              <div class="col my-2">
-                <label for="newTransactionAmount">Amount: </label>
-                <input type="number" id="newTransactionAmount" />
-              </div>
-            </div>
+            <div class="container-fluid modalContent"></div>
           </div>
           <div class="modal-footer">
             <button
