@@ -1,9 +1,8 @@
 "use strict";
 
-import * as bootstrap from "bootstrap";
+import * as helper from "./../helper.js";
 
 const parentElement = document.querySelector("#addTransactionModal");
-const transactionModal = new bootstrap.Modal(parentElement);
 
 const generateBudgetMarkup = (budgetObj) => {
   return `<div class="col">
@@ -12,7 +11,7 @@ const generateBudgetMarkup = (budgetObj) => {
         return `
     <div class="col my-2">
     <label for="cat${el.name}">${el.name}: </label>
-    <input class="input--budget" data-category=${el.name} type="number" id="cat${el.name}" value="${el.target}" />
+    <input class="input--budget" data-category=${el.name} data-native="${el.native}" data-value="${el.value}" type="number" id="cat${el.name}" value="${el.target}" />
   </div>
     </div>`;
       })
@@ -79,8 +78,57 @@ export const updateModalInfo = (type, budgetObj, mov) => {
   }
 };
 
-parentElement.addEventListener("hidden.bs.modal", function () {
-  if (document.querySelector(".mov--active")) {
-    document.querySelector(".mov--active").classList.remove("mov--active");
-  }
-});
+export const closeModal = () => {
+  helper.transactionModal.hide();
+};
+
+export const openModal = () => {
+  helper.transactionModal.show();
+};
+
+export const deleteBtnEvent = (handler) => {
+  const btnDeleteTrans = document.querySelector(".btn--deleteTransaction");
+
+  btnDeleteTrans.addEventListener("click", function () {
+    const id = document.querySelector(".mov--active").dataset.id;
+    handler(id);
+    helper.transactionModal.hide();
+  });
+};
+
+export const submitBtnEvent = (handler) => {
+  const submitBtnModal = document.querySelector(".btn--submitModal");
+
+  submitBtnModal.addEventListener("click", function () {
+    const type = this.dataset.type;
+    if (type.startsWith("transaction")) {
+      const amount = +document.querySelector("#newTransactionAmount").value;
+      const category = document.querySelector(".radioTransModal:checked")
+        .dataset.category;
+
+      if (!amount || !category) return helper.transactionModal.hide();
+
+      if (type.endsWith("New")) {
+        handler(type, { amount, category });
+      } else {
+        const id = document.querySelector(".mov--active").dataset.id;
+        handler(type, { amount, category, id });
+      }
+    } else if (type === "budget") {
+      const newBudget = [...document.querySelectorAll(".input--budget")].map(
+        (el) => {
+          return {
+            name: el.dataset.category,
+            value: +el.dataset.value,
+            target: Number(el.value),
+            native: Boolean(el.dataset.native),
+          };
+        }
+      );
+      console.log(newBudget);
+      handler(type, newBudget);
+    }
+
+    closeModal();
+  });
+};

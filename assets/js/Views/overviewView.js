@@ -1,4 +1,5 @@
 "use strict";
+import * as helper from "./../helper.js";
 
 const parentElement = document.querySelector(".overview--body");
 
@@ -15,4 +16,13 @@ export const renderBudget = (arr) => {
 
   parentElement.innerHTML = "";
   parentElement.insertAdjacentHTML("beforeend", markup);
+};
+
+export const changeBudgetClicked = (handler) => {
+  const btnBudget = document.querySelector(".btn--budget");
+
+  btnBudget.addEventListener("click", function () {
+    handler();
+    helper.transactionModal.show();
+  });
 };

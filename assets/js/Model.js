@@ -25,11 +25,11 @@ export const createTransaction = (amount, category) => {
     hour: "2-digit",
     minute: "2-digit",
   });
-  const newTransaction = { amount, category, date };
+  const newTransaction = { amount, category, date, id: String(Date.now()) };
   state.currentAccount.budget.find((el) => el.name === category).value +=
     +amount;
   state.currentAccount.movements.push(newTransaction);
-
+  saveLocalStorage();
   return newTransaction;
 };
 
@@ -38,8 +38,13 @@ export const updateTransaction = (mov, amount, category) => {
   updateBudget(newMov, mov);
   mov.category = category;
   mov.amount = amount;
-
+  saveLocalStorage();
   return mov;
+};
+
+export const newBudget = (newBudget) => {
+  state.currentAccount.budget = newBudget;
+  saveLocalStorage();
 };
 
 export const updateBudget = (newMov, oldMov) => {
@@ -50,8 +55,6 @@ export const updateBudget = (newMov, oldMov) => {
     const newCategory = state.currentAccount.budget.find(
       (el) => el.name === newMov.category
     );
-
-    console.log(oldCategory, newCategory);
 
     if (newCategory != oldCategory) {
       oldCategory.value -= +oldMov.amount;
@@ -66,11 +69,25 @@ export const updateBudget = (newMov, oldMov) => {
   }
   state.currentAccount.budget.find((el) => el.name === newMov.category).value +=
     +mov.amount;
+  saveLocalStorage();
   return;
+};
+
+export const findTransaction = (id) => {
+  return state.currentAccount.movements.find((el) => el.id === id);
+};
+export const deletTransaction = (id) => {
+  const i = state.currentAccount.movements.indexOf(findTransaction(id));
+  state.currentAccount.movements.splice(i, 1);
+  saveLocalStorage();
 };
 
 export const loadLocalStorage = () => {
   if (localStorage.getItem("state")) {
     state = JSON.parse(localStorage.getItem("state"));
   }
+};
+
+export const saveLocalStorage = () => {
+  localStorage.setItem("state", JSON.stringify(state));
 };
