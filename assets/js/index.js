@@ -41,10 +41,14 @@ const transactionUpdated = (obj) => {
 
 const newTransactionCreated = (obj) => {
   const newTransaction = Model.createTransaction(obj.amount, obj.category);
+  console.log(Model.isSameMonth(newTransaction));
   if (
-    Model.filters.categories.includes(newTransaction.category) &&
+    (Model.filters.categories.includes(newTransaction.category) ||
+      Model.filters.categories.length == 0) &&
     Model.isSameMonth(newTransaction)
   ) {
+    console.log("not entered?");
+    Model.updateBudget(newTransaction);
     View.renderTransaction(newTransaction);
   }
 };
@@ -83,6 +87,8 @@ const transactionClicked = (id) => {
 const applyFilterClicked = (obj) => {
   const transactions = Model.filterTransactions(obj);
   View.renderAllTransactions(transactions);
+  Model.calculateBudget(transactions);
+  overviewView.renderBudget(Model.state.currentAccount.budget);
 };
 
 const datePickerYearChanged = (yearSelected) => {
@@ -113,14 +119,15 @@ function init() {
 
   View.renderAllTransactions(Model.filterTransactions());
   filterView.renderCheckboxes(Model.state.currentAccount.budget);
-  filterView.datePickerYearEvent(datePickerYearChanged);
+  Model.calculateBudget(Model.filterTransactions());
+  overviewView.renderBudget(Model.state.currentAccount.budget);
 
+  filterView.datePickerYearEvent(datePickerYearChanged);
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);
   modalView.deleteBtnEvent(btnDeleteClicked);
   modalView.submitBtnEvent(submitButtonClicked);
   movementsNavView.addTransactionEvent(addTransactionClicked);
-  overviewView.renderBudget(Model.state.currentAccount.budget);
   overviewView.changeBudgetClicked(updateBudgetClicked);
 }
 

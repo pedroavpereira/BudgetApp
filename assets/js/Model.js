@@ -26,8 +26,8 @@ export let filters = {
 export const createTransaction = (amount, category) => {
   const date = Date.now();
   const newTransaction = { amount, category, date, id: String(Date.now()) };
-  state.currentAccount.budget.find((el) => el.name === category).value +=
-    +amount;
+  // state.currentAccount.budget.find((el) => el.name === category).value +=
+  //   +amount;
   state.currentAccount.movements.push(newTransaction);
   saveLocalStorage();
   return newTransaction;
@@ -45,6 +45,22 @@ export const updateTransaction = (mov, amount, category) => {
 export const newBudget = (newBudget) => {
   state.currentAccount.budget = newBudget;
   saveLocalStorage();
+};
+
+const resetBudget = () => {
+  state.currentAccount.budget.forEach((el) => (el.value = 0));
+};
+
+// TODO: Find more efficient manner of calculating budget instead of nested loops
+export const calculateBudget = (arr) => {
+  resetBudget();
+  state.currentAccount.budget.forEach((el) => {
+    arr.forEach((arrEl) => {
+      if (el.name === arrEl.category) {
+        el.value += +arrEl.amount;
+      }
+    });
+  });
 };
 
 export const updateBudget = (newMov, oldMov) => {
@@ -68,7 +84,7 @@ export const updateBudget = (newMov, oldMov) => {
     return;
   }
   state.currentAccount.budget.find((el) => el.name === newMov.category).value +=
-    +mov.amount;
+    +newMov.amount;
   saveLocalStorage();
   return;
 };
