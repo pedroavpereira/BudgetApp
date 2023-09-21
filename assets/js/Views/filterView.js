@@ -4,7 +4,7 @@ const months = [
   "Feb",
   "Mar",
   "Apr",
-  "Mai",
+  "May",
   "Jun",
   "Jul",
   "Aug",
@@ -29,8 +29,10 @@ const generateMarkupYear = (year) => {
   return `<option value="${year}">${year}</option>`;
 };
 
-export const renderDate = (obj) => {
-  renderYear(obj);
+export const renderDate = (obj, init = true) => {
+  if (init) {
+    renderYear(obj);
+  }
   renderMonths(obj);
 };
 
@@ -89,6 +91,10 @@ export const applyFilterEvent = (handler) => {
       if (e.target.classList.contains("btn")) {
         const obj = {};
         if (e.target.dataset.target === "apply") {
+          const month = document.querySelector("#selectMonth").value;
+          const year = document.querySelector("#selectYear").value;
+          obj.date = Date.parse(`01 ${month} ${year}`);
+          console.log(obj.date, month, year);
           obj.categories = [
             ...document.querySelectorAll(".dropdown--category:checked"),
           ].map((el) => el.dataset.category);
@@ -96,9 +102,10 @@ export const applyFilterEvent = (handler) => {
           [...document.querySelectorAll(".dropdown--category:checked")].forEach(
             (el) => (el.checked = false)
           );
+          obj.date = Date.now();
           obj.categories = [];
         }
-
+        console.log(obj);
         handler(obj);
       } else {
         e.stopPropagation();

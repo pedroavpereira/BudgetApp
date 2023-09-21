@@ -41,8 +41,12 @@ const transactionUpdated = (obj) => {
 
 const newTransactionCreated = (obj) => {
   const newTransaction = Model.createTransaction(obj.amount, obj.category);
-  const index = Model.state.currentAccount.movements.length - 1;
-  View.renderTransaction(newTransaction);
+  if (
+    Model.filters.categories.includes(newTransaction.category) &&
+    Model.isSameMonth(newTransaction)
+  ) {
+    View.renderTransaction(newTransaction);
+  }
 };
 
 const budgetSubmited = (obj) => {
@@ -77,12 +81,12 @@ const transactionClicked = (id) => {
 };
 
 const applyFilterClicked = (obj) => {
-  const transactions = Model.filterTransactions({ categories: obj.categories });
+  const transactions = Model.filterTransactions(obj);
   View.renderAllTransactions(transactions);
 };
 
 const datePickerYearChanged = (yearSelected) => {
-  filterView.renderDate(creatingDateObj(yearSelected));
+  filterView.renderDate(creatingDateObj(yearSelected), false);
 };
 
 const creatingDateObj = (yearSelected = new Date().getFullYear()) => {

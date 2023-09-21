@@ -86,9 +86,13 @@ export const filterTransactions = (
   obj = { categories: [], date: Date.now() }
 ) => {
   filters.categories = obj.categories;
+  filters.date = obj.date;
+
   let filteredTransactions = state.currentAccount.movements;
   if (obj.date) {
-    return filteredTransactions; // TODO: temporarily, until the date is added
+    filteredTransactions = filteredTransactions.filter((el) => {
+      return isSameMonth(el);
+    });
   }
   if (obj.categories && obj.categories.length != 0) {
     filteredTransactions = filteredTransactions.filter((el) =>
@@ -96,6 +100,13 @@ export const filterTransactions = (
     );
   }
   return filteredTransactions;
+};
+
+export const isSameMonth = (mov) => {
+  return (
+    new Date(filters.date).getMonth() === new Date(mov.date).getMonth() &&
+    new Date(filters.date).getFullYear() === new Date(mov.date).getFullYear()
+  );
 };
 
 export const initFilter = () => {
@@ -116,7 +127,7 @@ export const saveLocalStorage = () => {
 
 //Add movement to testing porpuses should not be used and should be deleted before production
 export const addMovement = () => {
-  const fakeDate = Date.parse(new Date(2021, 4, 12));
+  const fakeDate = Date.parse(new Date(2021, 8, 12));
   const newMov = {
     date: fakeDate,
     amount: 10,
