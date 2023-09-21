@@ -3,6 +3,7 @@ import * as bootstrap from "bootstrap";
 
 import * as helper from "./bootstrapElements.js";
 import * as View from "./Views/movementsView.js";
+import * as filterView from "./Views/filterView.js";
 import * as overviewView from "./Views/overviewView.js";
 import * as modalView from "./Views/modalView.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
@@ -11,7 +12,7 @@ import * as Model from "./Model.js";
 const btnDeleteClicked = (id) => {
   const mov = Model.findTransaction(id);
   Model.updateBudget({ category: mov.category, amount: 0 }, mov);
-  Model.deletTransaction(id);
+  Model.deleteTransaction(id);
   View.deleteTransaction(id);
   overviewView.renderBudget(Model.state.currentAccount.budget);
 };
@@ -75,15 +76,18 @@ const transactionClicked = (id) => {
   );
 };
 
-document
-  .querySelector(".btn--budget")
-  .addEventListener("click", function () {});
+const applyFilterClicked = (obj) => {
+  const transactions = Model.filterTransactions({ categories: obj.categories });
+  View.renderAllTransactions(transactions);
+};
 
 function init() {
   Model.loadLocalStorage();
 
   View.renderAllTransactions(Model.state.currentAccount.movements);
+  filterView.renderCheckboxes(Model.state.currentAccount.budget);
 
+  filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);
   modalView.deleteBtnEvent(btnDeleteClicked);
   modalView.submitBtnEvent(submitButtonClicked);

@@ -17,6 +17,8 @@ export let state = {
   },
 };
 
+export let filters = { date: Date.now(), categories: [] };
+
 export const createTransaction = (amount, category) => {
   const date = new Date().toLocaleDateString("pt-pt", {
     year: "numeric",
@@ -76,10 +78,24 @@ export const updateBudget = (newMov, oldMov) => {
 export const findTransaction = (id) => {
   return state.currentAccount.movements.find((el) => el.id === id);
 };
-export const deletTransaction = (id) => {
+export const deleteTransaction = (id) => {
   const i = state.currentAccount.movements.indexOf(findTransaction(id));
   state.currentAccount.movements.splice(i, 1);
   saveLocalStorage();
+};
+
+export const filterTransactions = (obj) => {
+  filters.categories = obj.categories;
+  let filteredTransactions = state.currentAccount.movements;
+  if (obj.date) {
+    return;
+  }
+  if (obj.categories && obj.categories.length != 0) {
+    filteredTransactions = filteredTransactions.filter((el) =>
+      obj.categories.includes(el.category)
+    );
+  }
+  return filteredTransactions;
 };
 
 export const loadLocalStorage = () => {
