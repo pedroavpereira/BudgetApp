@@ -1,16 +1,85 @@
-const parentElement = document.querySelector(".dropdown-menu--content");
+const parentElement = document.querySelector(".dropdown-menu--category");
+const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "Mai",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
-const generateMarkup = (el) => {
+const generateMarkupCheckbox = (el) => {
   return `<li class="dropdown-item">
     <input type="checkbox" class="dropdown--category" id="cat${el.name}" data-category="${el.name}"/>
     <label for="cat${el.name}">${el.name}</label>
   </li>`;
 };
 
+const generateMarkupMonth = (i) => {
+  return `<option data-monthId="${i}" value="${months[i]}">${months[i]}</option>`;
+};
+
+const generateMarkupYear = (year) => {
+  return `<option value="${year}">${year}</option>`;
+};
+
+export const renderDate = (obj) => {
+  renderYear(obj);
+  renderMonths(obj);
+};
+
+export const renderYear = (obj) => {
+  const yearElement = document.querySelector("#selectYear");
+  yearElement.innerHTML = "";
+
+  let year = obj.earliest.year;
+
+  while (year <= new Date().getFullYear()) {
+    const markup = generateMarkupYear(year);
+    yearElement.insertAdjacentHTML("afterbegin", markup);
+    year++;
+  }
+  if (obj.yearSelected === obj.current.year)
+    yearElement.value = obj.current.year;
+};
+
+const renderMonths = (obj) => {
+  const monthElement = document.querySelector("#selectMonth");
+  monthElement.innerHTML = "";
+  if (obj.yearSelected === obj.current.year) {
+    for (let i = 0; i <= obj.current.month; i++) {
+      const markup = generateMarkupMonth(i);
+      monthElement.insertAdjacentHTML("beforeend", markup);
+    }
+  } else if (obj.yearSelected === obj.earliest.year) {
+    for (let i = 11; i >= obj.earliest.month; i--) {
+      const markup = generateMarkupMonth(i);
+      monthElement.insertAdjacentHTML("afterbegin", markup);
+    }
+  } else {
+    months.forEach((el, i) => {
+      const markup = generateMarkupMonth(i);
+      monthElement.insertAdjacentHTML("beforeend", markup);
+    });
+  }
+};
+
 export const renderCheckboxes = (obj) => {
-  const markup = obj.map((el) => generateMarkup(el)).join("");
+  const markup = obj.map((el) => generateMarkupCheckbox(el)).join("");
 
   parentElement.insertAdjacentHTML("afterbegin", markup);
+};
+
+export const datePickerYearEvent = (handler) => {
+  document.querySelector("#selectYear").addEventListener("change", function () {
+    handler(+this.value);
+  });
 };
 
 export const applyFilterEvent = (handler) => {

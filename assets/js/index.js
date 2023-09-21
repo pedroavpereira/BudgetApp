@@ -81,11 +81,35 @@ const applyFilterClicked = (obj) => {
   View.renderAllTransactions(transactions);
 };
 
+const datePickerYearChanged = (yearSelected) => {
+  filterView.renderDate(creatingDateObj(yearSelected));
+};
+
+const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
+  const earliestMovDate = Model.filters.earliestDate;
+  const dateObj = { earliest: {}, current: {} };
+  dateObj.yearSelected = yearSelected;
+  dateObj.earliestDate = new Date(earliestMovDate);
+  dateObj.earliest.year = dateObj.earliestDate.getFullYear();
+  dateObj.earliest.month = dateObj.earliestDate.getMonth();
+  dateObj.current.year = new Date().getFullYear();
+  dateObj.current.month = new Date().getMonth();
+  return dateObj;
+};
+
 function init() {
   Model.loadLocalStorage();
+  if (Model.state.currentAccount.movements.length > 0) {
+    Model.initFilter();
+  }
 
-  View.renderAllTransactions(Model.filterTransactions(Model.filters));
+  // Model.addMovement();
+
+  filterView.renderDate(creatingDateObj());
+
+  View.renderAllTransactions(Model.filterTransactions());
   filterView.renderCheckboxes(Model.state.currentAccount.budget);
+  filterView.datePickerYearEvent(datePickerYearChanged);
 
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);

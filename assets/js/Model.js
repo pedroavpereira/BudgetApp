@@ -17,16 +17,14 @@ export let state = {
   },
 };
 
-export let filters = { date: Date.now(), categories: [] };
+export let filters = {
+  date: Date.now(),
+  categories: [],
+  earliestDate: Date.now(),
+};
 
 export const createTransaction = (amount, category) => {
-  const date = new Date().toLocaleDateString("pt-pt", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const date = Date.now();
   const newTransaction = { amount, category, date, id: String(Date.now()) };
   state.currentAccount.budget.find((el) => el.name === category).value +=
     +amount;
@@ -84,7 +82,9 @@ export const deleteTransaction = (id) => {
   saveLocalStorage();
 };
 
-export const filterTransactions = (obj) => {
+export const filterTransactions = (
+  obj = { categories: [], date: Date.now() }
+) => {
   filters.categories = obj.categories;
   let filteredTransactions = state.currentAccount.movements;
   if (obj.date) {
@@ -98,6 +98,12 @@ export const filterTransactions = (obj) => {
   return filteredTransactions;
 };
 
+export const initFilter = () => {
+  filters.earliestDate = state.currentAccount.movements.reduce((lowest, el) => {
+    return (lowest = el.date < lowest ? el.date : lowest);
+  }, state.currentAccount.movements[0].date);
+};
+
 export const loadLocalStorage = () => {
   if (localStorage.getItem("state")) {
     state = JSON.parse(localStorage.getItem("state"));
@@ -106,4 +112,18 @@ export const loadLocalStorage = () => {
 
 export const saveLocalStorage = () => {
   localStorage.setItem("state", JSON.stringify(state));
+};
+
+//Add movement to testing porpuses should not be used and should be deleted before production
+export const addMovement = () => {
+  const fakeDate = Date.parse(new Date(2021, 4, 12));
+  const newMov = {
+    date: fakeDate,
+    amount: 10,
+    category: "Groceries",
+    id: String(fakeDate),
+  };
+  console.log(newMov);
+  state.currentAccount.movements.push(newMov);
+  saveLocalStorage();
 };
