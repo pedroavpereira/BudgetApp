@@ -1,5 +1,6 @@
 "use strict";
-import * as helper from "./../helper.js";
+
+import * as helper from "./../bootstrapElements.js";
 
 const parentElement = document.querySelector(".overview--body");
 

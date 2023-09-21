@@ -1,7 +1,8 @@
 "use strict";
 
 import * as bootstrap from "bootstrap";
-import * as helper from "./../helper.js";
+
+import * as helper from "./../bootstrapElements.js";
 
 const parentElement = document.querySelector(".movement--container");
 

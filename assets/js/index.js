@@ -1,6 +1,7 @@
 "use stict";
 import * as bootstrap from "bootstrap";
-import * as helper from "./helper.js";
+
+import * as helper from "./bootstrapElements.js";
 import * as View from "./Views/movementsView.js";
 import * as overviewView from "./Views/overviewView.js";
 import * as modalView from "./Views/modalView.js";
