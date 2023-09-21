@@ -19,9 +19,17 @@ export const applyFilterEvent = (handler) => {
     .addEventListener("click", function (e) {
       if (e.target.classList.contains("btn")) {
         const obj = {};
-        obj.categories = [
-          ...document.querySelectorAll(".dropdown--category:checked"),
-        ].map((el) => el.dataset.category);
+        if (e.target.dataset.target === "apply") {
+          obj.categories = [
+            ...document.querySelectorAll(".dropdown--category:checked"),
+          ].map((el) => el.dataset.category);
+        } else if (e.target.dataset.target === "clear") {
+          [...document.querySelectorAll(".dropdown--category:checked")].forEach(
+            (el) => (el.checked = false)
+          );
+          obj.categories = [];
+        }
+
         handler(obj);
       } else {
         e.stopPropagation();

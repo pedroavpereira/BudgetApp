@@ -84,7 +84,7 @@ const applyFilterClicked = (obj) => {
 function init() {
   Model.loadLocalStorage();
 
-  View.renderAllTransactions(Model.state.currentAccount.movements);
+  View.renderAllTransactions(Model.filterTransactions(Model.filters));
   filterView.renderCheckboxes(Model.state.currentAccount.budget);
 
   filterView.applyFilterEvent(applyFilterClicked);

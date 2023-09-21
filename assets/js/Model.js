@@ -88,7 +88,7 @@ export const filterTransactions = (obj) => {
   filters.categories = obj.categories;
   let filteredTransactions = state.currentAccount.movements;
   if (obj.date) {
-    return;
+    return filteredTransactions; // TODO: temporarily, until the date is added
   }
   if (obj.categories && obj.categories.length != 0) {
     filteredTransactions = filteredTransactions.filter((el) =>
