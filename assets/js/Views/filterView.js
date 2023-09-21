@@ -59,16 +59,19 @@ const renderMonths = (obj) => {
       const markup = generateMarkupMonth(i);
       monthElement.insertAdjacentHTML("beforeend", markup);
     }
+    monthElement.value = months[obj.current.month];
   } else if (obj.yearSelected === obj.earliest.year) {
     for (let i = 11; i >= obj.earliest.month; i--) {
       const markup = generateMarkupMonth(i);
       monthElement.insertAdjacentHTML("afterbegin", markup);
     }
+    monthElement.value = months[obj.earliest.month];
   } else {
     months.forEach((el, i) => {
       const markup = generateMarkupMonth(i);
       monthElement.insertAdjacentHTML("beforeend", markup);
     });
+    monthElement.value = months[0];
   }
 };
 
@@ -94,7 +97,6 @@ export const applyFilterEvent = (handler) => {
           const month = document.querySelector("#selectMonth").value;
           const year = document.querySelector("#selectYear").value;
           obj.date = Date.parse(`01 ${month} ${year}`);
-          console.log(obj.date, month, year);
           obj.categories = [
             ...document.querySelectorAll(".dropdown--category:checked"),
           ].map((el) => el.dataset.category);
@@ -105,7 +107,6 @@ export const applyFilterEvent = (handler) => {
           obj.date = Date.now();
           obj.categories = [];
         }
-        console.log(obj);
         handler(obj);
       } else {
         e.stopPropagation();
