@@ -4,42 +4,42 @@ export let state = {
   currentAccount: {
     movements: [],
     budget: [
-      { type: "income", name: "Salary", value: 0, target: 0, native: true },
+      { type: "Income", name: "Salary", value: 0, target: 0, native: true },
       {
-        type: "income",
+        type: "Income",
         name: "Side hustle",
         value: 0,
         target: 0,
         native: true,
       },
       {
-        type: "income",
+        type: "Income",
         name: "Capital Gains / Dividends",
         value: 0,
         target: 0,
         native: true,
       },
-      { type: "expense", name: "Housing", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Housing", value: 0, target: 0, native: true },
       {
-        type: "expense",
+        type: "Expense",
         name: "Transportation",
         value: 0,
         target: 0,
         native: true,
       },
-      { type: "expense", name: "Groceries", value: 0, target: 0, native: true },
-      { type: "expense", name: "Food", value: 0, target: 0, native: true },
-      { type: "expense", name: "Utilities", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Groceries", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Food", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Utilities", value: 0, target: 0, native: true },
       {
-        type: "expense",
+        type: "Expense",
         name: "Subscriptions",
         value: 0,
         target: 0,
         native: true,
       },
-      { type: "expense", name: "Savings", value: 0, target: 0, native: true },
-      { type: "expense", name: "Investing", value: 0, target: 0, native: true },
-      { type: "expense", name: "Misc", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Savings", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Investing", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
     ],
   },
 };
@@ -63,12 +63,13 @@ export const createTransaction = (obj) => {
   return newTransaction;
 };
 
-export const updateTransaction = (mov, amount, category) => {
-  const newMov = { amount, category, date: mov.date };
+export const updateTransaction = (newMov) => {
+  const mov = findTransaction(newMov.id);
   updateBudget(newMov, mov);
-  mov.category = category;
-  mov.amount = amount;
+  Object.keys(mov).forEach((el) => (mov[el] = newMov[el]));
   saveLocalStorage();
+  console.log(state);
+  console.log(mov);
   return mov;
 };
 

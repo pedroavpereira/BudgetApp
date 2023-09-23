@@ -19,7 +19,7 @@ const generateBudgetMarkup = (budgetObj) => {
       .join(" ")}`;
 };
 
-const generateBudgetCheckboxes = (arr, mov, type) => {
+const generateBudgetCheckboxes = (arr, mov, type = "Expense") => {
   return `${arr
     .filter((el) => el.type === type)
     .map((el, i) => {
@@ -41,16 +41,20 @@ const generateBudgetCheckboxes = (arr, mov, type) => {
 };
 
 const generateTransactionMarkup = (budgetObj, mov) => {
+  const categoryPicker = mov?.type || "Expense";
+  console.log(categoryPicker);
   return `<div class="col">
   <div class="row check-type">
   <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expense-Type--Expense" data-target="Expense" checked >
+      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expense-Type--Expense" data-target="Expense" checked>
       <label class="form-check-label" for="expense-Type--Expense">
         Expense
       </label>
       </div>
       <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Income">
+      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Income" ${
+        mov?.type === "Income" ? "checked" : ""
+      }>
       <label class="form-check-label" for="expense-Type--Income">
         Income
       </label>
@@ -84,7 +88,7 @@ const generateTransactionMarkup = (budgetObj, mov) => {
       </div>
       
       <div class="col my-2 modal-transaction--categories">
-    ${generateBudgetCheckboxes(budgetObj, mov, "expense")}
+    ${generateBudgetCheckboxes(budgetObj, mov, categoryPicker)}
     </div>
       
   <div class="col my-2">
@@ -108,7 +112,7 @@ const updateCategories = (e, budgetObj, mov) => {
     categoriesContainer.innerHTML = "";
     categoriesContainer.insertAdjacentHTML(
       "afterbegin",
-      generateBudgetCheckboxes(budgetObj, mov, categoryType.toLowerCase())
+      generateBudgetCheckboxes(budgetObj, mov, categoryType)
     );
   }
 };
@@ -205,10 +209,10 @@ export const submitBtnEvent = (handler) => {
       }
 
       const obj = {
+        type: movType,
         amount,
         category,
         date: Date.parse(date),
-        type: movType,
         id: "",
       };
 

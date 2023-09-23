@@ -25,13 +25,7 @@ const addTransactionClicked = () => {
 };
 
 const transactionUpdated = (obj) => {
-  const mov = Model.findTransaction(obj.id);
-  const updatedTransaction = Model.updateTransaction(
-    mov,
-    obj.amount,
-    obj.category
-  );
-
+  const updatedTransaction = Model.updateTransaction(obj);
   View.deleteTransaction(obj.id);
   View.renderTransaction(
     updatedTransaction,
