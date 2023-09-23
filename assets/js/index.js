@@ -40,14 +40,14 @@ const transactionUpdated = (obj) => {
 };
 
 const newTransactionCreated = (obj) => {
-  const newTransaction = Model.createTransaction(obj.amount, obj.category);
-  console.log(Model.isSameMonth(newTransaction));
+  console.log("newTransaction");
+  const newTransaction = Model.createTransaction(obj);
+  console.log(newTransaction);
   if (
     (Model.filters.categories.includes(newTransaction.category) ||
       Model.filters.categories.length == 0) &&
     Model.isSameMonth(newTransaction)
   ) {
-    console.log("not entered?");
     Model.updateBudget(newTransaction);
     View.renderTransaction(newTransaction);
   }

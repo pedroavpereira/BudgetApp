@@ -1,6 +1,7 @@
 "use strict";
 
 import * as helper from "./../bootstrapElements.js";
+import * as config from "./../config.js";
 
 const parentElement = document.querySelector("#addTransactionModal");
 
@@ -18,36 +19,98 @@ const generateBudgetMarkup = (budgetObj) => {
       .join(" ")}`;
 };
 
+const generateBudgetCheckboxes = (arr, mov, type) => {
+  return `${arr
+    .filter((el) => el.type === type)
+    .map((el, i) => {
+      return `<div class="form-check">
+      <input
+    class="form-check-input radioTransModal"
+    type="radio"
+    name="radioCategory"
+    id="cat${el.name}"
+    ${mov?.category === el.name || i === 0 ? "checked" : ""}
+    data-category="${el.name}"
+  />
+  <label class="form-check-label" for="cat${el.name}">
+  ${el.name}
+  </label>
+  </div>`;
+    })
+    .join(" ")}`;
+};
+
 const generateTransactionMarkup = (budgetObj, mov) => {
   return `<div class="col">
-    <div class="form-check">
-    ${budgetObj
-      .map((el, i) => {
-        return `<div class="form-check">
-        <input
-      class="form-check-input radioTransModal"
-      type="radio"
-      name="radioCategory"
-      id="cat${el.name}"
-      ${mov?.category === el.name || i === 0 ? "checked" : ""}
-      data-category="${el.name}"
-    />
-    <label class="form-check-label" for="cat${el.name}">
-    ${el.name}
-    </label>
-    </div>`;
-      })
-      .join(" ")}
+  <div class="row check-type">
+  <div class="form-check col-3">
+      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expense-Type--Expense" data-target="Expense" checked >
+      <label class="form-check-label" for="expense-Type--Expense">
+        Expense
+      </label>
+      </div>
+      <div class="form-check col-3">
+      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Income">
+      <label class="form-check-label" for="expense-Type--Income">
+        Income
+      </label>
+    </div>
+    </div>
+
+    <div class="col my-2">
+      <label class"col-2" for="newTransactionAmount">Date: </label>
+      <input type="number" class=" col-2 datePickerModal"  id="getDayModal" value="${
+        mov?.date ? new Date(mov.date).getDate() : new Date().getDate()
+      }" />
+      <select class="datePickerModal col-2" id="getMonthModal">
+        ${config.months
+          .map((el, i) => {
+            return `<option value="${el}" ${
+              mov?.date
+                ? new Date(mov.date).getMonth() === i
+                  ? "selected"
+                  : ""
+                : new Date().getMonth() === i
+                ? "selected"
+                : ""
+            }>${el}</option>`;
+          })
+          .join("")}
+      </select>
+
+      <input type="number"  class="datePickerModal col-2" id="getYearModal" value="${
+        mov?.date ? new Date(mov.date).getFullYear() : new Date().getFullYear()
+      }" />
+      </div>
+      
+      <div class="col my-2 modal-transaction--categories">
+    ${generateBudgetCheckboxes(budgetObj, mov, "expense")}
+    </div>
       
   <div class="col my-2">
     <label for="newTransactionAmount">Amount: </label>
     <input type="number" id="newTransactionAmount" value="${
       mov?.amount ? mov.amount : 0
     }" />
-  </div>
+  
   </div>
   </div>
     `;
+};
+
+const updateCategories = (e, budgetObj, mov) => {
+  const target = e.target;
+  const categoriesContainer = document.querySelector(
+    ".modal-transaction--categories"
+  );
+  const categoryType = target.dataset.target;
+  if (categoryType) {
+    categoriesContainer.innerHTML = "";
+    categoriesContainer.insertAdjacentHTML(
+      "afterbegin",
+      generateBudgetCheckboxes(budgetObj, mov, categoryType.toLowerCase())
+    );
+  }
 };
 
 export const updateModalInfo = (type, budgetObj, mov) => {
@@ -68,6 +131,12 @@ export const updateModalInfo = (type, budgetObj, mov) => {
   document
     .querySelector(".modalContent")
     .insertAdjacentHTML("afterbegin", markup);
+
+  document
+    .querySelector(".check-type")
+    ?.addEventListener("click", function (e) {
+      updateCategories(e, budgetObj, mov);
+    });
 
   if (type === "transactionNew" || type === "budget") {
     document.querySelector(".btn--deleteTransaction").classList.add("d-none");
@@ -96,6 +165,16 @@ export const deleteBtnEvent = (handler) => {
   });
 };
 
+const getDateFromDOM = (...classDOM) => {
+  const values = classDOM
+    .map((el) => {
+      return document.getElementById(el).value;
+    })
+    .join(" ");
+
+  return new Date(values);
+};
+
 export const submitBtnEvent = (handler) => {
   const submitBtnModal = document.querySelector(".btn--submitModal");
 
@@ -106,13 +185,38 @@ export const submitBtnEvent = (handler) => {
       const category = document.querySelector(".radioTransModal:checked")
         .dataset.category;
 
-      if (!amount || !category) return helper.transactionModal.hide();
+      const date = getDateFromDOM(
+        "getDayModal",
+        "getMonthModal",
+        "getYearModal"
+      );
+
+      const movType = document.querySelector(".check-input--type:checked")
+        .dataset.target;
+
+      if (
+        !amount ||
+        !category ||
+        !date ||
+        isNaN(Date.parse(date)) ||
+        date > Date.now()
+      ) {
+        return helper.transactionModal.hide();
+      }
+
+      const obj = {
+        amount,
+        category,
+        date: Date.parse(date),
+        type: movType,
+        id: "",
+      };
 
       if (type.endsWith("New")) {
-        handler(type, { amount, category });
+        handler(type, obj);
       } else {
-        const id = document.querySelector(".mov--active").dataset.id;
-        handler(type, { amount, category, id });
+        obj.id = document.querySelector(".mov--active").dataset.id;
+        handler(type, obj);
       }
     } else if (type === "budget") {
       const newBudget = [...document.querySelectorAll(".input--budget")].map(
@@ -125,7 +229,6 @@ export const submitBtnEvent = (handler) => {
           };
         }
       );
-      console.log(newBudget);
       handler(type, newBudget);
     }
 

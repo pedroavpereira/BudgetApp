@@ -18,8 +18,6 @@ export const renderTransaction = (
         year: "numeric",
         month: "numeric",
         day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
       }
     )}</div>
     <div class="col-4 p-3 d-none d-md-block">${mov.category}</div>
