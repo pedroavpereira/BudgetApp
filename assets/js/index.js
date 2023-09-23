@@ -4,7 +4,7 @@ import * as bootstrap from "bootstrap";
 import * as helper from "./bootstrapElements.js";
 import * as View from "./Views/movementsView.js";
 import * as filterView from "./Views/filterView.js";
-import * as overviewView from "./Views/overviewView.js";
+import * as overviewView from "./Views/budgetView.js";
 import * as modalView from "./Views/modalView.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
 import * as Model from "./Model.js";
@@ -112,7 +112,7 @@ function init() {
   if (Model.state.currentAccount.movements.length > 0) {
     Model.initFilter();
   }
-
+  console.log(Model.state);
   // Model.addMovement();
 
   filterView.renderDate(creatingDateObj());
