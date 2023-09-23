@@ -19,6 +19,7 @@ document.querySelector(".btn-close").addEventListener("click", function () {
 });
 
 modalParentElement.addEventListener("hidden.bs.modal", function () {
+  document.querySelector(".modal-error").classList.add("d-none");
   if (document.querySelector(".mov--active")) {
     document.querySelector(".mov--active").classList.remove("mov--active");
   }

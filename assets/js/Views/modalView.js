@@ -205,7 +205,11 @@ export const submitBtnEvent = (handler) => {
         isNaN(Date.parse(date)) ||
         date > Date.now()
       ) {
-        return helper.transactionModal.hide();
+        document.querySelector(".modal-error--message").textContent =
+          "There was an error submitting these values";
+        document.querySelector(".modal-error").classList.remove("d-none");
+
+        return;
       }
 
       const obj = {
