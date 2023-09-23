@@ -27,10 +27,12 @@ const addTransactionClicked = () => {
 const transactionUpdated = (obj) => {
   const updatedTransaction = Model.updateTransaction(obj);
   View.deleteTransaction(obj.id);
-  View.renderTransaction(
-    updatedTransaction,
-    `.movement--row[data-id="${obj.id}"]`
-  );
+  if (Model.isSameMonth(updatedTransaction)) {
+    View.renderTransaction(
+      updatedTransaction,
+      `.movement--row[data-id="${obj.id}"]`
+    );
+  }
 };
 
 const newTransactionCreated = (obj) => {
