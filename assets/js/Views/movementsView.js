@@ -1,7 +1,8 @@
 "use strict";
 
 import * as bootstrap from "bootstrap";
-import * as helper from "./../helper.js";
+
+import * as helper from "./../bootstrapElements.js";
 
 const parentElement = document.querySelector(".movement--container");
 
@@ -11,7 +12,16 @@ export const renderTransaction = (
 ) => {
   const markup = `<div class="movement--row" data-id="${mov.id}">
     <div class="row text-center" >
-    <div class="col-6 col-md-4 p-3">${mov.date}</div>
+    <div class="col-6 col-md-4 p-3">${new Date(mov.date).toLocaleDateString(
+      "pt-pt",
+      {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }
+    )}</div>
     <div class="col-4 p-3 d-none d-md-block">${mov.category}</div>
     <div class="col-6 col-md-4 p-3">${mov.amount}</div>
   </div>

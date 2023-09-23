@@ -17,17 +17,17 @@ export let state = {
   },
 };
 
+export let filters = {
+  date: Date.now(),
+  categories: [],
+  earliestDate: Date.now(),
+};
+
 export const createTransaction = (amount, category) => {
-  const date = new Date().toLocaleDateString("pt-pt", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const date = Date.now();
   const newTransaction = { amount, category, date, id: String(Date.now()) };
-  state.currentAccount.budget.find((el) => el.name === category).value +=
-    +amount;
+  // state.currentAccount.budget.find((el) => el.name === category).value +=
+  //   +amount;
   state.currentAccount.movements.push(newTransaction);
   saveLocalStorage();
   return newTransaction;
@@ -45,6 +45,22 @@ export const updateTransaction = (mov, amount, category) => {
 export const newBudget = (newBudget) => {
   state.currentAccount.budget = newBudget;
   saveLocalStorage();
+};
+
+const resetBudget = () => {
+  state.currentAccount.budget.forEach((el) => (el.value = 0));
+};
+
+// TODO: Find more efficient manner of calculating budget instead of nested loops
+export const calculateBudget = (arr) => {
+  resetBudget();
+  state.currentAccount.budget.forEach((el) => {
+    arr.forEach((arrEl) => {
+      if (el.name === arrEl.category) {
+        el.value += +arrEl.amount;
+      }
+    });
+  });
 };
 
 export const updateBudget = (newMov, oldMov) => {
@@ -68,7 +84,7 @@ export const updateBudget = (newMov, oldMov) => {
     return;
   }
   state.currentAccount.budget.find((el) => el.name === newMov.category).value +=
-    +mov.amount;
+    +newMov.amount;
   saveLocalStorage();
   return;
 };
@@ -76,10 +92,43 @@ export const updateBudget = (newMov, oldMov) => {
 export const findTransaction = (id) => {
   return state.currentAccount.movements.find((el) => el.id === id);
 };
-export const deletTransaction = (id) => {
+export const deleteTransaction = (id) => {
   const i = state.currentAccount.movements.indexOf(findTransaction(id));
   state.currentAccount.movements.splice(i, 1);
   saveLocalStorage();
+};
+
+export const filterTransactions = (
+  obj = { categories: [], date: Date.now() }
+) => {
+  filters.categories = obj.categories;
+  filters.date = obj.date;
+
+  let filteredTransactions = state.currentAccount.movements;
+  if (obj.date) {
+    filteredTransactions = filteredTransactions.filter((el) => {
+      return isSameMonth(el);
+    });
+  }
+  if (obj.categories && obj.categories.length != 0) {
+    filteredTransactions = filteredTransactions.filter((el) =>
+      obj.categories.includes(el.category)
+    );
+  }
+  return filteredTransactions;
+};
+
+export const isSameMonth = (mov) => {
+  return (
+    new Date(filters.date).getMonth() === new Date(mov.date).getMonth() &&
+    new Date(filters.date).getFullYear() === new Date(mov.date).getFullYear()
+  );
+};
+
+export const initFilter = () => {
+  filters.earliestDate = state.currentAccount.movements.reduce((lowest, el) => {
+    return (lowest = el.date < lowest ? el.date : lowest);
+  }, state.currentAccount.movements[0].date);
 };
 
 export const loadLocalStorage = () => {
@@ -90,4 +139,18 @@ export const loadLocalStorage = () => {
 
 export const saveLocalStorage = () => {
   localStorage.setItem("state", JSON.stringify(state));
+};
+
+//Add movement to testing porpuses should not be used and should be deleted before production
+export const addMovement = () => {
+  const fakeDate = Date.parse(new Date(2021, 8, 12));
+  const newMov = {
+    date: fakeDate,
+    amount: 10,
+    category: "Groceries",
+    id: String(fakeDate),
+  };
+  console.log(newMov);
+  state.currentAccount.movements.push(newMov);
+  saveLocalStorage();
 };

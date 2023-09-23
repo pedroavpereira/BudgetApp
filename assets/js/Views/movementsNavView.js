@@ -1,7 +1,6 @@
 "use strict";
 
-import * as bootstrap from "bootstrap";
-import * as modalView from "./modalView.js";
+import * as helper from "./../bootstrapElements.js";
 
 const modal = document.querySelector("#addTransactionModal");
 const transactionModal = new bootstrap.Modal(modal);
@@ -13,6 +12,6 @@ export const addTransactionEvent = (handler) => {
 
   element.addEventListener("click", function () {
     handler();
-    modalView.openModal();
+    helper.transactionModal.show();
   });
 };

@@ -1,7 +1,9 @@
 "use stict";
 import * as bootstrap from "bootstrap";
-import * as helper from "./helper.js";
+
+import * as helper from "./bootstrapElements.js";
 import * as View from "./Views/movementsView.js";
+import * as filterView from "./Views/filterView.js";
 import * as overviewView from "./Views/overviewView.js";
 import * as modalView from "./Views/modalView.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
@@ -10,7 +12,7 @@ import * as Model from "./Model.js";
 const btnDeleteClicked = (id) => {
   const mov = Model.findTransaction(id);
   Model.updateBudget({ category: mov.category, amount: 0 }, mov);
-  Model.deletTransaction(id);
+  Model.deleteTransaction(id);
   View.deleteTransaction(id);
   overviewView.renderBudget(Model.state.currentAccount.budget);
 };
@@ -39,8 +41,16 @@ const transactionUpdated = (obj) => {
 
 const newTransactionCreated = (obj) => {
   const newTransaction = Model.createTransaction(obj.amount, obj.category);
-  const index = Model.state.currentAccount.movements.length - 1;
-  View.renderTransaction(newTransaction);
+  console.log(Model.isSameMonth(newTransaction));
+  if (
+    (Model.filters.categories.includes(newTransaction.category) ||
+      Model.filters.categories.length == 0) &&
+    Model.isSameMonth(newTransaction)
+  ) {
+    console.log("not entered?");
+    Model.updateBudget(newTransaction);
+    View.renderTransaction(newTransaction);
+  }
 };
 
 const budgetSubmited = (obj) => {
@@ -74,20 +84,50 @@ const transactionClicked = (id) => {
   );
 };
 
-document
-  .querySelector(".btn--budget")
-  .addEventListener("click", function () {});
+const applyFilterClicked = (obj) => {
+  const transactions = Model.filterTransactions(obj);
+  View.renderAllTransactions(transactions);
+  Model.calculateBudget(transactions);
+  overviewView.renderBudget(Model.state.currentAccount.budget);
+};
+
+const datePickerYearChanged = (yearSelected) => {
+  filterView.renderDate(creatingDateObj(yearSelected), false);
+};
+
+const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
+  const earliestMovDate = Model.filters.earliestDate;
+  const dateObj = { earliest: {}, current: {} };
+  dateObj.yearSelected = yearSelected;
+  dateObj.earliestDate = new Date(earliestMovDate);
+  dateObj.earliest.year = dateObj.earliestDate.getFullYear();
+  dateObj.earliest.month = dateObj.earliestDate.getMonth();
+  dateObj.current.year = new Date().getFullYear();
+  dateObj.current.month = new Date().getMonth();
+  return dateObj;
+};
 
 function init() {
   Model.loadLocalStorage();
+  if (Model.state.currentAccount.movements.length > 0) {
+    Model.initFilter();
+  }
 
-  View.renderAllTransactions(Model.state.currentAccount.movements);
+  // Model.addMovement();
 
+  filterView.renderDate(creatingDateObj());
+
+  View.renderAllTransactions(Model.filterTransactions());
+  filterView.renderCheckboxes(Model.state.currentAccount.budget);
+  Model.calculateBudget(Model.filterTransactions());
+  overviewView.renderBudget(Model.state.currentAccount.budget);
+
+  filterView.datePickerYearEvent(datePickerYearChanged);
+  filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);
   modalView.deleteBtnEvent(btnDeleteClicked);
   modalView.submitBtnEvent(submitButtonClicked);
   movementsNavView.addTransactionEvent(addTransactionClicked);
-  overviewView.renderBudget(Model.state.currentAccount.budget);
   overviewView.changeBudgetClicked(updateBudgetClicked);
 }
 
