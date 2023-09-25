@@ -33,15 +33,21 @@ export const accountContainerEvent = (
       const datasetTarget = target.dataset;
 
       if (datasetTarget.target === "account") {
-        handlerChangeAccount(datasetTarget.accountId);
+        return handlerChangeAccount(datasetTarget.accountId);
       } else if (datasetTarget.target === "addAccount") {
         const formInput = document.querySelector(".accounts-form--input").value;
         if (!formInput) return;
-        handlerAddAccount(formInput);
+        return handlerAddAccount(formInput);
       } else if (datasetTarget.target === "cancelAdition") {
         document.querySelector(".accounts-form").classList.add("d-none");
+        document
+          .querySelector(".accounts-display--form")
+          .classList.remove("d-none");
       } else if (datasetTarget.target === "display-newAccountForm") {
         document.querySelector(".accounts-form").classList.remove("d-none");
+        document
+          .querySelector(".accounts-display--form")
+          .classList.add("d-none");
       }
     });
 };
