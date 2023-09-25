@@ -40,7 +40,9 @@ export let state = {
     { type: "Expense", name: "Investing", value: 0, target: 0, native: true },
     { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
   ],
-  accounts: [{ name: "Main account", movements: [] }],
+  accounts: [
+    { name: "Main account", accountID: `${Date.now()}acc`, movements: [] },
+  ],
   currentAccount: {},
 };
 

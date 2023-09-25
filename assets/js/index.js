@@ -4,6 +4,7 @@ import * as bootstrap from "bootstrap";
 import * as helper from "./bootstrapElements.js";
 import * as View from "./Views/movementsView.js";
 import * as filterView from "./Views/filterView.js";
+import * as accountsView from "./Views/accountsView.js";
 import * as overviewView from "./Views/overviewView.js";
 import * as budgetView from "./Views/budgetView.js";
 import * as modalView from "./Views/modalView.js";
@@ -103,12 +104,21 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   return dateObj;
 };
 
+const changeAccountClicked = (accId) => {
+  console.log(accId);
+};
+
+const createNewAccountClicked = (accName) => {
+  console.log(accName);
+};
+
 function init() {
   Model.loadLocalStorage();
   Model.state.currentAccount = Model.state.accounts[0];
   if (Model.state.currentAccount.movements.length > 0) {
     Model.initFilter();
   }
+  Model.saveLocalStorage();
   console.log(Model.state);
   // Model.addMovement();
 
@@ -117,11 +127,16 @@ function init() {
   View.renderAllTransactions(Model.filterTransactions());
   Model.modifyStateOverview(Model.filterTransactions());
   overviewView.updateOverview(Model.state.overview);
+  accountsView.renderAccounts(Model.state.accounts);
 
   filterView.renderCheckboxes(Model.state.budget);
   Model.calculateBudget(Model.filterTransactions());
   budgetView.renderBudget(Model.state.budget);
 
+  accountsView.accountContainerEvent(
+    changeAccountClicked,
+    createNewAccountClicked
+  );
   filterView.datePickerYearEvent(datePickerYearChanged);
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);
