@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
   <head>
     <title>Budget App</title>
@@ -215,8 +216,14 @@
             ></button>
           </div>
           <div class="modal-body">
-            <div class="container-fluid modalContent"></div>
+            <div class="container-fluid mb-1 modalContent"></div>
+            <div
+              class="modal-error d-none text-light bg-danger text-center border rounded"
+            >
+              <p class="mt-1 modal-error--message">Error</p>
+            </div>
           </div>
+
           <div class="modal-footer">
             <button
               type="button"
@@ -225,11 +232,7 @@
             >
               Delete
             </button>
-            <button
-              type="button"
-              class="btn btn-primary btn--submitModal"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-primary btn--submitModal">
               Save changes
             </button>
           </div>

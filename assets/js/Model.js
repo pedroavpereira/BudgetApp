@@ -4,15 +4,42 @@ export let state = {
   currentAccount: {
     movements: [],
     budget: [
-      { name: "Housing", value: 0, target: 0, native: true },
-      { name: "Transportation", value: 0, target: 0, native: true },
-      { name: "Groceries", value: 0, target: 0, native: true },
-      { name: "Food", value: 0, target: 0, native: true },
-      { name: "Utilities", value: 0, target: 0, native: true },
-      { name: "Subscriptions", value: 0, target: 0, native: true },
-      { name: "Savings", value: 0, target: 0, native: true },
-      { name: "Investing", value: 0, target: 0, native: true },
-      { name: "Misc", value: 0, target: 0, native: true },
+      { type: "Income", name: "Salary", value: 0, target: 0, native: true },
+      {
+        type: "Income",
+        name: "Side hustle",
+        value: 0,
+        target: 0,
+        native: true,
+      },
+      {
+        type: "Income",
+        name: "Capital Gains / Dividends",
+        value: 0,
+        target: 0,
+        native: true,
+      },
+      { type: "Expense", name: "Housing", value: 0, target: 0, native: true },
+      {
+        type: "Expense",
+        name: "Transportation",
+        value: 0,
+        target: 0,
+        native: true,
+      },
+      { type: "Expense", name: "Groceries", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Food", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Utilities", value: 0, target: 0, native: true },
+      {
+        type: "Expense",
+        name: "Subscriptions",
+        value: 0,
+        target: 0,
+        native: true,
+      },
+      { type: "Expense", name: "Savings", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Investing", value: 0, target: 0, native: true },
+      { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
     ],
   },
 };
@@ -23,22 +50,26 @@ export let filters = {
   earliestDate: Date.now(),
 };
 
-export const createTransaction = (amount, category) => {
-  const date = Date.now();
-  const newTransaction = { amount, category, date, id: String(Date.now()) };
-  // state.currentAccount.budget.find((el) => el.name === category).value +=
-  //   +amount;
+export const createTransaction = (obj) => {
+  const newTransaction = {
+    type: obj.type,
+    amount: obj.amount,
+    category: obj.category,
+    date: obj.date,
+    id: String(Date.now()),
+  };
   state.currentAccount.movements.push(newTransaction);
   saveLocalStorage();
   return newTransaction;
 };
 
-export const updateTransaction = (mov, amount, category) => {
-  const newMov = { amount, category, date: mov.date };
+export const updateTransaction = (newMov) => {
+  const mov = findTransaction(newMov.id);
   updateBudget(newMov, mov);
-  mov.category = category;
-  mov.amount = amount;
+  Object.keys(mov).forEach((el) => (mov[el] = newMov[el]));
   saveLocalStorage();
+  console.log(state);
+  console.log(mov);
   return mov;
 };
 

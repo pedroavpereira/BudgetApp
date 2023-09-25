@@ -18,11 +18,14 @@ export const renderTransaction = (
         year: "numeric",
         month: "numeric",
         day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
       }
     )}</div>
-    <div class="col-4 p-3 d-none d-md-block">${mov.category}</div>
+    <div class="col-4 p-3 d-none d-md-block" style="display:inline;">${
+      mov.category
+    }  <p  style="display:inline;" class=" inline text-${
+    mov.type === "Income" ? "success" : "danger"
+  } text-opacity-75">(${mov.type})</p>
+    </div>
     <div class="col-6 col-md-4 p-3">${mov.amount}</div>
   </div>
   </div>`;

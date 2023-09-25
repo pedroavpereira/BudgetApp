@@ -4,7 +4,7 @@ import * as bootstrap from "bootstrap";
 import * as helper from "./bootstrapElements.js";
 import * as View from "./Views/movementsView.js";
 import * as filterView from "./Views/filterView.js";
-import * as overviewView from "./Views/overviewView.js";
+import * as overviewView from "./Views/budgetView.js";
 import * as modalView from "./Views/modalView.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
 import * as Model from "./Model.js";
@@ -25,29 +25,25 @@ const addTransactionClicked = () => {
 };
 
 const transactionUpdated = (obj) => {
-  const mov = Model.findTransaction(obj.id);
-  const updatedTransaction = Model.updateTransaction(
-    mov,
-    obj.amount,
-    obj.category
-  );
-
+  const updatedTransaction = Model.updateTransaction(obj);
   View.deleteTransaction(obj.id);
-  View.renderTransaction(
-    updatedTransaction,
-    `.movement--row[data-id="${obj.id}"]`
-  );
+  if (Model.isSameMonth(updatedTransaction)) {
+    View.renderTransaction(
+      updatedTransaction,
+      `.movement--row[data-id="${obj.id}"]`
+    );
+  }
 };
 
 const newTransactionCreated = (obj) => {
-  const newTransaction = Model.createTransaction(obj.amount, obj.category);
-  console.log(Model.isSameMonth(newTransaction));
+  console.log("newTransaction");
+  const newTransaction = Model.createTransaction(obj);
+  console.log(newTransaction);
   if (
     (Model.filters.categories.includes(newTransaction.category) ||
       Model.filters.categories.length == 0) &&
     Model.isSameMonth(newTransaction)
   ) {
-    console.log("not entered?");
     Model.updateBudget(newTransaction);
     View.renderTransaction(newTransaction);
   }
@@ -112,7 +108,7 @@ function init() {
   if (Model.state.currentAccount.movements.length > 0) {
     Model.initFilter();
   }
-
+  console.log(Model.state);
   // Model.addMovement();
 
   filterView.renderDate(creatingDateObj());
