@@ -1,6 +1,7 @@
 "use strict";
 
 export let state = {
+  overview: { totalIncome: 0, totalExpense: 0 },
   currentAccount: {
     movements: [],
     budget: [
@@ -66,11 +67,39 @@ export const createTransaction = (obj) => {
 export const updateTransaction = (newMov) => {
   const mov = findTransaction(newMov.id);
   updateBudget(newMov, mov);
+  updateStateOverview(newMov, mov);
   Object.keys(mov).forEach((el) => (mov[el] = newMov[el]));
   saveLocalStorage();
-  console.log(state);
-  console.log(mov);
   return mov;
+};
+
+export const findTransaction = (id) => {
+  return state.currentAccount.movements.find((el) => el.id === id);
+};
+export const deleteTransaction = (id) => {
+  const i = state.currentAccount.movements.indexOf(findTransaction(id));
+  state.currentAccount.movements.splice(i, 1);
+  saveLocalStorage();
+};
+
+export const filterTransactions = (
+  obj = { categories: [], date: Date.now() }
+) => {
+  filters.categories = obj.categories;
+  filters.date = obj.date;
+
+  let filteredTransactions = state.currentAccount.movements;
+  if (obj.date) {
+    filteredTransactions = filteredTransactions.filter((el) => {
+      return isSameMonth(el);
+    });
+  }
+  if (obj.categories && obj.categories.length != 0) {
+    filteredTransactions = filteredTransactions.filter((el) =>
+      obj.categories.includes(el.category)
+    );
+  }
+  return filteredTransactions;
 };
 
 export const newBudget = (newBudget) => {
@@ -120,33 +149,29 @@ export const updateBudget = (newMov, oldMov) => {
   return;
 };
 
-export const findTransaction = (id) => {
-  return state.currentAccount.movements.find((el) => el.id === id);
-};
-export const deleteTransaction = (id) => {
-  const i = state.currentAccount.movements.indexOf(findTransaction(id));
-  state.currentAccount.movements.splice(i, 1);
-  saveLocalStorage();
+export const modifyStateOverview = (arr) => {
+  if (arr.length > 1) resetStateOverview();
+  arr.forEach((el) => {
+    state.overview[`total${el.type}`] += el.amount;
+  });
+  return state.overview;
 };
 
-export const filterTransactions = (
-  obj = { categories: [], date: Date.now() }
-) => {
-  filters.categories = obj.categories;
-  filters.date = obj.date;
+const updateStateOverview = (newMov, oldMov) => {
+  state.overview[`total${oldMov.type}`] -= oldMov.amount;
+  state.overview[`total${newMov.type}`] += newMov.amount;
+};
 
-  let filteredTransactions = state.currentAccount.movements;
-  if (obj.date) {
-    filteredTransactions = filteredTransactions.filter((el) => {
-      return isSameMonth(el);
-    });
-  }
-  if (obj.categories && obj.categories.length != 0) {
-    filteredTransactions = filteredTransactions.filter((el) =>
-      obj.categories.includes(el.category)
-    );
-  }
-  return filteredTransactions;
+const resetStateOverview = () => {
+  state.overview.difference = 0;
+  state.overview.totalExpense = 0;
+  state.overview.totalIncome = 0;
+};
+
+export const initFilter = () => {
+  filters.earliestDate = state.currentAccount.movements.reduce((lowest, el) => {
+    return (lowest = el.date < lowest ? el.date : lowest);
+  }, state.currentAccount.movements[0].date);
 };
 
 export const isSameMonth = (mov) => {
@@ -154,12 +179,6 @@ export const isSameMonth = (mov) => {
     new Date(filters.date).getMonth() === new Date(mov.date).getMonth() &&
     new Date(filters.date).getFullYear() === new Date(mov.date).getFullYear()
   );
-};
-
-export const initFilter = () => {
-  filters.earliestDate = state.currentAccount.movements.reduce((lowest, el) => {
-    return (lowest = el.date < lowest ? el.date : lowest);
-  }, state.currentAccount.movements[0].date);
 };
 
 export const loadLocalStorage = () => {
