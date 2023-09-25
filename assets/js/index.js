@@ -4,7 +4,8 @@ import * as bootstrap from "bootstrap";
 import * as helper from "./bootstrapElements.js";
 import * as View from "./Views/movementsView.js";
 import * as filterView from "./Views/filterView.js";
-import * as overviewView from "./Views/budgetView.js";
+import * as overviewView from "./Views/overviewView.js";
+import * as budgetView from "./Views/budgetView.js";
 import * as modalView from "./Views/modalView.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
 import * as Model from "./Model.js";
@@ -14,7 +15,7 @@ const btnDeleteClicked = (id) => {
   Model.updateBudget({ category: mov.category, amount: 0 }, mov);
   Model.deleteTransaction(id);
   View.deleteTransaction(id);
-  overviewView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.currentAccount.budget);
 };
 
 const addTransactionClicked = () => {
@@ -27,6 +28,7 @@ const addTransactionClicked = () => {
 const transactionUpdated = (obj) => {
   const updatedTransaction = Model.updateTransaction(obj);
   View.deleteTransaction(obj.id);
+  overviewView.updateOverview(Model.state.overview);
   if (Model.isSameMonth(updatedTransaction)) {
     View.renderTransaction(
       updatedTransaction,
@@ -38,13 +40,14 @@ const transactionUpdated = (obj) => {
 const newTransactionCreated = (obj) => {
   console.log("newTransaction");
   const newTransaction = Model.createTransaction(obj);
-  console.log(newTransaction);
   if (
     (Model.filters.categories.includes(newTransaction.category) ||
       Model.filters.categories.length == 0) &&
     Model.isSameMonth(newTransaction)
   ) {
     Model.updateBudget(newTransaction);
+    Model.modifyStateOverview([newTransaction]);
+    overviewView.updateOverview(Model.state.overview);
     View.renderTransaction(newTransaction);
   }
 };
@@ -64,7 +67,7 @@ const submitButtonClicked = (type, obj) => {
     budgetSubmited(obj);
   }
 
-  overviewView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.currentAccount.budget);
 };
 
 const updateBudgetClicked = () => {
@@ -84,7 +87,7 @@ const applyFilterClicked = (obj) => {
   const transactions = Model.filterTransactions(obj);
   View.renderAllTransactions(transactions);
   Model.calculateBudget(transactions);
-  overviewView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.currentAccount.budget);
 };
 
 const datePickerYearChanged = (yearSelected) => {
@@ -108,15 +111,17 @@ function init() {
   if (Model.state.currentAccount.movements.length > 0) {
     Model.initFilter();
   }
-  console.log(Model.state);
   // Model.addMovement();
 
   filterView.renderDate(creatingDateObj());
 
   View.renderAllTransactions(Model.filterTransactions());
+  Model.modifyStateOverview(Model.filterTransactions());
+  overviewView.updateOverview(Model.state.overview);
+
   filterView.renderCheckboxes(Model.state.currentAccount.budget);
   Model.calculateBudget(Model.filterTransactions());
-  overviewView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.currentAccount.budget);
 
   filterView.datePickerYearEvent(datePickerYearChanged);
   filterView.applyFilterEvent(applyFilterClicked);
@@ -124,7 +129,7 @@ function init() {
   modalView.deleteBtnEvent(btnDeleteClicked);
   modalView.submitBtnEvent(submitButtonClicked);
   movementsNavView.addTransactionEvent(addTransactionClicked);
-  overviewView.changeBudgetClicked(updateBudgetClicked);
+  budgetView.changeBudgetClicked(updateBudgetClicked);
 }
 
 init();
