@@ -2,7 +2,9 @@ const parentElement = document.querySelector(".overviewContainer");
 
 const generateMarkup = (obj) => {
   const difference = obj.totalIncome - obj.totalExpense;
-  return `<p>
+  return `<p class="${
+    obj.totalExpense === 0 && obj.totalIncome === 0 ? "d-none" : ""
+  }">
   Income
   <span class="text-success">${obj.totalIncome}</span>
   Expenses

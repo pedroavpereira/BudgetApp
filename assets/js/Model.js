@@ -150,15 +150,15 @@ export const updateBudget = (newMov, oldMov) => {
 };
 
 export const modifyStateOverview = (arr) => {
-  if (arr.length > 1) resetStateOverview();
+  resetStateOverview();
   arr.forEach((el) => {
     state.overview[`total${el.type}`] += el.amount;
   });
   return state.overview;
 };
 
-const updateStateOverview = (newMov, oldMov) => {
-  state.overview[`total${oldMov.type}`] -= oldMov.amount;
+export const updateStateOverview = (newMov, oldMov) => {
+  if (oldMov) state.overview[`total${oldMov.type}`] -= oldMov.amount;
   state.overview[`total${newMov.type}`] += newMov.amount;
 };
 
