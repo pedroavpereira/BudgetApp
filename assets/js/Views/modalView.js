@@ -42,7 +42,7 @@ const generateBudgetCheckboxes = (arr, mov, type = "Expense") => {
 
 const generateTransactionMarkup = (budgetObj, mov) => {
   const categoryPicker = mov?.type || "Expense";
-  console.log(categoryPicker);
+
   return `<div class="col">
   <div class="row check-type">
   <div class="form-check col-3">
@@ -93,7 +93,7 @@ const generateTransactionMarkup = (budgetObj, mov) => {
       
   <div class="col my-2">
     <label for="newTransactionAmount">Amount: </label>
-    <input type="number" id="newTransactionAmount" value="${
+    <input type="number"  id="newTransactionAmount" value="${
       mov?.amount ? mov.amount : 0
     }" />
   
@@ -170,13 +170,33 @@ export const deleteBtnEvent = (handler) => {
 };
 
 const getDateFromDOM = (...classDOM) => {
-  const values = classDOM
+  const dateStr = classDOM
     .map((el) => {
       return document.getElementById(el).value;
     })
     .join(" ");
 
-  return new Date(values);
+  return new Date(dateStr);
+};
+
+const modalErrorMarkup = (errorArr) => {
+  const errors = [
+    "a valid amount",
+    "a valid date",
+    "a valid date",
+    "a date in the past",
+  ];
+  let markup = "Please insert ";
+  errorArr.forEach((el, i, arr) => {
+    if (el === true) {
+      if (arr.length - 1 === i && arr.length != 1) {
+        markup += ` and ${errors[i]}`;
+        return;
+      }
+      markup += `${errors[i]} `;
+    }
+  });
+  return markup;
 };
 
 export const submitBtnEvent = (handler) => {
@@ -198,15 +218,17 @@ export const submitBtnEvent = (handler) => {
       const movType = document.querySelector(".check-input--type:checked")
         .dataset.target;
 
-      if (
-        !amount ||
-        !category ||
-        !date ||
-        isNaN(Date.parse(date)) ||
-        date > Date.now()
-      ) {
+      const possibleErrors = [
+        !amount,
+        !date,
+        isNaN(Date.parse(date)),
+        date >= Date.now(),
+      ];
+
+      if (possibleErrors.some((el) => el === true)) {
         document.querySelector(".modal-error--message").textContent =
-          "There was an error submitting these values";
+          modalErrorMarkup(possibleErrors);
+
         document.querySelector(".modal-error").classList.remove("d-none");
 
         return;
