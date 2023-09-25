@@ -16,15 +16,12 @@ const btnDeleteClicked = (id) => {
   Model.updateStateOverview({ type: mov.type, amount: 0 }, mov);
   Model.deleteTransaction(id);
   View.deleteTransaction(id);
-  budgetView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.budget);
   overviewView.updateOverview(Model.state.overview);
 };
 
 const addTransactionClicked = () => {
-  modalView.updateModalInfo(
-    "transactionNew",
-    Model.state.currentAccount.budget
-  );
+  modalView.updateModalInfo("transactionNew", Model.state.budget);
 };
 
 const transactionUpdated = (obj) => {
@@ -69,20 +66,16 @@ const submitButtonClicked = (type, obj) => {
     budgetSubmited(obj);
   }
 
-  budgetView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.budget);
 };
 
 const updateBudgetClicked = () => {
-  modalView.updateModalInfo("budget", Model.state.currentAccount.budget);
+  modalView.updateModalInfo("budget", Model.state.budget);
 };
 
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
-  modalView.updateModalInfo(
-    "transaction",
-    Model.state.currentAccount.budget,
-    mov
-  );
+  modalView.updateModalInfo("transaction", Model.state.budget, mov);
 };
 
 const applyFilterClicked = (obj) => {
@@ -91,7 +84,7 @@ const applyFilterClicked = (obj) => {
   Model.modifyStateOverview(transactions);
   overviewView.updateOverview(Model.state.overview);
   Model.calculateBudget(transactions);
-  budgetView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.budget);
 };
 
 const datePickerYearChanged = (yearSelected) => {
@@ -112,9 +105,11 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
 
 function init() {
   Model.loadLocalStorage();
+  Model.state.currentAccount = Model.state.accounts[0];
   if (Model.state.currentAccount.movements.length > 0) {
     Model.initFilter();
   }
+  console.log(Model.state);
   // Model.addMovement();
 
   filterView.renderDate(creatingDateObj());
@@ -123,9 +118,9 @@ function init() {
   Model.modifyStateOverview(Model.filterTransactions());
   overviewView.updateOverview(Model.state.overview);
 
-  filterView.renderCheckboxes(Model.state.currentAccount.budget);
+  filterView.renderCheckboxes(Model.state.budget);
   Model.calculateBudget(Model.filterTransactions());
-  budgetView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.budget);
 
   filterView.datePickerYearEvent(datePickerYearChanged);
   filterView.applyFilterEvent(applyFilterClicked);

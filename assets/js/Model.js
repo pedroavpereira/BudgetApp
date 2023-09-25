@@ -2,47 +2,46 @@
 
 export let state = {
   overview: { totalIncome: 0, totalExpense: 0 },
-  currentAccount: {
-    movements: [],
-    budget: [
-      { type: "Income", name: "Salary", value: 0, target: 0, native: true },
-      {
-        type: "Income",
-        name: "Side hustle",
-        value: 0,
-        target: 0,
-        native: true,
-      },
-      {
-        type: "Income",
-        name: "Capital Gains / Dividends",
-        value: 0,
-        target: 0,
-        native: true,
-      },
-      { type: "Expense", name: "Housing", value: 0, target: 0, native: true },
-      {
-        type: "Expense",
-        name: "Transportation",
-        value: 0,
-        target: 0,
-        native: true,
-      },
-      { type: "Expense", name: "Groceries", value: 0, target: 0, native: true },
-      { type: "Expense", name: "Food", value: 0, target: 0, native: true },
-      { type: "Expense", name: "Utilities", value: 0, target: 0, native: true },
-      {
-        type: "Expense",
-        name: "Subscriptions",
-        value: 0,
-        target: 0,
-        native: true,
-      },
-      { type: "Expense", name: "Savings", value: 0, target: 0, native: true },
-      { type: "Expense", name: "Investing", value: 0, target: 0, native: true },
-      { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
-    ],
-  },
+  budget: [
+    { type: "Income", name: "Salary", value: 0, target: 0, native: true },
+    {
+      type: "Income",
+      name: "Side hustle",
+      value: 0,
+      target: 0,
+      native: true,
+    },
+    {
+      type: "Income",
+      name: "Capital Gains / Dividends",
+      value: 0,
+      target: 0,
+      native: true,
+    },
+    { type: "Expense", name: "Housing", value: 0, target: 0, native: true },
+    {
+      type: "Expense",
+      name: "Transportation",
+      value: 0,
+      target: 0,
+      native: true,
+    },
+    { type: "Expense", name: "Groceries", value: 0, target: 0, native: true },
+    { type: "Expense", name: "Food", value: 0, target: 0, native: true },
+    { type: "Expense", name: "Utilities", value: 0, target: 0, native: true },
+    {
+      type: "Expense",
+      name: "Subscriptions",
+      value: 0,
+      target: 0,
+      native: true,
+    },
+    { type: "Expense", name: "Savings", value: 0, target: 0, native: true },
+    { type: "Expense", name: "Investing", value: 0, target: 0, native: true },
+    { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
+  ],
+  accounts: [{ name: "Main account", movements: [] }],
+  currentAccount: {},
 };
 
 export let filters = {
@@ -103,18 +102,18 @@ export const filterTransactions = (
 };
 
 export const newBudget = (newBudget) => {
-  state.currentAccount.budget = newBudget;
+  state.budget = newBudget;
   saveLocalStorage();
 };
 
 const resetBudget = () => {
-  state.currentAccount.budget.forEach((el) => (el.value = 0));
+  state.budget.forEach((el) => (el.value = 0));
 };
 
 // TODO: Find more efficient manner of calculating budget instead of nested loops
 export const calculateBudget = (arr) => {
   resetBudget();
-  state.currentAccount.budget.forEach((el) => {
+  state.budget.forEach((el) => {
     arr.forEach((arrEl) => {
       if (el.name === arrEl.category) {
         el.value += +arrEl.amount;
