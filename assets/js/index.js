@@ -13,9 +13,11 @@ import * as Model from "./Model.js";
 const btnDeleteClicked = (id) => {
   const mov = Model.findTransaction(id);
   Model.updateBudget({ category: mov.category, amount: 0 }, mov);
+  Model.updateStateOverview({ type: mov.type, amount: 0 }, mov);
   Model.deleteTransaction(id);
   View.deleteTransaction(id);
   budgetView.renderBudget(Model.state.currentAccount.budget);
+  overviewView.updateOverview(Model.state.overview);
 };
 
 const addTransactionClicked = () => {
@@ -46,7 +48,7 @@ const newTransactionCreated = (obj) => {
     Model.isSameMonth(newTransaction)
   ) {
     Model.updateBudget(newTransaction);
-    Model.modifyStateOverview([newTransaction]);
+    Model.updateStateOverview(newTransaction);
     overviewView.updateOverview(Model.state.overview);
     View.renderTransaction(newTransaction);
   }
@@ -86,6 +88,8 @@ const transactionClicked = (id) => {
 const applyFilterClicked = (obj) => {
   const transactions = Model.filterTransactions(obj);
   View.renderAllTransactions(transactions);
+  Model.modifyStateOverview(transactions);
+  overviewView.updateOverview(Model.state.overview);
   Model.calculateBudget(transactions);
   budgetView.renderBudget(Model.state.currentAccount.budget);
 };

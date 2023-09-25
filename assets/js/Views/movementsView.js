@@ -39,9 +39,14 @@ export const deleteTransaction = (id) => {
 
 export const renderAllTransactions = (arr) => {
   parentElement.innerHTML = "";
-  arr.forEach((el) => {
-    renderTransaction(el);
-  });
+  if (arr.length > 1) {
+    arr.forEach((el) => {
+      renderTransaction(el);
+    });
+  } else {
+    //TODO: Add a more comprehensive no transaction message
+    parentElement.textContent = "No transactions found, add a new transaction";
+  }
 };
 
 export const movementContainerEvent = (handler) => {
