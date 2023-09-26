@@ -4,6 +4,7 @@ import * as bootstrap from "bootstrap";
 import * as helper from "./bootstrapElements.js";
 import * as View from "./Views/movementsView.js";
 import * as filterView from "./Views/filterView.js";
+import * as accountsView from "./Views/accountsView.js";
 import * as overviewView from "./Views/overviewView.js";
 import * as budgetView from "./Views/budgetView.js";
 import * as modalView from "./Views/modalView.js";
@@ -16,15 +17,12 @@ const btnDeleteClicked = (id) => {
   Model.updateStateOverview({ type: mov.type, amount: 0 }, mov);
   Model.deleteTransaction(id);
   View.deleteTransaction(id);
-  budgetView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.budget);
   overviewView.updateOverview(Model.state.overview);
 };
 
 const addTransactionClicked = () => {
-  modalView.updateModalInfo(
-    "transactionNew",
-    Model.state.currentAccount.budget
-  );
+  modalView.updateModalInfo("transactionNew", Model.state.budget);
 };
 
 const transactionUpdated = (obj) => {
@@ -36,6 +34,9 @@ const transactionUpdated = (obj) => {
       updatedTransaction,
       `.movement--row[data-id="${obj.id}"]`
     );
+  } else {
+    Model.initFilter(Model.filters.categories);
+    filterView.renderDate(creatingDateObj());
   }
 };
 
@@ -51,6 +52,9 @@ const newTransactionCreated = (obj) => {
     Model.updateStateOverview(newTransaction);
     overviewView.updateOverview(Model.state.overview);
     View.renderTransaction(newTransaction);
+  } else {
+    Model.initFilter(Model.filters.categories);
+    filterView.renderDate(creatingDateObj());
   }
 };
 
@@ -69,20 +73,16 @@ const submitButtonClicked = (type, obj) => {
     budgetSubmited(obj);
   }
 
-  budgetView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.budget);
 };
 
 const updateBudgetClicked = () => {
-  modalView.updateModalInfo("budget", Model.state.currentAccount.budget);
+  modalView.updateModalInfo("budget", Model.state.budget);
 };
 
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
-  modalView.updateModalInfo(
-    "transaction",
-    Model.state.currentAccount.budget,
-    mov
-  );
+  modalView.updateModalInfo("transaction", Model.state.budget, mov);
 };
 
 const applyFilterClicked = (obj) => {
@@ -91,7 +91,7 @@ const applyFilterClicked = (obj) => {
   Model.modifyStateOverview(transactions);
   overviewView.updateOverview(Model.state.overview);
   Model.calculateBudget(transactions);
-  budgetView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.budget);
 };
 
 const datePickerYearChanged = (yearSelected) => {
@@ -100,7 +100,7 @@ const datePickerYearChanged = (yearSelected) => {
 
 const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   const earliestMovDate = Model.filters.earliestDate;
-  const dateObj = { earliest: {}, current: {} };
+  const dateObj = { earliest: {}, current: {}, earliestDate: 0 };
   dateObj.yearSelected = yearSelected;
   dateObj.earliestDate = new Date(earliestMovDate);
   dateObj.earliest.year = dateObj.earliestDate.getFullYear();
@@ -110,11 +110,29 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   return dateObj;
 };
 
+const changeAccountClicked = (accId) => {
+  Model.changeAccount(accId);
+  Model.initFilter();
+  View.renderAllTransactions(Model.filterTransactions());
+  Model.modifyStateOverview(Model.filterTransactions());
+  overviewView.updateOverview(Model.state.overview);
+  filterView.renderDate(creatingDateObj());
+  filterView.uncheckCheckboxes();
+};
+
+const createNewAccountClicked = (accName) => {
+  Model.createAccount(accName);
+  accountsView.renderAccounts(Model.state.accounts);
+};
+
 function init() {
   Model.loadLocalStorage();
+  Model.state.currentAccount = Model.state.accounts[0];
   if (Model.state.currentAccount.movements.length > 0) {
     Model.initFilter();
   }
+  Model.saveLocalStorage();
+  console.log(Model.state);
   // Model.addMovement();
 
   filterView.renderDate(creatingDateObj());
@@ -122,11 +140,16 @@ function init() {
   View.renderAllTransactions(Model.filterTransactions());
   Model.modifyStateOverview(Model.filterTransactions());
   overviewView.updateOverview(Model.state.overview);
+  accountsView.renderAccounts(Model.state.accounts);
 
-  filterView.renderCheckboxes(Model.state.currentAccount.budget);
+  filterView.renderCheckboxes(Model.state.budget);
   Model.calculateBudget(Model.filterTransactions());
-  budgetView.renderBudget(Model.state.currentAccount.budget);
+  budgetView.renderBudget(Model.state.budget);
 
+  accountsView.accountContainerEvent(
+    changeAccountClicked,
+    createNewAccountClicked
+  );
   filterView.datePickerYearEvent(datePickerYearChanged);
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);

@@ -14,6 +14,12 @@ const months = [
   "Dec",
 ];
 
+export const uncheckCheckboxes = () => {
+  [...document.querySelectorAll(".dropdown--category")].forEach(
+    (el) => (el.checked = false)
+  );
+};
+
 const generateMarkupCheckbox = (el) => {
   return `<li class="dropdown-item">
     <input type="checkbox" class="dropdown--category" id="cat${el.name}" data-category="${el.name}"/>

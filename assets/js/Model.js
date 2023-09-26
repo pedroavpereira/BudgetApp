@@ -2,47 +2,46 @@
 
 export let state = {
   overview: { totalIncome: 0, totalExpense: 0 },
-  currentAccount: {
-    movements: [],
-    budget: [
-      { type: "Income", name: "Salary", value: 0, target: 0, native: true },
-      {
-        type: "Income",
-        name: "Side hustle",
-        value: 0,
-        target: 0,
-        native: true,
-      },
-      {
-        type: "Income",
-        name: "Capital Gains / Dividends",
-        value: 0,
-        target: 0,
-        native: true,
-      },
-      { type: "Expense", name: "Housing", value: 0, target: 0, native: true },
-      {
-        type: "Expense",
-        name: "Transportation",
-        value: 0,
-        target: 0,
-        native: true,
-      },
-      { type: "Expense", name: "Groceries", value: 0, target: 0, native: true },
-      { type: "Expense", name: "Food", value: 0, target: 0, native: true },
-      { type: "Expense", name: "Utilities", value: 0, target: 0, native: true },
-      {
-        type: "Expense",
-        name: "Subscriptions",
-        value: 0,
-        target: 0,
-        native: true,
-      },
-      { type: "Expense", name: "Savings", value: 0, target: 0, native: true },
-      { type: "Expense", name: "Investing", value: 0, target: 0, native: true },
-      { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
-    ],
-  },
+  budget: [
+    { type: "Income", name: "Salary", value: 0, target: 0, native: true },
+    {
+      type: "Income",
+      name: "Side hustle",
+      value: 0,
+      target: 0,
+      native: true,
+    },
+    {
+      type: "Income",
+      name: "Capital Gains / Dividends",
+      value: 0,
+      target: 0,
+      native: true,
+    },
+    { type: "Expense", name: "Housing", value: 0, target: 0, native: true },
+    {
+      type: "Expense",
+      name: "Transportation",
+      value: 0,
+      target: 0,
+      native: true,
+    },
+    { type: "Expense", name: "Groceries", value: 0, target: 0, native: true },
+    { type: "Expense", name: "Food", value: 0, target: 0, native: true },
+    { type: "Expense", name: "Utilities", value: 0, target: 0, native: true },
+    {
+      type: "Expense",
+      name: "Subscriptions",
+      value: 0,
+      target: 0,
+      native: true,
+    },
+    { type: "Expense", name: "Savings", value: 0, target: 0, native: true },
+    { type: "Expense", name: "Investing", value: 0, target: 0, native: true },
+    { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
+  ],
+  accounts: [{ name: "Main account", accountID: `native`, movements: [] }],
+  currentAccount: {},
 };
 
 export let filters = {
@@ -103,18 +102,18 @@ export const filterTransactions = (
 };
 
 export const newBudget = (newBudget) => {
-  state.currentAccount.budget = newBudget;
+  state.budget = newBudget;
   saveLocalStorage();
 };
 
 const resetBudget = () => {
-  state.currentAccount.budget.forEach((el) => (el.value = 0));
+  state.budget.forEach((el) => (el.value = 0));
 };
 
 // TODO: Find more efficient manner of calculating budget instead of nested loops
 export const calculateBudget = (arr) => {
   resetBudget();
-  state.currentAccount.budget.forEach((el) => {
+  state.budget.forEach((el) => {
     arr.forEach((arrEl) => {
       if (el.name === arrEl.category) {
         el.value += +arrEl.amount;
@@ -125,12 +124,8 @@ export const calculateBudget = (arr) => {
 
 export const updateBudget = (newMov, oldMov) => {
   if (oldMov) {
-    const oldCategory = state.currentAccount.budget.find(
-      (el) => el.name === oldMov.category
-    );
-    const newCategory = state.currentAccount.budget.find(
-      (el) => el.name === newMov.category
-    );
+    const oldCategory = state.budget.find((el) => el.name === oldMov.category);
+    const newCategory = state.budget.find((el) => el.name === newMov.category);
 
     if (newCategory != oldCategory) {
       oldCategory.value -= +oldMov.amount;
@@ -143,7 +138,7 @@ export const updateBudget = (newMov, oldMov) => {
 
     return;
   }
-  state.currentAccount.budget.find((el) => el.name === newMov.category).value +=
+  state.budget.find((el) => el.name === newMov.category).value +=
     +newMov.amount;
   saveLocalStorage();
   return;
@@ -168,10 +163,34 @@ const resetStateOverview = () => {
   state.overview.totalIncome = 0;
 };
 
-export const initFilter = () => {
-  filters.earliestDate = state.currentAccount.movements.reduce((lowest, el) => {
-    return (lowest = el.date < lowest ? el.date : lowest);
-  }, state.currentAccount.movements[0].date);
+export const createAccount = (accName) => {
+  const newAccount = {
+    name: accName,
+    movements: [],
+    accountID: `${Date.now()}acc`,
+  };
+  state.accounts.push(newAccount);
+  saveLocalStorage();
+};
+
+export const changeAccount = (accId) => {
+  const acc = state.accounts.find((el) => el.accountID === accId);
+  state.currentAccount = acc;
+};
+
+export const initFilter = (categories = []) => {
+  if (state.currentAccount.movements.length > 0) {
+    filters.earliestDate = state.currentAccount.movements.reduce(
+      (lowest, el) => {
+        return (lowest = el.date < lowest ? el.date : lowest);
+      },
+      state.currentAccount.movements[0].date
+    );
+  } else {
+    filters.earliestDate = Date.now();
+  }
+
+  filters.categories = categories;
 };
 
 export const isSameMonth = (mov) => {
