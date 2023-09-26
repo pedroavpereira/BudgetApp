@@ -21,6 +21,11 @@ export const renderAccounts = (arr) => {
   parentElement.insertAdjacentHTML("afterbegin", markup);
 };
 
+const toggleNewAccountForm = (addClass, removeClass) => {
+  document.querySelector(addClass).classList.add("d-none");
+  document.querySelector(removeClass).classList.remove("d-none");
+};
+
 export const accountContainerEvent = (
   handlerChangeAccount,
   handlerAddAccount
@@ -31,23 +36,19 @@ export const accountContainerEvent = (
       const target = e.target.closest(".accounts-event");
       if (!target) return;
       const datasetTarget = target.dataset;
-
+      const formInput = document.querySelector(".accounts-form--input");
       if (datasetTarget.target === "account") {
-        return handlerChangeAccount(datasetTarget.accountId);
+        handlerChangeAccount(datasetTarget.accountId);
       } else if (datasetTarget.target === "addAccount") {
-        const formInput = document.querySelector(".accounts-form--input").value;
         if (!formInput) return;
-        return handlerAddAccount(formInput);
+        handlerAddAccount(formInput.value);
+        formInput.value = "";
+        toggleNewAccountForm(".accounts-form", ".accounts-display--form");
       } else if (datasetTarget.target === "cancelAdition") {
-        document.querySelector(".accounts-form").classList.add("d-none");
-        document
-          .querySelector(".accounts-display--form")
-          .classList.remove("d-none");
+        formInput.value = "";
+        toggleNewAccountForm(".accounts-form", ".accounts-display--form");
       } else if (datasetTarget.target === "display-newAccountForm") {
-        document.querySelector(".accounts-form").classList.remove("d-none");
-        document
-          .querySelector(".accounts-display--form")
-          .classList.add("d-none");
+        toggleNewAccountForm(".accounts-display--form", ".accounts-form");
       }
     });
 };

@@ -39,7 +39,7 @@ export const deleteTransaction = (id) => {
 
 export const renderAllTransactions = (arr) => {
   parentElement.innerHTML = "";
-  if (arr.length > 1) {
+  if (arr.length > 0) {
     arr.forEach((el) => {
       renderTransaction(el);
     });

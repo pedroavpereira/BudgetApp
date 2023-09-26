@@ -34,6 +34,9 @@ const transactionUpdated = (obj) => {
       updatedTransaction,
       `.movement--row[data-id="${obj.id}"]`
     );
+  } else {
+    Model.initFilter(Model.filters.categories);
+    filterView.renderDate(creatingDateObj());
   }
 };
 
@@ -49,6 +52,9 @@ const newTransactionCreated = (obj) => {
     Model.updateStateOverview(newTransaction);
     overviewView.updateOverview(Model.state.overview);
     View.renderTransaction(newTransaction);
+  } else {
+    Model.initFilter(Model.filters.categories);
+    filterView.renderDate(creatingDateObj());
   }
 };
 
@@ -94,7 +100,7 @@ const datePickerYearChanged = (yearSelected) => {
 
 const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   const earliestMovDate = Model.filters.earliestDate;
-  const dateObj = { earliest: {}, current: {} };
+  const dateObj = { earliest: {}, current: {}, earliestDate: 0 };
   dateObj.yearSelected = yearSelected;
   dateObj.earliestDate = new Date(earliestMovDate);
   dateObj.earliest.year = dateObj.earliestDate.getFullYear();
@@ -105,11 +111,18 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
 };
 
 const changeAccountClicked = (accId) => {
-  console.log(accId);
+  Model.changeAccount(accId);
+  Model.initFilter();
+  View.renderAllTransactions(Model.filterTransactions());
+  Model.modifyStateOverview(Model.filterTransactions());
+  overviewView.updateOverview(Model.state.overview);
+  filterView.renderDate(creatingDateObj());
+  filterView.uncheckCheckboxes();
 };
 
 const createNewAccountClicked = (accName) => {
-  console.log(accName);
+  Model.createAccount(accName);
+  accountsView.renderAccounts(Model.state.accounts);
 };
 
 function init() {
