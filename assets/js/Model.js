@@ -178,6 +178,17 @@ export const changeAccount = (accId) => {
   state.currentAccount = acc;
 };
 
+export const deleteAccount = (accId) => {
+  const account = state.accounts.find((el) => el.accountID === accId);
+  if (state.currentAccount === account) {
+    state.currentAccount = state.accounts.find(
+      (el) => el.accountID === "native"
+    );
+  }
+  state.accounts.splice(state.accounts.indexOf(account), 1);
+  saveLocalStorage();
+};
+
 export const initFilter = (categories = []) => {
   if (state.currentAccount.movements.length > 0) {
     filters.earliestDate = state.currentAccount.movements.reduce(

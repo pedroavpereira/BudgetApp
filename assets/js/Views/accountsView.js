@@ -3,8 +3,22 @@
 const parentElement = document.querySelector(".accounts-container--list");
 
 const generateAccountMarkup = (account) => {
-  return `<div class="row accounts-row p-2 accounts-event" data-target="account" data-account-id=${account.accountID}>
+  console.log(account);
+  return `<div class="row accounts-row p-2 accounts-event" data-target="account" data-account-id=${
+    account.accountID
+  }>
   <div class="col" >${account.name}</div>
+  ${
+    account.accountID != "native"
+      ? `<div class="col" >
+      <button
+  type="button"
+  class="btn btn-sm btn-outline-danger accounts-event"
+  data-target="deleteAccount" data-account-id="${account.accountID}"
+><i class="bi bi-x-lg"></i>
+</button> </div>`
+      : ""
+  }
 </div>`;
 };
 
@@ -28,7 +42,8 @@ const toggleNewAccountForm = (addClass, removeClass) => {
 
 export const accountContainerEvent = (
   handlerChangeAccount,
-  handlerAddAccount
+  handlerAddAccount,
+  handlerDeleteAccount
 ) => {
   document
     .querySelector(".accounts-container")
@@ -49,6 +64,8 @@ export const accountContainerEvent = (
         toggleNewAccountForm(".accounts-form", ".accounts-display--form");
       } else if (datasetTarget.target === "display-newAccountForm") {
         toggleNewAccountForm(".accounts-display--form", ".accounts-form");
+      } else if (datasetTarget.target === "deleteAccount") {
+        handlerDeleteAccount(datasetTarget.accountId);
       }
     });
 };

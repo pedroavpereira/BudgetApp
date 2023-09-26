@@ -11,6 +11,11 @@ import * as modalView from "./Views/modalView.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
 import * as Model from "./Model.js";
 
+const updateOverview = () => {
+  Model.modifyStateOverview(Model.filterTransactions());
+  overviewView.updateOverview(Model.state.overview);
+};
+
 const btnDeleteClicked = (id) => {
   const mov = Model.findTransaction(id);
   Model.updateBudget({ category: mov.category, amount: 0 }, mov);
@@ -49,8 +54,7 @@ const newTransactionCreated = (obj) => {
     Model.isSameMonth(newTransaction)
   ) {
     Model.updateBudget(newTransaction);
-    Model.updateStateOverview(newTransaction);
-    overviewView.updateOverview(Model.state.overview);
+    updateOverview();
     View.renderTransaction(newTransaction);
   } else {
     Model.initFilter(Model.filters.categories);
@@ -114,8 +118,7 @@ const changeAccountClicked = (accId) => {
   Model.changeAccount(accId);
   Model.initFilter();
   View.renderAllTransactions(Model.filterTransactions());
-  Model.modifyStateOverview(Model.filterTransactions());
-  overviewView.updateOverview(Model.state.overview);
+  updateOverview();
   filterView.renderDate(creatingDateObj());
   filterView.uncheckCheckboxes();
 };
@@ -123,6 +126,13 @@ const changeAccountClicked = (accId) => {
 const createNewAccountClicked = (accName) => {
   Model.createAccount(accName);
   accountsView.renderAccounts(Model.state.accounts);
+};
+
+const deleteAccountClicked = (accId) => {
+  Model.deleteAccount(accId);
+  accountsView.renderAccounts(Model.state.accounts);
+  View.renderAllTransactions(Model.filterTransactions());
+  updateOverview();
 };
 
 function init() {
@@ -138,8 +148,7 @@ function init() {
   filterView.renderDate(creatingDateObj());
 
   View.renderAllTransactions(Model.filterTransactions());
-  Model.modifyStateOverview(Model.filterTransactions());
-  overviewView.updateOverview(Model.state.overview);
+  updateOverview();
   accountsView.renderAccounts(Model.state.accounts);
 
   filterView.renderCheckboxes(Model.state.budget);
@@ -148,7 +157,8 @@ function init() {
 
   accountsView.accountContainerEvent(
     changeAccountClicked,
-    createNewAccountClicked
+    createNewAccountClicked,
+    deleteAccountClicked
   );
   filterView.datePickerYearEvent(datePickerYearChanged);
   filterView.applyFilterEvent(applyFilterClicked);
