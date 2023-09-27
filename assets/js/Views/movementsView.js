@@ -17,9 +17,13 @@ const generateTransactionMarkup = (mov) => {
       }
     )}</div>
     <div class="col-4 p-3 d-none d-md-block" style="display:inline;">
+      
       <p  style="display:inline;" class=" inline text-${
-        mov.type === "In" ? "success" : "danger"
-      } text-opacity-75">(Transfer ${mov.category})</p>
+        mov.category === "In" ? "success" : "danger"
+      } text-opacity-75">${mov.category === "In" ? "From" : "To"}</p> ${
+      mov[mov.category === "In" ? "from" : "to"]
+    }
+      
     </div>
     <div class="col-6 col-md-4 p-3">${Math.abs(mov.amount)}</div>
   </div>

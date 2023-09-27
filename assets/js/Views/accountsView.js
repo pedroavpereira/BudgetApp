@@ -3,7 +3,6 @@
 const parentElement = document.querySelector(".accounts-container--list");
 
 const generateAccountMarkup = (account) => {
-  console.log(account);
   return `<div class="row accounts-row p-2 accounts-event" data-target="account" data-account-id=${
     account.accountID
   }>

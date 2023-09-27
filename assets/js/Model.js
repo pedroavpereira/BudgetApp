@@ -207,7 +207,7 @@ export const createTransfer = (transferObj) => {
     .find((el) => el.name === transferObj.for)
     .movements.push({ ...transfer, category: "In" });
   saveLocalStorage();
-  return state.currentAccount.find((el) => el.id === transfer);
+  return { ...transfer, category: "Out" };
 };
 
 export const initFilter = (categories = []) => {

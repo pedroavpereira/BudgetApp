@@ -46,7 +46,6 @@ const transactionUpdated = (obj) => {
 };
 
 const newTransactionCreated = (obj) => {
-  console.log("newTransaction");
   const newTransaction = Model.createTransaction(obj);
   if (
     (Model.filters.categories.includes(newTransaction.category) ||
@@ -68,12 +67,7 @@ const budgetSubmited = (obj) => {
 
 const transferCreated = (obj) => {
   const transferObj = Model.createTransfer(obj);
-  if (
-    Model.isSameAccount(transferObj?.from) ||
-    Model.isSameAccount(transferObj?.to)
-  ) {
-    View.renderTransaction(transferObj);
-  }
+  View.renderTransaction(transferObj);
 };
 
 const submitButtonClicked = (type, obj) => {
