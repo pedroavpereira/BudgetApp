@@ -52,11 +52,15 @@ export const accountContainerEvent = (
       if (!target) return;
       const datasetTarget = target.dataset;
       const formInput = document.querySelector(".accounts-form--input");
+      const accountTypeSelect = document.querySelector("#selectAccountType");
       if (datasetTarget.target === "account") {
         handlerChangeAccount(datasetTarget.accountId);
       } else if (datasetTarget.target === "addAccount") {
         if (!formInput) return;
-        handlerAddAccount(formInput.value);
+        handlerAddAccount({
+          name: formInput.value,
+          type: accountTypeSelect.value,
+        });
         formInput.value = "";
         toggleNewAccountForm(".accounts-form", ".accounts-display--form");
       } else if (datasetTarget.target === "cancelAdition") {

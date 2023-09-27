@@ -163,9 +163,10 @@ const resetStateOverview = () => {
   state.overview.totalIncome = 0;
 };
 
-export const createAccount = (accName) => {
+export const createAccount = (accObj) => {
   const newAccount = {
-    name: accName,
+    name: accObj.name,
+    type: accObj.type,
     movements: [],
     accountID: `${Date.now()}acc`,
   };

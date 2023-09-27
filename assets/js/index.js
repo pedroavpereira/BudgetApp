@@ -123,8 +123,8 @@ const changeAccountClicked = (accId) => {
   filterView.uncheckCheckboxes();
 };
 
-const createNewAccountClicked = (accName) => {
-  Model.createAccount(accName);
+const createNewAccountClicked = (accObj) => {
+  Model.createAccount(accObj);
   accountsView.renderAccounts(Model.state.accounts);
 };
 
