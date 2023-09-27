@@ -27,7 +27,7 @@ const btnDeleteClicked = (id) => {
 };
 
 const addTransactionClicked = () => {
-  modalView.updateModalInfo("transactionNew", Model.state.budget);
+  modalView.updateModalInfo("transactionNew", Model.state);
 };
 
 const transactionUpdated = (obj) => {
@@ -66,6 +66,16 @@ const budgetSubmited = (obj) => {
   Model.newBudget(obj);
 };
 
+const transferCreated = (obj) => {
+  const transferObj = Model.createTransfer(obj);
+  if (
+    Model.isSameAccount(transferObj.from) ||
+    Model.isSameAccount(transferObj.to)
+  ) {
+    View.renderTransaction(transferObj);
+  }
+};
+
 const submitButtonClicked = (type, obj) => {
   if (type.startsWith("transaction")) {
     if (type.endsWith("New")) {
@@ -81,12 +91,12 @@ const submitButtonClicked = (type, obj) => {
 };
 
 const updateBudgetClicked = () => {
-  modalView.updateModalInfo("budget", Model.state.budget);
+  modalView.updateModalInfo("budget", Model.state);
 };
 
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
-  modalView.updateModalInfo("transaction", Model.state.budget, mov);
+  modalView.updateModalInfo("transaction", Model.state, mov);
 };
 
 const applyFilterClicked = (obj) => {
@@ -164,7 +174,12 @@ function init() {
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);
   modalView.deleteBtnEvent(btnDeleteClicked);
-  modalView.submitBtnEvent(submitButtonClicked);
+  modalView.submitBtnEvent(
+    newTransactionCreated,
+    transactionUpdated,
+    budgetSubmited,
+    transferCreated
+  );
   movementsNavView.addTransactionEvent(addTransactionClicked);
   budgetView.changeBudgetClicked(updateBudgetClicked);
 }

@@ -190,6 +190,27 @@ export const deleteAccount = (accId) => {
   saveLocalStorage();
 };
 
+export const createTransfer = (transferObj) => {
+  const transfer = {
+    type: "Transfer",
+    category: "Transfer",
+    from: transferObj.from,
+    to: transferObj.for,
+    amount: transferObj.amount,
+    date: Date.now(),
+    id: String(Date.now()),
+  };
+
+  state.accounts
+    .find((el) => el.name === transferObj.from)
+    .movements.push(transfer);
+  state.accounts
+    .find((el) => el.name === transferObj.for)
+    .movements.push(transfer);
+  saveLocalStorage();
+  return transfer;
+};
+
 export const initFilter = (categories = []) => {
   if (state.currentAccount.movements.length > 0) {
     filters.earliestDate = state.currentAccount.movements.reduce(
@@ -210,6 +231,10 @@ export const isSameMonth = (mov) => {
     new Date(filters.date).getMonth() === new Date(mov.date).getMonth() &&
     new Date(filters.date).getFullYear() === new Date(mov.date).getFullYear()
   );
+};
+
+export const isSameAccount = (accName) => {
+  return accName === state.currentAccount.name;
 };
 
 export const loadLocalStorage = () => {
