@@ -193,7 +193,6 @@ export const deleteAccount = (accId) => {
 export const createTransfer = (transferObj) => {
   const transfer = {
     type: "Transfer",
-    category: "Transfer",
     from: transferObj.from,
     to: transferObj.for,
     amount: transferObj.amount,
@@ -203,12 +202,12 @@ export const createTransfer = (transferObj) => {
 
   state.accounts
     .find((el) => el.name === transferObj.from)
-    .movements.push(transfer);
+    .movements.push({ ...transfer, category: "Out" });
   state.accounts
     .find((el) => el.name === transferObj.for)
-    .movements.push(transfer);
+    .movements.push({ ...transfer, category: "In" });
   saveLocalStorage();
-  return transfer;
+  return state.currentAccount.find((el) => el.id === transfer);
 };
 
 export const initFilter = (categories = []) => {

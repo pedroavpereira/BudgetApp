@@ -1,16 +1,12 @@
 "use strict";
 
-import * as bootstrap from "bootstrap";
-
 import * as helper from "./../bootstrapElements.js";
 
 const parentElement = document.querySelector(".movement--container");
 
-export const renderTransaction = (
-  mov,
-  selectorDOM = ".movement--container"
-) => {
-  const markup = `<div class="movement--row" data-id="${mov.id}">
+const generateTransactionMarkup = (mov) => {
+  if (mov.type === "Transfer") {
+    return `<div class="movement--row" data-id="${mov.id}">
     <div class="row text-center" >
     <div class="col-6 col-md-4 p-3">${new Date(mov.date).toLocaleDateString(
       "pt-pt",
@@ -20,15 +16,42 @@ export const renderTransaction = (
         day: "numeric",
       }
     )}</div>
-    <div class="col-4 p-3 d-none d-md-block" style="display:inline;">${
-      mov.category
-    }  <p  style="display:inline;" class=" inline text-${
-    mov.type === "Income" ? "success" : "danger"
-  } text-opacity-75">(${mov.type})</p>
+    <div class="col-4 p-3 d-none d-md-block" style="display:inline;">
+      <p  style="display:inline;" class=" inline text-${
+        mov.type === "In" ? "success" : "danger"
+      } text-opacity-75">(Transfer ${mov.category})</p>
     </div>
     <div class="col-6 col-md-4 p-3">${Math.abs(mov.amount)}</div>
   </div>
   </div>`;
+  } else {
+    return `<div class="movement--row" data-id="${mov.id}">
+  <div class="row text-center" >
+  <div class="col-6 col-md-4 p-3">${new Date(mov.date).toLocaleDateString(
+    "pt-pt",
+    {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    }
+  )}</div>
+  <div class="col-4 p-3 d-none d-md-block" style="display:inline;">${
+    mov.category
+  }  <p  style="display:inline;" class=" inline text-${
+      mov.type === "Income" ? "success" : "danger"
+    } text-opacity-75">(${mov.type})</p>
+  </div>
+  <div class="col-6 col-md-4 p-3">${Math.abs(mov.amount)}</div>
+</div>
+</div>`;
+  }
+};
+
+export const renderTransaction = (
+  mov,
+  selectorDOM = ".movement--container"
+) => {
+  const markup = generateTransactionMarkup(mov);
 
   document.querySelector(selectorDOM).insertAdjacentHTML("afterbegin", markup);
 };

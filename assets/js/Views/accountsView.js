@@ -7,8 +7,12 @@ const generateAccountMarkup = (account) => {
   return `<div class="row accounts-row p-2 accounts-event" data-target="account" data-account-id=${
     account.accountID
   }>
-  <div class="col-8" ><i class="bi bi-${
-    account.type === "Savings" ? "bank" : "credit-card"
+  <div class="col-8" ><i class="bi text-primary bi-${
+    account.type === "Savings"
+      ? "bank"
+      : account.type === "Investing"
+      ? "currency-exchange"
+      : "credit-card"
   }"></i> ${account.name}</div>
   ${
     account.accountID != "native"

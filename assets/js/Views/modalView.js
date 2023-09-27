@@ -26,15 +26,11 @@ const generateBudgetCheckboxes = (arr, mov, type = "Expense") => {
     <select
     name="month"
     class="form-select form-select-sm"
-    id="selectAccountFrom"
+    id="selectAccountFrom" disabled 
   >
-    ${arr.accounts
-      .map((el) => {
-        return `<option value="${el.name}" ${
-          el === arr.currentAccount ? "selected" : ""
-        }>${el.name}</option>`;
-      })
-      .join(" ")}
+  <option value="${arr.currentAccount.name}" >${
+      arr.currentAccount.name
+    }</option>
   </select>
   <label class="form-check-label" for="selectTransferTo">To </label>
   <select

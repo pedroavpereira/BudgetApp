@@ -69,8 +69,8 @@ const budgetSubmited = (obj) => {
 const transferCreated = (obj) => {
   const transferObj = Model.createTransfer(obj);
   if (
-    Model.isSameAccount(transferObj.from) ||
-    Model.isSameAccount(transferObj.to)
+    Model.isSameAccount(transferObj?.from) ||
+    Model.isSameAccount(transferObj?.to)
   ) {
     View.renderTransaction(transferObj);
   }
