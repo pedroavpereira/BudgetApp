@@ -139,6 +139,37 @@ const generateTransactionMarkup = (budgetObj, mov) => {
     `;
 };
 
+const generateSavingsMarkup = (accObj) => {
+  return `<div>
+  <div class="form-floating mb-3">
+    <input
+      type="name"
+      class="form-control"
+      id="foatingAccountName"
+      placeholder="${accObj.name}"
+      value = "${accObj.name}"
+    />
+    <label for="foatingAccountName">AccountName</label>
+  </div>
+  <div class="form-floating">
+  <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
+  <option value="1" selected>${accObj.type}</option>
+  </select>
+  <label for="floatingSelect">Account Type</label>
+  </div>
+  <div class="form-floating mt-3">
+    <input
+      type="Number"
+      class="form-control"
+      id="FloatingAccountGoal"
+      placeholder="${accObj.goal}"
+      value = "${accObj.goal}"
+    />
+    <label for="FloatingAccountGoal">Account Goal</label>
+  </div>
+</div>`;
+};
+
 const updateCategories = (e, budgetObj, mov) => {
   const target = e.target;
   const categoriesContainer = document.querySelector(
@@ -155,7 +186,6 @@ const updateCategories = (e, budgetObj, mov) => {
 };
 
 export const updateModalInfo = (type, stateObj, mov) => {
-  //   parentElement.setAttribute("data-index", index);
   const buttonSubmit = document.querySelector(".btn--submitModal");
   buttonSubmit.setAttribute("data-type", type);
 
@@ -164,7 +194,12 @@ export const updateModalInfo = (type, stateObj, mov) => {
   if (type === "budget") {
     markup = generateBudgetMarkup(stateObj);
   } else {
-    markup = generateTransactionMarkup(stateObj, mov);
+    if (stateObj.currentAccount.type === "Savings") {
+      buttonSubmit.setAttribute("data-type", "Savings");
+      markup = generateSavingsMarkup(stateObj.currentAccount);
+    } else {
+      markup = generateTransactionMarkup(stateObj, mov);
+    }
   }
 
   document.querySelector(".modalContent").innerHTML = "";
@@ -240,7 +275,8 @@ export const submitBtnEvent = (
   newTransactionHandler,
   transactionUpdatedHandler,
   budgetUpdatedHandler,
-  transferCreatedHandler
+  transferCreatedHandler,
+  updateSavingsAccountHandler
 ) => {
   const submitBtnModal = document.querySelector(".btn--submitModal");
 
@@ -308,6 +344,12 @@ export const submitBtnEvent = (
         }
       );
       budgetUpdatedHandler(type, newBudget);
+    } else if (type === "Savings") {
+      const obj = {
+        name: document.querySelector("#foatingAccountName").value,
+        goal: document.querySelector("#FloatingAccountGoal").value,
+      };
+      updateSavingsAccountHandler(obj);
     }
 
     closeModal();

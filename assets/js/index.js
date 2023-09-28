@@ -70,6 +70,10 @@ const transferCreated = (obj) => {
   View.renderTransaction(transferObj);
 };
 
+const savingsAccountUpdated = (accObj) => {
+  Model.updateSavingsAccount(accObj);
+};
+
 const submitButtonClicked = (type, obj) => {
   if (type.startsWith("transaction")) {
     if (type.endsWith("New")) {
@@ -172,7 +176,8 @@ function init() {
     newTransactionCreated,
     transactionUpdated,
     budgetSubmited,
-    transferCreated
+    transferCreated,
+    savingsAccountUpdated
   );
   movementsNavView.addTransactionEvent(addTransactionClicked);
   budgetView.changeBudgetClicked(updateBudgetClicked);

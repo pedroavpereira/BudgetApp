@@ -167,10 +167,18 @@ export const createAccount = (accObj) => {
   const newAccount = {
     name: accObj.name,
     type: accObj.type,
+    deposits: 0,
     movements: [],
     accountID: `${Date.now()}acc`,
   };
+  if (accObj.type === "Savings") newAccount.goal = 0;
+  if (accObj.type === "Investing") newAccount.currentValue = 0;
   state.accounts.push(newAccount);
+  saveLocalStorage();
+};
+
+export const updateSavingsAccount = (accObj) => {
+  Object.keys(accObj).forEach((el) => (state.currentAccount[el] = accObj[el]));
   saveLocalStorage();
 };
 
