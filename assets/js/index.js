@@ -22,7 +22,7 @@ const btnDeleteClicked = (id) => {
   Model.updateStateOverview({ type: mov.type, amount: 0 }, mov);
   Model.deleteTransaction(id);
   View.deleteTransaction(id);
-  budgetView.renderBudget(Model.state.budget);
+  budgetView.renderBudget(Model.state);
   overviewView.updateOverview(Model.state.overview);
 };
 
@@ -85,7 +85,7 @@ const submitButtonClicked = (type, obj) => {
     budgetSubmited(obj);
   }
 
-  budgetView.renderBudget(Model.state.budget);
+  budgetView.renderBudget(Model.state);
 };
 
 const updateBudgetClicked = () => {
@@ -103,7 +103,7 @@ const applyFilterClicked = (obj) => {
   Model.modifyStateOverview(transactions);
   overviewView.updateOverview(Model.state.overview);
   Model.calculateBudget(transactions);
-  budgetView.renderBudget(Model.state.budget);
+  budgetView.renderBudget(Model.state);
 };
 
 const datePickerYearChanged = (yearSelected) => {
@@ -127,6 +127,7 @@ const changeAccountClicked = (accId) => {
   Model.initFilter();
   View.renderAllTransactions(Model.filterTransactions());
   updateOverview();
+  budgetView.renderBudget(Model.state);
   filterView.renderDate(creatingDateObj());
   filterView.uncheckCheckboxes();
 };
@@ -161,7 +162,7 @@ function init() {
 
   filterView.renderCheckboxes(Model.state.budget);
   Model.calculateBudget(Model.filterTransactions());
-  budgetView.renderBudget(Model.state.budget);
+  budgetView.renderBudget(Model.state);
 
   accountsView.accountContainerEvent(
     changeAccountClicked,

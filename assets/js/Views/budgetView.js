@@ -5,15 +5,22 @@ import * as helper from "../bootstrapElements.js";
 const parentElement = document.querySelector(".overview--body");
 
 export const renderBudget = (arr) => {
-  const markup = arr
-    .map((el) => {
-      if (el.value) {
-        return `<p class="text-${
-          el.value <= el.target ? "success" : "danger"
-        }">${el.name} - ${el.value} / ${el.target}</p>`;
-      }
-    })
-    .join(" ");
+  let markup;
+  if (arr.currentAccount.type === "Savings") {
+    markup = `<p>${arr.currentAccount.deposits} of the goal ${arr.currentAccount.goal}</p>`;
+    document.querySelector(".btn--budget").classList.add("d-none");
+  } else {
+    document.querySelector(".btn--budget").classList.remove("d-none");
+    markup = arr.budget
+      .map((el) => {
+        if (el.value) {
+          return `<p class="text-${
+            el.value <= el.target ? "success" : "danger"
+          }">${el.name} - ${el.value} / ${el.target}</p>`;
+        }
+      })
+      .join(" ");
+  }
 
   parentElement.innerHTML = "";
   parentElement.insertAdjacentHTML("beforeend", markup);

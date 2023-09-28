@@ -5,9 +5,9 @@ import * as config from "./../config.js";
 
 const parentElement = document.querySelector("#addTransactionModal");
 
-const generateBudgetMarkup = (budgetObj) => {
+const generateBudgetMarkup = (stateArr) => {
   return `<div class="col">
-    ${budgetObj
+    ${stateArr.budget
       .map((el) => {
         return `
     <div class="col my-2">
