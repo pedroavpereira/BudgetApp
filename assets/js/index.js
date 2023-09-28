@@ -72,6 +72,7 @@ const transferCreated = (obj) => {
 
 const savingsAccountUpdated = (accObj) => {
   Model.updateSavingsAccount(accObj);
+  accountsView.renderAccounts(Model.state.accounts);
 };
 
 const submitButtonClicked = (type, obj) => {
