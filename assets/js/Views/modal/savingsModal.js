@@ -10,7 +10,7 @@ const generateTransactionMarkup = (trans) => {
     </select>
     <label for="floatingSelect">From</label>
     </div>
-    <div class="form-floating">
+    <div class="form-floating mt-2 mb-2">
     <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
     <option value="1" selected>${trans.to}</option>
     </select>
@@ -83,7 +83,7 @@ export const renderTransactionSum = (trans) => {
       day: "numeric",
     })}`
   );
-  parentView.updateSubmitButton("Update Account");
-  parentView.updateDeleteButton("Delete", true);
+  parentView.updateSubmitButton("Close");
+  parentView.updateDeleteButton("Delete");
   insertHTML(markup);
 };
