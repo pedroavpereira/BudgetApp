@@ -2,6 +2,7 @@
 import * as bootstrap from "bootstrap";
 
 import * as helper from "./bootstrapElements.js";
+import * as savingsModalView from "./Views/modal/savingsModal.js";
 import * as View from "./Views/movementsView.js";
 import * as filterView from "./Views/filterView.js";
 import * as accountsView from "./Views/accountsView.js";
@@ -27,7 +28,11 @@ const btnDeleteClicked = (id) => {
 };
 
 const addTransactionClicked = () => {
-  modalView.updateModalInfo("transactionNew", Model.state);
+  if (Model.state.currentAccount.type === "Savings") {
+    savingsModalView.renderAccountSum(Model.state.currentAccount);
+  } else {
+    modalView.updateModalInfo("transactionNew", Model.state);
+  }
 };
 
 const transactionUpdated = (obj) => {
@@ -95,7 +100,11 @@ const updateBudgetClicked = () => {
 
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
-  modalView.updateModalInfo("transaction", Model.state, mov);
+  if (Model.state.currentAccount.type === "Savings") {
+    savingsModalView.renderTransactionSum(mov);
+  } else {
+    modalView.updateModalInfo("transaction", Model.state, mov);
+  }
 };
 
 const applyFilterClicked = (obj) => {

@@ -2,9 +2,6 @@
 
 import * as helper from "./../bootstrapElements.js";
 
-const modal = document.querySelector("#addTransactionModal");
-const transactionModal = new bootstrap.Modal(modal);
-
 const parentElement = document.querySelector(".movements--nav");
 
 export const addTransactionEvent = (handler) => {
