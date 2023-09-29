@@ -131,7 +131,7 @@ const generateTransactionMarkup = (budgetObj, mov) => {
   <div class="col my-2">
     <label for="newTransactionAmount">Amount: </label>
     <input type="number"  id="newTransactionAmount" value="${
-      mov?.amount ? mov.amount : 0
+      mov?.amount ? Math.abs(mov.amount) : 0
     }" />
   
   </div>
@@ -319,7 +319,7 @@ export const submitBtnEvent = (
       } else {
         const obj = {
           type: movType,
-          amount,
+          amount: movType === "Expense" ? -amount : amount,
           category,
           date: Date.parse(date),
           id: "",

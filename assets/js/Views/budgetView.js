@@ -7,7 +7,7 @@ const parentElement = document.querySelector(".overview--body");
 export const renderBudget = (arr) => {
   let markup;
   if (arr.currentAccount.type === "Savings") {
-    markup = `<p>${arr.currentAccount.deposits} of the goal ${arr.currentAccount.goal}</p>`;
+    markup = `<p>${arr.currentAccount.balance} of the goal ${arr.currentAccount.goal}</p>`;
     document.querySelector(".btn--budget").classList.add("d-none");
   } else {
     document.querySelector(".btn--budget").classList.remove("d-none");

@@ -40,7 +40,9 @@ export let state = {
     { type: "Expense", name: "Investing", value: 0, target: 0, native: true },
     { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
   ],
-  accounts: [{ name: "Main account", accountID: `native`, movements: [] }],
+  accounts: [
+    { name: "Main account", accountID: `native`, movements: [], balance: 0 },
+  ],
   currentAccount: {},
 };
 
@@ -59,6 +61,7 @@ export const createTransaction = (obj) => {
     id: String(Date.now()),
   };
   state.currentAccount.movements.push(newTransaction);
+  state.currentAccount.balance += newTransaction.amount;
   saveLocalStorage();
   return newTransaction;
 };
@@ -67,6 +70,8 @@ export const updateTransaction = (newMov) => {
   const mov = findTransaction(newMov.id);
   updateBudget(newMov, mov);
   updateStateOverview(newMov, mov);
+  state.currentAccount.balance += newMov.amount;
+  state.currentAccount.balance -= mov.amount;
   Object.keys(mov).forEach((el) => (mov[el] = newMov[el]));
   saveLocalStorage();
   return mov;
@@ -76,8 +81,12 @@ export const findTransaction = (id) => {
   return state.currentAccount.movements.find((el) => el.id === id);
 };
 export const deleteTransaction = (id) => {
-  const i = state.currentAccount.movements.indexOf(findTransaction(id));
-  state.currentAccount.movements.splice(i, 1);
+  const mov = findTransaction(id);
+  state.currentAccount.balance -= mov.amount;
+  state.currentAccount.movements.splice(
+    state.currentAccount.movements.indexOf(mov),
+    1
+  );
   saveLocalStorage();
 };
 
@@ -116,7 +125,7 @@ export const calculateBudget = (arr) => {
   state.budget.forEach((el) => {
     arr.forEach((arrEl) => {
       if (el.name === arrEl.category) {
-        el.value += +arrEl.amount;
+        el.value += Math.abs(arrEl.amount);
       }
     });
   });
@@ -167,7 +176,7 @@ export const createAccount = (accObj) => {
   const newAccount = {
     name: accObj.name,
     type: accObj.type,
-    deposits: 0,
+    balance: 0,
     movements: [],
     accountID: `${Date.now()}acc`,
   };
@@ -207,13 +216,14 @@ export const createTransfer = (transferObj) => {
     date: Date.now(),
     id: String(Date.now()),
   };
+  const fromAccount = state.accounts.find((el) => el.name === transferObj.from);
+  const toAccount = state.accounts.find((el) => el.name === transferObj.for);
 
-  state.accounts
-    .find((el) => el.name === transferObj.from)
-    .movements.push({ ...transfer, category: "Out" });
-  state.accounts
-    .find((el) => el.name === transferObj.for)
-    .movements.push({ ...transfer, category: "In" });
+  fromAccount.balance -= transfer.amount;
+  toAccount.balance += transfer.amount;
+
+  fromAccount.movements.push({ ...transfer, category: "Out" });
+  toAccount.movements.push({ ...transfer, category: "In" });
   saveLocalStorage();
   return { ...transfer, category: "Out" };
 };
