@@ -68,22 +68,23 @@ const insertHTML = (markup) => {
 
 export const renderAccountSum = (accObj) => {
   const markup = generateAccSumMarkup(accObj);
-  parentView.changeTitle(`Savings: ${accObj.name}`);
-  parentView.updateSubmitButton("Update Account");
-  parentView.updateDeleteButton("Delete", true);
+  parentView.updateBaseModal({
+    title: `Savings: ${accObj.name}`,
+    submitBtn: ["Update Account", "SavingsAccount"],
+  });
   insertHTML(markup);
 };
 
 export const renderTransactionSum = (trans) => {
   const markup = generateTransactionMarkup(trans);
-  parentView.changeTitle(
-    `Transfer from: ${new Date(trans.date).toLocaleDateString("pt-pt", {
+  parentView.updateBaseModal({
+    title: `Transfer from: ${new Date(trans.date).toLocaleDateString("pt-pt", {
       year: "numeric",
       month: "numeric",
       day: "numeric",
-    })}`
-  );
-  parentView.updateSubmitButton("Close");
-  parentView.updateDeleteButton("Delete");
+    })}`,
+    submitBtn: ["Close", "SavingsTrans"],
+    deleteBtn: ["Delete", true],
+  });
   insertHTML(markup);
 };
