@@ -5,9 +5,9 @@ import * as config from "./../config.js";
 
 const parentElement = document.querySelector("#addTransactionModal");
 
-const generateBudgetMarkup = (budgetObj) => {
+const generateBudgetMarkup = (stateArr) => {
   return `<div class="col">
-    ${budgetObj
+    ${stateArr.budget
       .map((el) => {
         return `
     <div class="col my-2">
@@ -20,10 +20,38 @@ const generateBudgetMarkup = (budgetObj) => {
 };
 
 const generateBudgetCheckboxes = (arr, mov, type = "Expense") => {
-  return `${arr
-    .filter((el) => el.type === type)
-    .map((el, i) => {
-      return `<div class="form-check">
+  if (type === "Transfer") {
+    return `
+    <label class="form-check-label" for="selectAccountFrom">From: </label>
+    <select
+    name="month"
+    class="form-select form-select-sm"
+    id="selectAccountFrom" disabled 
+  >
+  <option value="${arr.currentAccount.name}" >${
+      arr.currentAccount.name
+    }</option>
+  </select>
+  <label class="form-check-label" for="selectTransferTo">To </label>
+  <select
+                          name="month"
+                          class="form-select form-select-sm"
+                          id="selectAccountTo"
+                        >
+                        ${arr.accounts
+                          .map((el) => {
+                            return `<option value="${el.name}" ${
+                              el != arr.currentAccount ? "selected" : ""
+                            }>${el.name}</option>`;
+                          })
+                          .join(" ")}
+                        </select>
+    `;
+  } else {
+    return `${arr.budget
+      .filter((el) => el.type === type)
+      .map((el, i) => {
+        return `<div class="form-check">
       <input
     class="form-check-input radioTransModal"
     type="radio"
@@ -36,8 +64,9 @@ const generateBudgetCheckboxes = (arr, mov, type = "Expense") => {
   ${el.name}
   </label>
   </div>`;
-    })
-    .join(" ")}`;
+      })
+      .join(" ")}`;
+  }
 };
 
 const generateTransactionMarkup = (budgetObj, mov) => {
@@ -55,8 +84,16 @@ const generateTransactionMarkup = (budgetObj, mov) => {
       <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Income" ${
         mov?.type === "Income" ? "checked" : ""
       }>
-      <label class="form-check-label" for="expense-Type--Income">
+      <label class="form-check-label" for="expense-Type--Transfer">
         Income
+      </label>
+    </div>
+    <div class="form-check col-3">
+      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Transfer" ${
+        mov?.type === "Transfer" ? "checked" : ""
+      }>
+      <label class="form-check-label" for="expense-Type--Income">
+        Transfer
       </label>
     </div>
     </div>
@@ -94,12 +131,43 @@ const generateTransactionMarkup = (budgetObj, mov) => {
   <div class="col my-2">
     <label for="newTransactionAmount">Amount: </label>
     <input type="number"  id="newTransactionAmount" value="${
-      mov?.amount ? mov.amount : 0
+      mov?.amount ? Math.abs(mov.amount) : 0
     }" />
   
   </div>
   </div>
     `;
+};
+
+const generateSavingsMarkup = (accObj) => {
+  return `<div>
+  <div class="form-floating mb-3">
+    <input
+      type="name"
+      class="form-control"
+      id="foatingAccountName"
+      placeholder="${accObj.name}"
+      value = "${accObj.name}"
+    />
+    <label for="foatingAccountName">AccountName</label>
+  </div>
+  <div class="form-floating">
+  <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
+  <option value="1" selected>${accObj.type}</option>
+  </select>
+  <label for="floatingSelect">Account Type</label>
+  </div>
+  <div class="form-floating mt-3">
+    <input
+      type="Number"
+      class="form-control"
+      id="FloatingAccountGoal"
+      placeholder="${accObj.goal}"
+      value = "${accObj.goal}"
+    />
+    <label for="FloatingAccountGoal">Account Goal</label>
+  </div>
+</div>`;
 };
 
 const updateCategories = (e, budgetObj, mov) => {
@@ -117,17 +185,21 @@ const updateCategories = (e, budgetObj, mov) => {
   }
 };
 
-export const updateModalInfo = (type, budgetObj, mov) => {
-  //   parentElement.setAttribute("data-index", index);
+export const updateModalInfo = (type, stateObj, mov) => {
   const buttonSubmit = document.querySelector(".btn--submitModal");
   buttonSubmit.setAttribute("data-type", type);
 
   let markup;
 
   if (type === "budget") {
-    markup = generateBudgetMarkup(budgetObj);
+    markup = generateBudgetMarkup(stateObj);
   } else {
-    markup = generateTransactionMarkup(budgetObj, mov);
+    if (stateObj.currentAccount.type === "Savings") {
+      buttonSubmit.setAttribute("data-type", "Savings");
+      markup = generateSavingsMarkup(stateObj.currentAccount);
+    } else {
+      markup = generateTransactionMarkup(stateObj, mov);
+    }
   }
 
   document.querySelector(".modalContent").innerHTML = "";
@@ -139,7 +211,7 @@ export const updateModalInfo = (type, budgetObj, mov) => {
   document
     .querySelector(".check-type")
     ?.addEventListener("click", function (e) {
-      updateCategories(e, budgetObj, mov);
+      updateCategories(e, stateObj, mov);
     });
 
   if (type === "transactionNew" || type === "budget") {
@@ -199,7 +271,13 @@ const modalErrorMarkup = (errorArr) => {
   return markup;
 };
 
-export const submitBtnEvent = (handler) => {
+export const submitBtnEvent = (
+  newTransactionHandler,
+  transactionUpdatedHandler,
+  budgetUpdatedHandler,
+  transferCreatedHandler,
+  updateSavingsAccountHandler
+) => {
   const submitBtnModal = document.querySelector(".btn--submitModal");
 
   submitBtnModal.addEventListener("click", function () {
@@ -207,7 +285,7 @@ export const submitBtnEvent = (handler) => {
     if (type.startsWith("transaction")) {
       const amount = +document.querySelector("#newTransactionAmount").value;
       const category = document.querySelector(".radioTransModal:checked")
-        .dataset.category;
+        ?.dataset.category;
 
       const date = getDateFromDOM(
         "getDayModal",
@@ -234,19 +312,25 @@ export const submitBtnEvent = (handler) => {
         return;
       }
 
-      const obj = {
-        type: movType,
-        amount,
-        category,
-        date: Date.parse(date),
-        id: "",
-      };
-
-      if (type.endsWith("New")) {
-        handler(type, obj);
+      if (movType === "Transfer") {
+        const accFrom = document.querySelector("#selectAccountFrom").value;
+        const accFor = document.querySelector("#selectAccountTo").value;
+        transferCreatedHandler({ from: accFrom, for: accFor, amount });
       } else {
-        obj.id = document.querySelector(".mov--active").dataset.id;
-        handler(type, obj);
+        const obj = {
+          type: movType,
+          amount: movType === "Expense" ? -amount : amount,
+          category,
+          date: Date.parse(date),
+          id: "",
+        };
+
+        if (type.endsWith("New")) {
+          newTransactionHandler(obj);
+        } else {
+          obj.id = document.querySelector(".mov--active").dataset.id;
+          transactionUpdatedHandler(obj);
+        }
       }
     } else if (type === "budget") {
       const newBudget = [...document.querySelectorAll(".input--budget")].map(
@@ -259,7 +343,13 @@ export const submitBtnEvent = (handler) => {
           };
         }
       );
-      handler(type, newBudget);
+      budgetUpdatedHandler(type, newBudget);
+    } else if (type === "Savings") {
+      const obj = {
+        name: document.querySelector("#foatingAccountName").value,
+        goal: document.querySelector("#FloatingAccountGoal").value,
+      };
+      updateSavingsAccountHandler(obj);
     }
 
     closeModal();

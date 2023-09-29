@@ -3,8 +3,27 @@
 const parentElement = document.querySelector(".accounts-container--list");
 
 const generateAccountMarkup = (account) => {
-  return `<div class="row accounts-row p-2 accounts-event" data-target="account" data-account-id=${account.accountID}>
-  <div class="col" >${account.name}</div>
+  return `<div class="row accounts-row p-2 accounts-event" data-target="account" data-account-id=${
+    account.accountID
+  }>
+  <div class="col-8" ><i class="bi text-primary bi-${
+    account.type === "Savings"
+      ? "bank"
+      : account.type === "Investing"
+      ? "currency-exchange"
+      : "credit-card"
+  }"></i> ${account.name}</div>
+  ${
+    account.accountID != "native"
+      ? `<div class="col-4" >
+      <button
+  type="button"
+  class="btn btn-sm btn-outline-danger accounts-event"
+  data-target="deleteAccount" data-account-id="${account.accountID}"
+><i class="bi bi-x-lg"></i>
+</button> </div>`
+      : ""
+  }
 </div>`;
 };
 
@@ -28,7 +47,8 @@ const toggleNewAccountForm = (addClass, removeClass) => {
 
 export const accountContainerEvent = (
   handlerChangeAccount,
-  handlerAddAccount
+  handlerAddAccount,
+  handlerDeleteAccount
 ) => {
   document
     .querySelector(".accounts-container")
@@ -37,11 +57,15 @@ export const accountContainerEvent = (
       if (!target) return;
       const datasetTarget = target.dataset;
       const formInput = document.querySelector(".accounts-form--input");
+      const accountTypeSelect = document.querySelector("#selectAccountType");
       if (datasetTarget.target === "account") {
         handlerChangeAccount(datasetTarget.accountId);
       } else if (datasetTarget.target === "addAccount") {
         if (!formInput) return;
-        handlerAddAccount(formInput.value);
+        handlerAddAccount({
+          name: formInput.value,
+          type: accountTypeSelect.value,
+        });
         formInput.value = "";
         toggleNewAccountForm(".accounts-form", ".accounts-display--form");
       } else if (datasetTarget.target === "cancelAdition") {
@@ -49,6 +73,8 @@ export const accountContainerEvent = (
         toggleNewAccountForm(".accounts-form", ".accounts-display--form");
       } else if (datasetTarget.target === "display-newAccountForm") {
         toggleNewAccountForm(".accounts-display--form", ".accounts-form");
+      } else if (datasetTarget.target === "deleteAccount") {
+        handlerDeleteAccount(datasetTarget.accountId);
       }
     });
 };

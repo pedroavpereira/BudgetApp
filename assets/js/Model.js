@@ -40,7 +40,9 @@ export let state = {
     { type: "Expense", name: "Investing", value: 0, target: 0, native: true },
     { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
   ],
-  accounts: [{ name: "Main account", accountID: `native`, movements: [] }],
+  accounts: [
+    { name: "Main account", accountID: `native`, movements: [], balance: 0 },
+  ],
   currentAccount: {},
 };
 
@@ -59,6 +61,7 @@ export const createTransaction = (obj) => {
     id: String(Date.now()),
   };
   state.currentAccount.movements.push(newTransaction);
+  state.currentAccount.balance += newTransaction.amount;
   saveLocalStorage();
   return newTransaction;
 };
@@ -67,6 +70,8 @@ export const updateTransaction = (newMov) => {
   const mov = findTransaction(newMov.id);
   updateBudget(newMov, mov);
   updateStateOverview(newMov, mov);
+  state.currentAccount.balance += newMov.amount;
+  state.currentAccount.balance -= mov.amount;
   Object.keys(mov).forEach((el) => (mov[el] = newMov[el]));
   saveLocalStorage();
   return mov;
@@ -76,8 +81,12 @@ export const findTransaction = (id) => {
   return state.currentAccount.movements.find((el) => el.id === id);
 };
 export const deleteTransaction = (id) => {
-  const i = state.currentAccount.movements.indexOf(findTransaction(id));
-  state.currentAccount.movements.splice(i, 1);
+  const mov = findTransaction(id);
+  state.currentAccount.balance -= mov.amount;
+  state.currentAccount.movements.splice(
+    state.currentAccount.movements.indexOf(mov),
+    1
+  );
   saveLocalStorage();
 };
 
@@ -116,7 +125,7 @@ export const calculateBudget = (arr) => {
   state.budget.forEach((el) => {
     arr.forEach((arrEl) => {
       if (el.name === arrEl.category) {
-        el.value += +arrEl.amount;
+        el.value += Math.abs(arrEl.amount);
       }
     });
   });
@@ -163,19 +172,60 @@ const resetStateOverview = () => {
   state.overview.totalIncome = 0;
 };
 
-export const createAccount = (accName) => {
+export const createAccount = (accObj) => {
   const newAccount = {
-    name: accName,
+    name: accObj.name,
+    type: accObj.type,
+    balance: 0,
     movements: [],
     accountID: `${Date.now()}acc`,
   };
+  if (accObj.type === "Savings") newAccount.goal = 0;
+  if (accObj.type === "Investing") newAccount.currentValue = 0;
   state.accounts.push(newAccount);
+  saveLocalStorage();
+};
+
+export const updateSavingsAccount = (accObj) => {
+  Object.keys(accObj).forEach((el) => (state.currentAccount[el] = accObj[el]));
   saveLocalStorage();
 };
 
 export const changeAccount = (accId) => {
   const acc = state.accounts.find((el) => el.accountID === accId);
   state.currentAccount = acc;
+};
+
+export const deleteAccount = (accId) => {
+  const account = state.accounts.find((el) => el.accountID === accId);
+  if (state.currentAccount === account) {
+    state.currentAccount = state.accounts.find(
+      (el) => el.accountID === "native"
+    );
+  }
+  state.accounts.splice(state.accounts.indexOf(account), 1);
+  saveLocalStorage();
+};
+
+export const createTransfer = (transferObj) => {
+  const transfer = {
+    type: "Transfer",
+    from: transferObj.from,
+    to: transferObj.for,
+    amount: transferObj.amount,
+    date: Date.now(),
+    id: String(Date.now()),
+  };
+  const fromAccount = state.accounts.find((el) => el.name === transferObj.from);
+  const toAccount = state.accounts.find((el) => el.name === transferObj.for);
+
+  fromAccount.balance -= transfer.amount;
+  toAccount.balance += transfer.amount;
+
+  fromAccount.movements.push({ ...transfer, category: "Out" });
+  toAccount.movements.push({ ...transfer, category: "In" });
+  saveLocalStorage();
+  return { ...transfer, category: "Out" };
 };
 
 export const initFilter = (categories = []) => {
@@ -198,6 +248,10 @@ export const isSameMonth = (mov) => {
     new Date(filters.date).getMonth() === new Date(mov.date).getMonth() &&
     new Date(filters.date).getFullYear() === new Date(mov.date).getFullYear()
   );
+};
+
+export const isSameAccount = (accName) => {
+  return accName === state.currentAccount.name;
 };
 
 export const loadLocalStorage = () => {
