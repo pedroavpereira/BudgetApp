@@ -4,6 +4,7 @@ import * as bootstrap from "bootstrap";
 import * as helper from "./bootstrapElements.js";
 import * as savingsModalView from "./Views/modal/savingsModal.js";
 import * as transactionModalView from "./Views/modal/transactionModal.js";
+import * as budgetModalView from "./Views/modal/budgetModal.js";
 import * as View from "./Views/movementsView.js";
 import * as filterView from "./Views/filterView.js";
 import * as accountsView from "./Views/accountsView.js";
@@ -82,7 +83,7 @@ const savingsAccountUpdated = (accObj) => {
 };
 
 const updateBudgetClicked = () => {
-  modalView.updateModalInfo("budget", Model.state);
+  budgetModalView.renderUpdateModal(Model.state);
 };
 
 const transactionClicked = (id) => {

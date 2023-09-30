@@ -1,7 +1,8 @@
 import * as parentView from "./modalBase.js";
 import * as config from "./../../config.js";
+import * as bootstrapElements from "./../../bootstrapElements.js";
 
-const generateTransTypeMarkup = (mov) => {
+const generateTransTypeMarkup = () => {
   return `<div class="row check-type">
   <div class="form-check col-3">
       <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expense-Type--Expense" data-target="Expense" checked>
@@ -10,17 +11,13 @@ const generateTransTypeMarkup = (mov) => {
       </label>
       </div>
       <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Income" ${
-        mov?.type === "Income" ? "checked" : ""
-      }>
+      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Income">
       <label class="form-check-label" for="expense-Type--Transfer">
         Income
       </label>
     </div>
     <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Transfer" ${
-        mov?.type === "Transfer" ? "checked" : ""
-      }>
+      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Transfer">
       <label class="form-check-label" for="expense-Type--Income">
         Transfer
       </label>
@@ -28,35 +25,25 @@ const generateTransTypeMarkup = (mov) => {
     </div>`;
 };
 
-const generateDatePickerMarkup = (mov) => {
+const generateDatePickerMarkup = () => {
   return `<div class="col my-2">
     <label class"col-2" for="newTransactionAmount">Date: </label>
-    <input type="number" class=" col-2 datePickerModal"  id="getDayModal" value="${
-      mov?.date ? new Date(mov.date).getDate() : new Date().getDate()
-    }" />
+    <input type="number" class=" col-2 datePickerModal"  id="getDayModal" value ="${new Date().getDate()}"/>
     <select class="datePickerModal col-2" id="getMonthModal">
       ${config.months
         .map((el, i) => {
           return `<option value="${el}" ${
-            mov?.date
-              ? new Date(mov.date).getMonth() === i
-                ? "selected"
-                : ""
-              : new Date().getMonth() === i
-              ? "selected"
-              : ""
+            new Date().getMonth() === i ? "selected" : ""
           }>${el}</option>`;
         })
         .join("")}
     </select>
 
-    <input type="number"  class="datePickerModal col-2" id="getYearModal" value="${
-      mov?.date ? new Date(mov.date).getFullYear() : new Date().getFullYear()
-    }" />
+    <input type="number"  class="datePickerModal col-2" id="getYearModal" value="${new Date().getFullYear()}" />
     </div>`;
 };
 
-const transferCheckboxesMarkup = (stateObj) => {
+const transferContentMarkup = (stateObj) => {
   return `
       <label class="form-check-label" for="selectAccountFrom">From: </label>
       <select
@@ -81,8 +68,7 @@ const transferCheckboxesMarkup = (stateObj) => {
       `;
 };
 
-const transactionCheckboxesMarkup = (stateObj, mov) => {
-  const type = mov ? mov.type : "Expense";
+const transactionCheckboxesMarkup = (stateObj, type) => {
   return `${stateObj.budget
     .filter((el) => el.type === type)
     .map((el, i) => {
@@ -92,8 +78,8 @@ const transactionCheckboxesMarkup = (stateObj, mov) => {
         type="radio"
         name="radioCategory"
         id="cat${el.name}"
-        ${mov?.category === el.name || i === 0 ? "checked" : ""}
         data-category="${el.name}"
+        ${i === 0 ? "checked" : ""}
       />
       <label class="form-check-label" for="cat${el.name}">
       ${el.name}
@@ -103,31 +89,27 @@ const transactionCheckboxesMarkup = (stateObj, mov) => {
     .join(" ")}`;
 };
 
-const generateBudgetCheckboxes = (stateObj, mov) => {
-  const type = mov ? mov.type : "Expense";
-
+const generateCategoriesCheckboxes = (stateObj, type = "Expense") => {
   if (type === "Transfer") {
-    return transferCheckboxesMarkup(stateObj);
+    return transferContentMarkup(stateObj);
   } else {
-    return transactionCheckboxesMarkup(stateObj, mov);
+    return transactionCheckboxesMarkup(stateObj, type);
   }
 };
 
-const generateContentMarkup = (stateObj, mov) => {
+const generateContentMarkup = (stateObj, type) => {
   return `<div class="col">
-    ${generateTransTypeMarkup(mov)}
-    ${generateDatePickerMarkup(mov)}
+    ${generateTransTypeMarkup()}
+    ${generateDatePickerMarkup()}
     
       
       <div class="col my-2 modal-transaction--categories">
-    ${generateBudgetCheckboxes(stateObj, mov)}
+    ${generateCategoriesCheckboxes(stateObj, type)}
     </div>
       
   <div class="col my-2">
     <label for="newTransactionAmount">Amount: </label>
-    <input type="number"  id="newTransactionAmount" value="${
-      mov?.amount ? Math.abs(mov.amount) : 0
-    }" />
+    <input type="number"  id="newTransactionAmount" value ="0"/>
   
   </div>
   </div>
@@ -153,8 +135,30 @@ const createOptionsObj = (mov) => {
   }
 };
 
+const movFillInputs = (mov) => {
+  if (mov.type === "Expense" || mov.type === "Income") {
+    document.getElementById(`cat${mov.category}`).checked = true;
+    document.querySelector(`#newTransactionAmount`).value = Math.abs(
+      mov.amount
+    );
+  }
+  const date = new Date(mov.date);
+  document.querySelector("#getDayModal").value = date.getDate();
+  document.querySelector(`#getMonthModal`).value =
+    config.months[date.getMonth()];
+  document.querySelector("#getYearModal").value = date.getFullYear();
+};
+
+const typeChanged = (stateObj, mov, type) => {
+  generateBudgetCheckboxes(stateObj, type);
+};
+
 export const renderTransactionModal = (stateObj, mov) => {
-  const markup = generateContentMarkup(stateObj, mov);
+  const markup = generateContentMarkup(stateObj, mov ? mov.type : "Expense");
   parentView.updateBaseModal(createOptionsObj(mov));
   parentView.insertHTML(markup);
+  bootstrapElements.transactionModal.show();
+  if (mov) movFillInputs(mov);
+
+  parentView.typePickerEvent(stateObj, mov, generateCategoriesCheckboxes);
 };
