@@ -1,4 +1,4 @@
-import * as parentView from "./modalBase.js";
+import * as modalBase from "./modalBase.js";
 
 const modalContent = document.querySelector(".modalContent");
 
@@ -68,16 +68,16 @@ const insertHTML = (markup) => {
 
 export const renderAccountSum = (accObj) => {
   const markup = generateAccSumMarkup(accObj);
-  parentView.updateBaseModal({
+  modalBase.updateBaseModal({
     title: `Savings: ${accObj.name}`,
     submitBtn: ["Update Account", "SavingsAccount"],
   });
-  parentView.insertHTML(markup);
+  modalBase.insertHTML(markup);
 };
 
 export const renderTransactionSum = (trans) => {
   const markup = generateTransactionMarkup(trans);
-  parentView.updateBaseModal({
+  modalBase.updateBaseModal({
     title: `Transfer from: ${new Date(trans.date).toLocaleDateString("pt-pt", {
       year: "numeric",
       month: "numeric",
@@ -86,5 +86,5 @@ export const renderTransactionSum = (trans) => {
     submitBtn: ["Close", "SavingsTrans"],
     deleteBtn: ["Delete", true],
   });
-  parentView.insertHTML(markup);
+  modalBase.insertHTML(markup);
 };

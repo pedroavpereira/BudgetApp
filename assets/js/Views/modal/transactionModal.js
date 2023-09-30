@@ -1,4 +1,4 @@
-import * as parentView from "./modalBase.js";
+import * as modalBase from "./modalBase.js";
 import * as config from "./../../config.js";
 import * as bootstrapElements from "./../../bootstrapElements.js";
 
@@ -11,14 +11,14 @@ const generateTransTypeMarkup = () => {
       </label>
       </div>
       <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Income">
-      <label class="form-check-label" for="expense-Type--Transfer">
+      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expense-Type--Income" data-target="Income">
+      <label class="form-check-label" for="expense-Type--Income">
         Income
       </label>
     </div>
     <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expenseTypeIncome" data-target="Transfer">
-      <label class="form-check-label" for="expense-Type--Income">
+      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expense-Type--Transfer" data-target="Transfer">
+      <label class="form-check-label" for="expense-Type--Transfer">
         Transfer
       </label>
     </div>
@@ -77,11 +77,11 @@ const transactionCheckboxesMarkup = (stateObj, type) => {
         class="form-check-input radioTransModal"
         type="radio"
         name="radioCategory"
-        id="cat${el.name}"
+        id="modal-cat--${el.name}"
         data-category="${el.name}"
         ${i === 0 ? "checked" : ""}
       />
-      <label class="form-check-label" for="cat${el.name}">
+      <label class="form-check-label" for="modal-cat--${el.name}">
       ${el.name}
       </label>
       </div>`;
@@ -137,11 +137,11 @@ const createOptionsObj = (mov) => {
 
 const movFillInputs = (mov) => {
   if (mov.type === "Expense" || mov.type === "Income") {
-    document.getElementById(`cat${mov.category}`).checked = true;
-    document.querySelector(`#newTransactionAmount`).value = Math.abs(
-      mov.amount
-    );
+    // BUG NOT WORKING NO IDEA WHY
+    document.getElementById(`modal-cat--${mov.category}`).checked = true;
+  } else if (mov.type === "Transfer") {
   }
+  document.querySelector(`#newTransactionAmount`).value = Math.abs(mov.amount);
   const date = new Date(mov.date);
   document.querySelector("#getDayModal").value = date.getDate();
   document.querySelector(`#getMonthModal`).value =
@@ -155,10 +155,10 @@ const typeChanged = (stateObj, mov, type) => {
 
 export const renderTransactionModal = (stateObj, mov) => {
   const markup = generateContentMarkup(stateObj, mov ? mov.type : "Expense");
-  parentView.updateBaseModal(createOptionsObj(mov));
-  parentView.insertHTML(markup);
+  modalBase.updateBaseModal(createOptionsObj(mov));
+  modalBase.insertHTML(markup);
   bootstrapElements.transactionModal.show();
   if (mov) movFillInputs(mov);
 
-  parentView.typePickerEvent(stateObj, mov, generateCategoriesCheckboxes);
+  modalBase.typePickerEvent(stateObj, mov, generateCategoriesCheckboxes);
 };
