@@ -1,3 +1,5 @@
+const modalContent = document.querySelector(".modalContent");
+
 export const updateBaseModal = (options) => {
   changeTitle(options.title);
   updateSubmitButton(options.submitBtn);
@@ -26,4 +28,13 @@ const updateDeleteButton = (optionsArr = ["", false]) => {
   } else {
     btnDelete.classList.add("d-none");
   }
+};
+
+const clearContent = () => {
+  modalContent.innerHTML = "";
+};
+
+export const insertHTML = (markup) => {
+  clearContent();
+  modalContent.insertAdjacentHTML("afterbegin", markup);
 };

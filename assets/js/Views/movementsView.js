@@ -4,6 +4,7 @@ import * as helper from "./../bootstrapElements.js";
 
 const parentElement = document.querySelector(".movement--container");
 
+//TODO: add the to localeDateString to its helper function to helper.js in the future
 const generateTransactionMarkup = (mov) => {
   if (mov.type === "Transfer") {
     return `<div class="movement--row" data-id="${mov.id}">

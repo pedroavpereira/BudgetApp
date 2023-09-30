@@ -3,6 +3,7 @@ import * as bootstrap from "bootstrap";
 
 import * as helper from "./bootstrapElements.js";
 import * as savingsModalView from "./Views/modal/savingsModal.js";
+import * as transactionModalView from "./Views/modal/transactionModal.js";
 import * as View from "./Views/movementsView.js";
 import * as filterView from "./Views/filterView.js";
 import * as accountsView from "./Views/accountsView.js";
@@ -31,7 +32,7 @@ const addTransactionClicked = () => {
   if (Model.state.currentAccount.type === "Savings") {
     savingsModalView.renderAccountSum(Model.state.currentAccount);
   } else {
-    modalView.updateModalInfo("transactionNew", Model.state);
+    transactionModalView.renderTransactionModal(Model.state);
   }
 };
 
@@ -80,20 +81,6 @@ const savingsAccountUpdated = (accObj) => {
   accountsView.renderAccounts(Model.state.accounts);
 };
 
-const submitButtonClicked = (type, obj) => {
-  if (type.startsWith("transaction")) {
-    if (type.endsWith("New")) {
-      newTransactionCreated(obj);
-    } else {
-      transactionUpdated(obj);
-    }
-  } else if (type === "budget") {
-    budgetSubmited(obj);
-  }
-
-  budgetView.renderBudget(Model.state);
-};
-
 const updateBudgetClicked = () => {
   modalView.updateModalInfo("budget", Model.state);
 };
@@ -103,7 +90,7 @@ const transactionClicked = (id) => {
   if (Model.state.currentAccount.type === "Savings") {
     savingsModalView.renderTransactionSum(mov);
   } else {
-    modalView.updateModalInfo("transaction", Model.state, mov);
+    transactionModalView.renderTransactionModal(Model.state, mov);
   }
 };
 

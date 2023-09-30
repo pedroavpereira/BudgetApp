@@ -1,4 +1,4 @@
-import * as parentView from "./modal.js";
+import * as parentView from "./modalBase.js";
 
 const modalContent = document.querySelector(".modalContent");
 
@@ -72,7 +72,7 @@ export const renderAccountSum = (accObj) => {
     title: `Savings: ${accObj.name}`,
     submitBtn: ["Update Account", "SavingsAccount"],
   });
-  insertHTML(markup);
+  parentView.insertHTML(markup);
 };
 
 export const renderTransactionSum = (trans) => {
@@ -86,5 +86,5 @@ export const renderTransactionSum = (trans) => {
     submitBtn: ["Close", "SavingsTrans"],
     deleteBtn: ["Delete", true],
   });
-  insertHTML(markup);
+  parentView.insertHTML(markup);
 };
