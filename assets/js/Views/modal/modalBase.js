@@ -1,4 +1,27 @@
-import * as bootstrapElements from "./../../bootstrapElements.js";
+import * as bootstrap from "bootstrap";
+
+/*
+Bootstrap elements
+*/
+
+const modalParentElement = document.querySelector("#addTransactionModal");
+export const transactionModal = new bootstrap.Modal(modalParentElement);
+
+document.querySelector(".btn-close").addEventListener("click", function () {
+  transactionModal.hide();
+});
+
+//Code to remove every unnecessary class when the modal is closed
+modalParentElement.addEventListener("hidden.bs.modal", function () {
+  document.querySelector(".modal-error").classList.add("d-none");
+  if (document.querySelector(".mov--active")) {
+    document.querySelector(".mov--active").classList.remove("mov--active");
+  }
+});
+
+/*
+End of Bootstrap 
+*/
 
 const modalContent = document.querySelector(".modalContent");
 
@@ -49,11 +72,11 @@ export const typePickerEvent = (stateObj, mov, handler) => {
   document
     .querySelector(".check-type")
     ?.addEventListener("click", function (e) {
-      updateCategories(e, stateObj, mov, handler);
+      updateCategories(e, stateObj, handler);
     });
 };
 
-const updateCategories = (e, stateObj, mov, handler) => {
+const updateCategories = (e, stateObj, handler) => {
   const target = e.target;
   const categoriesContainer = document.querySelector(
     ".modal-transaction--categories"
@@ -66,6 +89,16 @@ const updateCategories = (e, stateObj, mov, handler) => {
       handler(stateObj, categoryType)
     );
   }
+};
+
+export const deleteBtnEvent = (handler) => {
+  const btnDeleteTrans = document.querySelector(".btn--deleteTransaction");
+
+  btnDeleteTrans.addEventListener("click", function () {
+    const id = document.querySelector(".mov--active").dataset.id;
+    handler(id);
+    transactionModal.hide();
+  });
 };
 
 export const submitFormEvent = (handler) => {
@@ -98,7 +131,7 @@ export const submitFormEvent = (handler) => {
     }
 
     handler(data);
-    bootstrapElements.transactionModal.hide();
+    transactionModal.hide();
   });
 };
 

@@ -1,6 +1,6 @@
 "use strict";
 
-import * as helper from "./../bootstrapElements.js";
+import { transactionModal } from "./modal/modalBase.js";
 
 const parentElement = document.querySelector(".movement--container");
 
@@ -86,6 +86,6 @@ export const movementContainerEvent = (handler) => {
 
     target.classList.add("mov--active");
     handler(target.dataset.id);
-    helper.transactionModal.show();
+    transactionModal.show();
   });
 };

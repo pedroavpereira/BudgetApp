@@ -1,6 +1,6 @@
 "use strict";
 
-import * as helper from "../bootstrapElements.js";
+import { transactionModal } from "./modal/modalBase.js";
 
 const parentElement = document.querySelector(".overview--body");
 
@@ -31,6 +31,6 @@ export const changeBudgetClicked = (handler) => {
 
   btnBudget.addEventListener("click", function () {
     handler();
-    helper.transactionModal.show();
+    transactionModal.show();
   });
 };

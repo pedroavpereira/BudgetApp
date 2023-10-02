@@ -1,19 +1,17 @@
 "use stict";
-import * as bootstrap from "bootstrap";
 
-import * as helper from "./bootstrapElements.js";
+import * as Model from "./Model.js";
+import * as accountsView from "./Views/accountsView.js";
+import * as budgetView from "./Views/budgetView.js";
+import * as filterView from "./Views/filterView.js";
+import * as budgetModalView from "./Views/modal/budgetModal.js";
 import * as modalBase from "./Views/modal/modalBase.js";
 import * as savingsModalView from "./Views/modal/savingsModal.js";
 import * as transactionModalView from "./Views/modal/transactionModal.js";
-import * as budgetModalView from "./Views/modal/budgetModal.js";
-import * as View from "./Views/movementsView.js";
-import * as filterView from "./Views/filterView.js";
-import * as accountsView from "./Views/accountsView.js";
-import * as overviewView from "./Views/overviewView.js";
-import * as budgetView from "./Views/budgetView.js";
-import * as modalView from "./Views/modalView.js";
+// import * as modalView from "./Views/modalView.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
-import * as Model from "./Model.js";
+import * as View from "./Views/movementsView.js";
+import * as overviewView from "./Views/overviewView.js";
 
 const updateOverview = () => {
   Model.modifyStateOverview(Model.filterTransactions());
@@ -195,7 +193,7 @@ function init() {
   filterView.datePickerYearEvent(datePickerYearChanged);
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);
-  modalView.deleteBtnEvent(btnDeleteClicked);
+  modalBase.deleteBtnEvent(btnDeleteClicked);
   modalBase.submitFormEvent(submitButtonClicked);
   // modalView.submitBtnEvent(
   //   newTransactionCreated,

@@ -1,8 +1,7 @@
 import * as modalBase from "./modalBase.js";
 import * as config from "./../../config.js";
-import * as bootstrapElements from "./../../bootstrapElements.js";
 
-const generateTransTypeMarkup = () => {
+const generateTransTypeMarkup = (stateObj) => {
   return `<div class="row check-type">
   <div class="form-check col-3">
       <input class="form-check-input check-input--type  form-input" type="radio" name="type" id="transaction-type--Expense" data-target="Expense" value="Expense" checked>
@@ -17,7 +16,9 @@ const generateTransTypeMarkup = () => {
       </label>
     </div>
     <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="type" id="transaction-type--Transfer" data-target="Transfer" value="Transfer">
+      <input class="form-check-input check-input--type" type="radio" name="type" id="transaction-type--Transfer" data-target="Transfer" value="Transfer" ${
+        stateObj.accounts.length <= 1 ? "disabled" : ""
+      }>
       <label class="form-check-label" for="transaction-type--Transfer">
         Transfer
       </label>
@@ -101,7 +102,7 @@ const generateCategoriesCheckboxes = (stateObj, type = "Expense") => {
 
 const generateContentMarkup = (stateObj, type) => {
   return `<div class="col">
-    ${generateTransTypeMarkup()}
+    ${generateTransTypeMarkup(stateObj)}
     ${generateDatePickerMarkup()}
     
       
@@ -155,7 +156,7 @@ export const renderTransactionModal = (stateObj, mov) => {
   const markup = generateContentMarkup(stateObj, mov ? mov.type : "Expense");
   modalBase.updateBaseModal(createOptionsObj(mov));
   modalBase.insertHTML(markup);
-  bootstrapElements.transactionModal.show();
+  modalBase.transactionModal.show();
   if (mov) movFillInputs(mov);
   modalBase.typePickerEvent(stateObj, mov, generateCategoriesCheckboxes);
 };
