@@ -2,6 +2,7 @@
 import * as bootstrap from "bootstrap";
 
 import * as helper from "./bootstrapElements.js";
+import * as modalBase from "./Views/modal/modalBase.js";
 import * as savingsModalView from "./Views/modal/savingsModal.js";
 import * as transactionModalView from "./Views/modal/transactionModal.js";
 import * as budgetModalView from "./Views/modal/budgetModal.js";
@@ -120,6 +121,30 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   return dateObj;
 };
 
+const submitButtonClicked = (formData) => {
+  console.log(formData);
+  switch (formData.target) {
+    case "newTrans":
+      if (formData.type === "Transfer") {
+        transferCreated(formData);
+      } else {
+        newTransactionCreated(formData);
+      }
+      break;
+    case "updateTrans":
+      transactionUpdated(formData);
+      break;
+    case "updateAccount":
+      savingsAccountUpdated(formData);
+      break;
+    case "updateBudget":
+      budgetSubmited(formData);
+      break;
+    default:
+      break;
+  }
+};
+
 const changeAccountClicked = (accId) => {
   Model.changeAccount(accId);
   Model.initFilter();
@@ -171,13 +196,14 @@ function init() {
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);
   modalView.deleteBtnEvent(btnDeleteClicked);
-  modalView.submitBtnEvent(
-    newTransactionCreated,
-    transactionUpdated,
-    budgetSubmited,
-    transferCreated,
-    savingsAccountUpdated
-  );
+  modalBase.submitFormEvent(submitButtonClicked);
+  // modalView.submitBtnEvent(
+  //   newTransactionCreated,
+  //   transactionUpdated,
+  //   budgetSubmited,
+  //   transferCreated,
+  //   savingsAccountUpdated
+  // );
   movementsNavView.addTransactionEvent(addTransactionClicked);
   budgetView.changeBudgetClicked(updateBudgetClicked);
 }

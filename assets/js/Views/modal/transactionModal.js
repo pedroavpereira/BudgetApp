@@ -5,20 +5,20 @@ import * as bootstrapElements from "./../../bootstrapElements.js";
 const generateTransTypeMarkup = () => {
   return `<div class="row check-type">
   <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expense-Type--Expense" data-target="Expense" checked>
-      <label class="form-check-label" for="expense-Type--Expense">
+      <input class="form-check-input check-input--type  form-input" type="radio" name="type" id="transaction-type--Expense" data-target="Expense" value="Expense" checked>
+      <label class="form-check-label" for="transaction-type--Expense">
         Expense
       </label>
       </div>
       <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expense-Type--Income" data-target="Income">
-      <label class="form-check-label" for="expense-Type--Income">
+      <input class="form-check-input check-input--type" type="radio" name="type" id="transaction-type--Income" value="Income" data-target="Income">
+      <label class="form-check-label" for="transaction-type--Income">
         Income
       </label>
     </div>
     <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="expense-type" id="expense-Type--Transfer" data-target="Transfer">
-      <label class="form-check-label" for="expense-Type--Transfer">
+      <input class="form-check-input check-input--type" type="radio" name="type" id="transaction-type--Transfer" data-target="Transfer" value="Transfer">
+      <label class="form-check-label" for="transaction-type--Transfer">
         Transfer
       </label>
     </div>
@@ -28,8 +28,8 @@ const generateTransTypeMarkup = () => {
 const generateDatePickerMarkup = () => {
   return `<div class="col my-2">
     <label class"col-2" for="newTransactionAmount">Date: </label>
-    <input type="number" class=" col-2 datePickerModal"  id="getDayModal" value ="${new Date().getDate()}"/>
-    <select class="datePickerModal col-2" id="getMonthModal">
+    <input type="number" class=" col-2 datePickerModal" name="day"  id="getDayModal" value ="${new Date().getDate()}"/>
+    <select class="datePickerModal col-2" name="month" id="getMonthModal">
       ${config.months
         .map((el, i) => {
           return `<option value="${el}" ${
@@ -39,7 +39,7 @@ const generateDatePickerMarkup = () => {
         .join("")}
     </select>
 
-    <input type="number"  class="datePickerModal col-2" id="getYearModal" value="${new Date().getFullYear()}" />
+    <input type="number"  class="datePickerModal col-2" name="year" id="getYearModal" value="${new Date().getFullYear()}" />
     </div>`;
 };
 
@@ -47,20 +47,21 @@ const transferContentMarkup = (stateObj) => {
   return `
       <label class="form-check-label" for="selectAccountFrom">From: </label>
       <select
-      name="month"
-      class="form-select form-select-sm"
-      id="selectAccountFrom" disabled 
+      name="from"
+      class="form-select form-select-sm form-select--from"
+      id="selectAccountFrom"
+      value= "${stateObj.currentAccount.name}"
     >
-    <option value="${stateObj.currentAccount.name}" >${
+    <option value="${stateObj.currentAccount.name}">${
     stateObj.currentAccount.name
   }</option>
     </select>
     <label class="form-check-label" for="selectTransferTo">To </label>
-    <select name="month" class="form-select form-select-sm" id="selectAccountTo">
+    <select name="to" class="form-select form-select-sm" id="selectAccountTo">
     ${stateObj.accounts
       .map((el) => {
         return `<option value="${el.name}" ${
-          el != stateObj.currentAccount ? "selected" : ""
+          el != stateObj.currentAccount ? "selected" : "disabled"
         }>${el.name}</option>`;
       })
       .join(" ")}
@@ -76,8 +77,9 @@ const transactionCheckboxesMarkup = (stateObj, type) => {
           <input
         class="form-check-input radioTransModal"
         type="radio"
-        name="radioCategory"
+        name="category"
         id="modal-cat--${el.name}"
+        value="${el.name}"
         data-category="${el.name}"
         ${i === 0 ? "checked" : ""}
       />
@@ -108,8 +110,8 @@ const generateContentMarkup = (stateObj, type) => {
     </div>
       
   <div class="col my-2">
-    <label for="newTransactionAmount">Amount: </label>
-    <input type="number"  id="newTransactionAmount" value ="0"/>
+    <label for="newTransactionAmount" >Amount: </label>
+    <input type="number" name="amount"  id="newTransactionAmount" value ="0"/>
   
   </div>
   </div>
@@ -149,16 +151,11 @@ const movFillInputs = (mov) => {
   document.querySelector("#getYearModal").value = date.getFullYear();
 };
 
-const typeChanged = (stateObj, mov, type) => {
-  generateBudgetCheckboxes(stateObj, type);
-};
-
 export const renderTransactionModal = (stateObj, mov) => {
   const markup = generateContentMarkup(stateObj, mov ? mov.type : "Expense");
   modalBase.updateBaseModal(createOptionsObj(mov));
   modalBase.insertHTML(markup);
   bootstrapElements.transactionModal.show();
   if (mov) movFillInputs(mov);
-
   modalBase.typePickerEvent(stateObj, mov, generateCategoriesCheckboxes);
 };

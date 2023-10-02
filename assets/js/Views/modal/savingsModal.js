@@ -33,6 +33,7 @@ const generateAccSumMarkup = (accObj) => {
       type="name"
       class="form-control"
       id="foatingAccountName"
+      name="name"
       placeholder="${accObj.name}"
       value = "${accObj.name}"
     />
@@ -51,6 +52,7 @@ const generateAccSumMarkup = (accObj) => {
       id="FloatingAccountGoal"
       placeholder="${accObj.goal}"
       value = "${accObj.goal}"
+      name="goal"
     />
     <label for="FloatingAccountGoal">Account Goal</label>
   </div>
@@ -70,7 +72,7 @@ export const renderAccountSum = (accObj) => {
   const markup = generateAccSumMarkup(accObj);
   modalBase.updateBaseModal({
     title: `Savings: ${accObj.name}`,
-    submitBtn: ["Update Account", "SavingsAccount"],
+    submitBtn: ["Update Account", "updateAccount"],
   });
   modalBase.insertHTML(markup);
 };
@@ -83,7 +85,7 @@ export const renderTransactionSum = (trans) => {
       month: "numeric",
       day: "numeric",
     })}`,
-    submitBtn: ["Close", "SavingsTrans"],
+    submitBtn: ["Close", "close"],
     deleteBtn: ["Delete", true],
   });
   modalBase.insertHTML(markup);

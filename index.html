@@ -20,10 +20,15 @@
     />
 
     <style>
+      .form-select--from,
       .movement--row:hover,
       .accounts-row:hover {
         background-color: #eee;
         cursor: pointer;
+      }
+
+      option[disabled] {
+        background-color: #eee;
       }
     </style>
   </head>
@@ -280,38 +285,45 @@
     >
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Add new transaction
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div class="container-fluid mb-1 modalContent"></div>
-            <div
-              class="modal-error d-none text-light bg-danger text-center border rounded"
-            >
-              <p class="mt-1 modal-error--message">Error</p>
+          <form action="#" class="form">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Add new transaction
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
-          </div>
+            <div class="modal-body">
+              <div class="container-fluid mb-1 modalContent"></div>
+              <div
+                class="modal-error d-none text-light bg-danger text-center border rounded"
+              >
+                <p class="mt-1 modal-error--message">Error</p>
+              </div>
+            </div>
 
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-danger d-none btn--deleteTransaction"
-              data-bs-dismiss="modal"
-            >
-              Delete
-            </button>
-            <button type="button" class="btn btn-primary btn--submitModal">
-              Save changes
-            </button>
-          </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger d-none btn--deleteTransaction"
+                data-bs-dismiss="modal"
+              >
+                Delete
+              </button>
+              <button
+                type="submit"
+                name="type"
+                value="trans"
+                class="btn btn-primary btn--submitModal"
+              >
+                Save changes
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
