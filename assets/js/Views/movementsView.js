@@ -19,11 +19,11 @@ const generateTransactionMarkup = (mov) => {
     )}</div>
     <div class="col-4 p-3 d-none d-md-block" style="display:inline;">
       
-      <p  style="display:inline;" class=" inline text-${
-        mov.category === "In" ? "success" : "danger"
-      } text-opacity-75">${mov.category === "In" ? "From" : "To"}</p> ${
+    <p class="movement-category movement-category--transfer
+    }">${mov.category === "In" ? "from" : "To"} ${
       mov[mov.category === "In" ? "from" : "to"]
-    }
+    }</p> 
+    
       
     </div>
     <div class="col-6 col-md-4 p-3">${Math.abs(mov.amount)}</div>
@@ -40,11 +40,10 @@ const generateTransactionMarkup = (mov) => {
       day: "numeric",
     }
   )}</div>
-  <div class="col-4 p-3 d-none d-md-block" style="display:inline;">${
-    mov.category
-  }  <p  style="display:inline;" class=" inline text-${
-      mov.type === "Income" ? "success" : "danger"
-    } text-opacity-75">(${mov.type})</p>
+  <div class="col-4 p-3 d-none d-md-block" style="display:inline;">
+    <p class="movement-category movement-category--${
+      mov.type === "Income" ? "income" : "expense"
+    }">${mov.category}</p> 
   </div>
   <div class="col-6 col-md-4 p-3">${Math.abs(mov.amount)}</div>
 </div>

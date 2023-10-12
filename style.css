@@ -5,6 +5,26 @@
   cursor: pointer;
 }
 
+.movement-category {
+  color: white;
+  padding: 2px 0;
+  border-radius: 12px;
+  margin: auto;
+  width: 150px;
+}
+
+.movement-category--expense {
+  background-color: rgba(255, 0, 0, 0.75);
+}
+
+.movement-category--income {
+  background-color: rgba(0, 160, 0, 0.75);
+}
+
+.movement-category--transfer {
+  background-color: rgba(101, 59, 255, 0.75);
+}
+
 option[disabled] {
   background-color: #eee;
 }
