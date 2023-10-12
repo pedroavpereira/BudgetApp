@@ -3,7 +3,7 @@
 const parentElement = document.querySelector(".accounts-container--list");
 
 const generateAccountMarkup = (account) => {
-  return `<div class="row accounts-row p-2 accounts-event" data-target="account" data-account-id=${
+  return `<div class="row accounts-row p-2 accounts-event accounts-acc--container" data-target="account" data-account-id=${
     account.accountID
   }>
   <div class="col-8" ><i class="bi text-primary bi-${
@@ -18,9 +18,9 @@ const generateAccountMarkup = (account) => {
       ? `<div class="col-4" >
       <button
   type="button"
-  class="btn btn-sm btn-outline-danger accounts-event"
+  class="btn btn-sm btn-outline-danger accounts-event accounts-btn--delete"
   data-target="deleteAccount" data-account-id="${account.accountID}"
-><i class="bi bi-x-lg"></i>
+><i class="bi bi-trash"></i>
 </button> </div>`
       : ""
   }

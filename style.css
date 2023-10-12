@@ -1,39 +1,18 @@
-.movement__navbar {
-  margin-bottom: 0px;
+.form-select--from,
+.movement--row:hover,
+.accounts-row:hover {
+  background-color: #eee;
+  cursor: pointer;
 }
 
-.movement__navbar--ul {
-  list-style: none;
-  display: flex;
-  gap: 50px;
-  border: 1px solid black;
+option[disabled] {
+  background-color: #eee;
 }
 
-.movement__navbar--li {
-  padding: 5px;
+.accounts-acc--container:hover .accounts-btn--delete {
+  display: inline;
 }
 
-.movement__navbar--li:hover {
-  background-color: #ccc;
-}
-
-.movement__div {
-  border: 1px solid rgb(0, 0, 0);
-  height: 500px;
-}
-
-.movement__container--ul {
-  margin-top: 0;
-  height: 100%;
-  list-style: none;
-  padding: 0;
-}
-
-.movement {
-  height: 10%;
-  padding: 10px 0 10px;
-}
-
-.movement:hover {
-  background-color: #ccc;
+.accounts-btn--delete {
+  display: none;
 }
