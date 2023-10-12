@@ -1,9 +1,10 @@
 "use strict";
 
-import * as helper from "./../bootstrapElements.js";
+import { transactionModal } from "./modal/modalBase.js";
 
 const parentElement = document.querySelector(".movement--container");
 
+//TODO: add the to localeDateString to its helper function to helper.js in the future
 const generateTransactionMarkup = (mov) => {
   if (mov.type === "Transfer") {
     return `<div class="movement--row" data-id="${mov.id}">
@@ -85,6 +86,6 @@ export const movementContainerEvent = (handler) => {
 
     target.classList.add("mov--active");
     handler(target.dataset.id);
-    helper.transactionModal.show();
+    transactionModal.show();
   });
 };

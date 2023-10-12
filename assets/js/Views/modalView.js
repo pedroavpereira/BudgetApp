@@ -170,21 +170,6 @@ const generateSavingsMarkup = (accObj) => {
 </div>`;
 };
 
-const updateCategories = (e, budgetObj, mov) => {
-  const target = e.target;
-  const categoriesContainer = document.querySelector(
-    ".modal-transaction--categories"
-  );
-  const categoryType = target.dataset.target;
-  if (categoryType) {
-    categoriesContainer.innerHTML = "";
-    categoriesContainer.insertAdjacentHTML(
-      "afterbegin",
-      generateBudgetCheckboxes(budgetObj, mov, categoryType)
-    );
-  }
-};
-
 export const updateModalInfo = (type, stateObj, mov) => {
   const buttonSubmit = document.querySelector(".btn--submitModal");
   buttonSubmit.setAttribute("data-type", type);

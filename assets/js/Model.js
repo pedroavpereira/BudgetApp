@@ -110,8 +110,10 @@ export const filterTransactions = (
   return filteredTransactions;
 };
 
-export const newBudget = (newBudget) => {
-  state.budget = newBudget;
+export const newBudget = (budgetObj) => {
+  state.budget.forEach((el) => {
+    el.target = Number(budgetObj[el.name]);
+  });
   saveLocalStorage();
 };
 
@@ -187,7 +189,11 @@ export const createAccount = (accObj) => {
 };
 
 export const updateSavingsAccount = (accObj) => {
-  Object.keys(accObj).forEach((el) => (state.currentAccount[el] = accObj[el]));
+  Object.keys(accObj).forEach((el) => {
+    if (state.currentAccount.hasOwnProperty(el)) {
+      state.currentAccount[el] = accObj[el];
+    }
+  });
   saveLocalStorage();
 };
 

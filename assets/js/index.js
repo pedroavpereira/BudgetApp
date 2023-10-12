@@ -1,15 +1,17 @@
 "use stict";
-import * as bootstrap from "bootstrap";
 
-import * as helper from "./bootstrapElements.js";
-import * as View from "./Views/movementsView.js";
-import * as filterView from "./Views/filterView.js";
-import * as accountsView from "./Views/accountsView.js";
-import * as overviewView from "./Views/overviewView.js";
-import * as budgetView from "./Views/budgetView.js";
-import * as modalView from "./Views/modalView.js";
-import * as movementsNavView from "./Views/movementsNavView.js";
 import * as Model from "./Model.js";
+import * as accountsView from "./Views/accountsView.js";
+import * as budgetView from "./Views/budgetView.js";
+import * as filterView from "./Views/filterView.js";
+import * as budgetModalView from "./Views/modal/budgetModal.js";
+import * as modalBase from "./Views/modal/modalBase.js";
+import * as savingsModalView from "./Views/modal/savingsModal.js";
+import * as transactionModalView from "./Views/modal/transactionModal.js";
+// import * as modalView from "./Views/modalView.js";
+import * as movementsNavView from "./Views/movementsNavView.js";
+import * as View from "./Views/movementsView.js";
+import * as overviewView from "./Views/overviewView.js";
 
 const updateOverview = () => {
   Model.modifyStateOverview(Model.filterTransactions());
@@ -27,7 +29,11 @@ const btnDeleteClicked = (id) => {
 };
 
 const addTransactionClicked = () => {
-  modalView.updateModalInfo("transactionNew", Model.state);
+  if (Model.state.currentAccount.type === "Savings") {
+    savingsModalView.renderAccountSum(Model.state.currentAccount);
+  } else {
+    transactionModalView.renderTransactionModal(Model.state);
+  }
 };
 
 const transactionUpdated = (obj) => {
@@ -75,27 +81,17 @@ const savingsAccountUpdated = (accObj) => {
   accountsView.renderAccounts(Model.state.accounts);
 };
 
-const submitButtonClicked = (type, obj) => {
-  if (type.startsWith("transaction")) {
-    if (type.endsWith("New")) {
-      newTransactionCreated(obj);
-    } else {
-      transactionUpdated(obj);
-    }
-  } else if (type === "budget") {
-    budgetSubmited(obj);
-  }
-
-  budgetView.renderBudget(Model.state);
-};
-
 const updateBudgetClicked = () => {
-  modalView.updateModalInfo("budget", Model.state);
+  budgetModalView.renderUpdateModal(Model.state);
 };
 
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
-  modalView.updateModalInfo("transaction", Model.state, mov);
+  if (Model.state.currentAccount.type === "Savings") {
+    savingsModalView.renderTransactionSum(mov);
+  } else {
+    transactionModalView.renderTransactionModal(Model.state, mov);
+  }
 };
 
 const applyFilterClicked = (obj) => {
@@ -121,6 +117,30 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   dateObj.current.year = new Date().getFullYear();
   dateObj.current.month = new Date().getMonth();
   return dateObj;
+};
+
+const submitButtonClicked = (formData) => {
+  console.log(formData);
+  switch (formData.target) {
+    case "newTrans":
+      if (formData.type === "Transfer") {
+        transferCreated(formData);
+      } else {
+        newTransactionCreated(formData);
+      }
+      break;
+    case "updateTrans":
+      transactionUpdated(formData);
+      break;
+    case "updateAccount":
+      savingsAccountUpdated(formData);
+      break;
+    case "updateBudget":
+      budgetSubmited(formData);
+      break;
+    default:
+      break;
+  }
 };
 
 const changeAccountClicked = (accId) => {
@@ -173,14 +193,15 @@ function init() {
   filterView.datePickerYearEvent(datePickerYearChanged);
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);
-  modalView.deleteBtnEvent(btnDeleteClicked);
-  modalView.submitBtnEvent(
-    newTransactionCreated,
-    transactionUpdated,
-    budgetSubmited,
-    transferCreated,
-    savingsAccountUpdated
-  );
+  modalBase.deleteBtnEvent(btnDeleteClicked);
+  modalBase.submitFormEvent(submitButtonClicked);
+  // modalView.submitBtnEvent(
+  //   newTransactionCreated,
+  //   transactionUpdated,
+  //   budgetSubmited,
+  //   transferCreated,
+  //   savingsAccountUpdated
+  // );
   movementsNavView.addTransactionEvent(addTransactionClicked);
   budgetView.changeBudgetClicked(updateBudgetClicked);
 }
