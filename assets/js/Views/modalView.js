@@ -51,7 +51,7 @@ const generateBudgetCheckboxes = (arr, mov, type = "Expense") => {
     return `${arr.budget
       .filter((el) => el.type === type)
       .map((el, i) => {
-        return `<div class="form-check">
+        return `<div class="form-check ">
       <input
     class="form-check-input radioTransModal"
     type="radio"

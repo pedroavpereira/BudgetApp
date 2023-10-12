@@ -1,39 +1,76 @@
-.movement__navbar {
-  margin-bottom: 0px;
+.form-select--from,
+.movement--row:hover,
+.accounts-row:hover {
+  background-color: #eee;
+  cursor: pointer;
 }
 
-.movement__navbar--ul {
-  list-style: none;
-  display: flex;
-  gap: 50px;
-  border: 1px solid black;
+option[disabled] {
+  background-color: #eee;
 }
 
-.movement__navbar--li {
-  padding: 5px;
+/* MovementView */
+.movement-category {
+  color: white;
+  padding: 2px 0;
+  border-radius: 12px;
+  margin: auto;
+  width: 150px;
 }
 
-.movement__navbar--li:hover {
-  background-color: #ccc;
+.movement-category--expense {
+  background-color: rgba(255, 0, 0, 0.75);
 }
 
-.movement__div {
-  border: 1px solid rgb(0, 0, 0);
-  height: 500px;
+.movement-category--income {
+  background-color: rgba(0, 160, 0, 0.75);
 }
 
-.movement__container--ul {
-  margin-top: 0;
-  height: 100%;
-  list-style: none;
+.movement-category--transfer {
+  background-color: rgba(101, 59, 255, 0.75);
+}
+
+/* Accounts View */
+.accounts-acc--container:hover .accounts-btn--delete {
+  display: inline;
+}
+
+.accounts-btn--delete {
+  display: none;
+}
+
+/* modalView */
+#addTransactionModal .row {
+  text-align: center;
+}
+.modal-checkbox--container {
+  text-align: center;
+  display: inline-block;
   padding: 0;
 }
 
-.movement {
-  height: 10%;
-  padding: 10px 0 10px;
+.modal-transaction--legend {
+  font-size: 16px;
+  background-color: white;
+  font-weight: bold;
 }
 
-.movement:hover {
-  background-color: #ccc;
+.modal-checkbox--input {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.modal-checkbox--label {
+  display: inline-block;
+  padding: 10px;
+}
+
+.modal-checkbox--label:hover {
+  cursor: pointer;
+}
+
+.modal-checkbox--input:checked ~ .modal-checkbox--label {
+  border: 1px solid rgba(73, 160, 252, 0.75);
+  background-color: rgba(73, 160, 252, 0.5);
 }
