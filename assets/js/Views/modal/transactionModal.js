@@ -150,11 +150,10 @@ const createOptionsObj = (mov) => {
 };
 
 const movFillInputs = (mov) => {
-  if (mov.type === "Expense" || mov.type === "Income") {
-    // BUG NOT WORKING NO IDEA WHY
-    document.getElementById(`modal-cat--${mov.category}`).checked = true;
-  } else if (mov.type === "Transfer") {
-  }
+  // BUG NOT WORKING NO IDEA WHY
+  document.getElementById(`transaction-type--${mov.type}`).checked = true;
+  document.getElementById(`modal-cat--${mov.category}`).checked = true;
+
   document.querySelector(`#newTransactionAmount`).value = Math.abs(mov.amount);
   const date = new Date(mov.date);
   document.querySelector("#getDayModal").value = date.getDate();
