@@ -3,23 +3,23 @@ import * as config from "./../../config.js";
 
 const generateTransTypeMarkup = (stateObj) => {
   return `<div class="row check-type">
-  <div class="form-check col-3">
-      <input class="form-check-input check-input--type  form-input" type="radio" name="type" id="transaction-type--Expense" data-target="Expense" value="Expense" checked>
-      <label class="form-check-label" for="transaction-type--Expense">
+  <div class="form-check col-3 modal-checkbox--container">
+      <input class="form-check-input check-input--type  form-input modal-checkbox--input" type="radio" name="type" id="transaction-type--Expense" data-target="Expense" value="Expense" checked>
+      <label class="form-check-label modal-checkbox--label" for="transaction-type--Expense">
         Expense
       </label>
       </div>
       <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="type" id="transaction-type--Income" value="Income" data-target="Income">
-      <label class="form-check-label" for="transaction-type--Income">
+      <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="type" id="transaction-type--Income" value="Income" data-target="Income">
+      <label class="form-check-label modal-checkbox--label" for="transaction-type--Income">
         Income
       </label>
     </div>
     <div class="form-check col-3">
-      <input class="form-check-input check-input--type" type="radio" name="type" id="transaction-type--Transfer" data-target="Transfer" value="Transfer" ${
+      <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="type" id="transaction-type--Transfer" data-target="Transfer" value="Transfer" ${
         stateObj.accounts.length <= 1 ? "disabled" : ""
       }>
-      <label class="form-check-label" for="transaction-type--Transfer">
+      <label class="form-check-label modal-checkbox--label" for="transaction-type--Transfer">
         Transfer
       </label>
     </div>
@@ -28,7 +28,6 @@ const generateTransTypeMarkup = (stateObj) => {
 
 const generateDatePickerMarkup = () => {
   return `<div class="col my-2">
-    <label class"col-2" for="newTransactionAmount">Date: </label>
     <input type="number" class=" col-2 datePickerModal" name="day"  id="getDayModal" value ="${new Date().getDate()}"/>
     <select class="datePickerModal col-2" name="month" id="getMonthModal">
       ${config.months
@@ -74,9 +73,9 @@ const transactionCheckboxesMarkup = (stateObj, type) => {
   return `${stateObj.budget
     .filter((el) => el.type === type)
     .map((el, i) => {
-      return `<div class="form-check">
+      return `<div class="form-check modal-checkbox--container">
           <input
-        class="form-check-input radioTransModal"
+        class="form-check-input radioTransModal modal-checkbox--input"
         type="radio"
         name="category"
         id="modal-cat--${el.name}"
@@ -84,7 +83,9 @@ const transactionCheckboxesMarkup = (stateObj, type) => {
         data-category="${el.name}"
         ${i === 0 ? "checked" : ""}
       />
-      <label class="form-check-label" for="modal-cat--${el.name}">
+      <label class="form-check-label modal-checkbox--label" for="modal-cat--${
+        el.name
+      }">
       ${el.name}
       </label>
       </div>`;
@@ -102,18 +103,28 @@ const generateCategoriesCheckboxes = (stateObj, type = "Expense") => {
 
 const generateContentMarkup = (stateObj, type) => {
   return `<div class="col">
+    <fieldset class="modal-transaction--fieldset">
+    <legend class="modal-transaction--legend">Type:</legend>  
     ${generateTransTypeMarkup(stateObj)}
+    </fieldset>
+
+    <fieldset class="modal-transaction--fieldset">
+    <legend class="modal-transaction--legend">Date:</legend>
     ${generateDatePickerMarkup()}
+    </fieldset>
     
-      
-      <div class="col my-2 modal-transaction--categories">
+    <fieldset class="modal-transaction--fieldset">
+    <legend class="modal-transaction--legend">Categories:</legend>
+    <div class="col my-2 modal-transaction--categories">
     ${generateCategoriesCheckboxes(stateObj, type)}
     </div>
+    </fieldset>
       
   <div class="col my-2">
-    <label for="newTransactionAmount" >Amount: </label>
+  <fieldset class="modal-transaction--fieldset">
+    <legend class="modal-transaction--legend">Amount:</legend>  
     <input type="number" name="amount"  id="newTransactionAmount" value ="0"/>
-  
+    </fieldset>
   </div>
   </div>
     `;
