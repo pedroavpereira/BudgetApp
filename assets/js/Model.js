@@ -202,6 +202,10 @@ export const changeAccount = (accId) => {
   state.currentAccount = acc;
 };
 
+export const findAccount = (accId) => {
+  return state.accounts.find((el) => el.accountID === accId);
+};
+
 export const deleteAccount = (accId) => {
   const account = state.accounts.find((el) => el.accountID === accId);
   if (state.currentAccount === account) {

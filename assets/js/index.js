@@ -144,13 +144,15 @@ const submitButtonClicked = (formData) => {
 };
 
 const changeAccountClicked = (accId) => {
-  Model.changeAccount(accId);
-  Model.initFilter();
-  View.renderAllTransactions(Model.filterTransactions());
-  updateOverview();
-  budgetView.renderBudget(Model.state);
-  filterView.renderDate(creatingDateObj());
-  filterView.uncheckCheckboxes();
+  console.log("ChangeAccountClicked");
+  savingsModalView.renderAccountSum(Model.findAccount(accId));
+  // Model.changeAccount(accId);
+  // Model.initFilter();
+  // View.renderAllTransactions(Model.filterTransactions());
+  // updateOverview();
+  // budgetView.renderBudget(Model.state);
+  // filterView.renderDate(creatingDateObj());
+  // filterView.uncheckCheckboxes();
 };
 
 const createNewAccountClicked = (accObj) => {
