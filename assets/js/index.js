@@ -122,7 +122,14 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
 
 const savingsWithdrawn = (formData) => {
   const account = Model.findAccount(formData.account);
+  const mainAccount = Model.findAccount("native");
   if (Model.hasEnoughFunds(account, formData.amount)) {
+    const transferObj = Model.createTransfer({
+      amount: formData.amount,
+      from: account.name,
+      to: mainAccount.name,
+    });
+    View.renderTransaction(transferObj);
   } else {
     alertView.displayAlert("Insuficient funds in the account", "error");
   }
