@@ -7,13 +7,13 @@ let selectedAccount;
 const generateModalTypeMarkup = () => {
   return `<div class="row check-type">
   <div class="form-check col-3 modal-checkbox--container">
-      <input class="form-check-input check-input--type form-input modal-checkbox--input" type="radio" name="type" id="transaction-type--withdrawl" data-target="Withdrawl" value="Withdraw" checked>
+      <input class="form-check-input check-input--type form-input modal-checkbox--input" type="radio" name="account" id="transaction-type--withdrawl" data-target="Withdrawl" value="${selectedAccount.accountID}" checked>
       <label class="form-check-label modal-checkbox--label" for="transaction-type--withdrawl">
         Withdral
       </label>
       </div>
       <div class="form-check col-3">
-      <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="type" id="transaction-type--account" value="account" data-target="account">
+      <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="account" id="transaction-type--account" value="${selectedAccount.accountID}" data-target="account">
       <label class="form-check-label modal-checkbox--label" for="transaction-type--account">
         Account
       </label>
@@ -54,6 +54,7 @@ const generateWithdrawlMarkup = () => {
     class="form-control"
     value="0"
   />
+  <p>All withdrawls will be automatically added to your main account</p>
 </div>`;
 };
 
@@ -151,6 +152,7 @@ const updateModalContent = (e) => {
 
 export const renderAccountSum = (accObj) => {
   selectedAccount = accObj;
+  console.log(selectedAccount);
   modalBase.transactionModal.show();
   const markup = generateInitialMarkup();
   modalBase.updateBaseModal({
