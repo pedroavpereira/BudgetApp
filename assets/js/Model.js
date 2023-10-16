@@ -253,6 +253,10 @@ export const initFilter = (categories = []) => {
   filters.categories = categories;
 };
 
+export const hasEnoughFunds = (acc, amount) => {
+  return acc.balance > amount;
+};
+
 export const isSameMonth = (mov) => {
   return (
     new Date(filters.date).getMonth() === new Date(mov.date).getMonth() &&

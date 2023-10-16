@@ -12,6 +12,7 @@ import * as transactionModalView from "./Views/modal/transactionModal.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
 import * as View from "./Views/movementsView.js";
 import * as overviewView from "./Views/overviewView.js";
+import * as alertView from "./Views/alertView.js";
 
 const updateOverview = () => {
   Model.modifyStateOverview(Model.filterTransactions());
@@ -119,6 +120,14 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   return dateObj;
 };
 
+const savingsWithdrawn = (formData) => {
+  const account = Model.findAccount(formData.account);
+  if (Model.hasEnoughFunds(account, formData.amount)) {
+  } else {
+    alertView.displayAlert("Insuficient funds in the account", "error");
+  }
+};
+
 const submitButtonClicked = (formData) => {
   console.log(formData);
   switch (formData.target) {
@@ -139,7 +148,7 @@ const submitButtonClicked = (formData) => {
       budgetSubmited(formData);
       break;
     case "savingsWithdrawl":
-      console.log("withdraaaaw");
+      savingsWithdrawn(formData);
       break;
     default:
       break;
