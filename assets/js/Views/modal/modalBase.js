@@ -32,7 +32,8 @@ export const updateBaseModal = (options) => {
   updateDeleteButton(options.deleteBtn);
 };
 
-const changeTitle = (message = "Add / update") => {
+const changeTitle = (message) => {
+  if (!message) return;
   document.querySelector(".modal-title").textContent = message;
 };
 
@@ -125,7 +126,6 @@ export const submitFormEvent = (handler) => {
       delete data.year;
     }
 
-    console.log(data);
     if (document.querySelector(".mov--active")) {
       data.id = document.querySelector(".mov--active").dataset.id;
     }

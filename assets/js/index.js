@@ -138,6 +138,9 @@ const submitButtonClicked = (formData) => {
     case "updateBudget":
       budgetSubmited(formData);
       break;
+    case "savingsWithdrawl":
+      console.log("withdraaaaw");
+      break;
     default:
       break;
   }
