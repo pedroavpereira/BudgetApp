@@ -259,7 +259,7 @@ export const initFilter = (categories = []) => {
 };
 
 export const hasEnoughFunds = (acc, amount) => {
-  return acc.balance > amount;
+  return acc.balance >= amount;
 };
 
 export const isSameMonth = (mov) => {
