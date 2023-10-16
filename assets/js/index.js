@@ -12,6 +12,7 @@ import * as transactionModalView from "./Views/modal/transactionModal.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
 import * as View from "./Views/movementsView.js";
 import * as overviewView from "./Views/overviewView.js";
+import * as alertView from "./Views/alertView.js";
 
 const updateOverview = () => {
   Model.modifyStateOverview(Model.filterTransactions());
@@ -119,6 +120,21 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   return dateObj;
 };
 
+const savingsWithdrawn = (formData) => {
+  const account = Model.findAccount(formData.account);
+  const mainAccount = Model.findAccount("native");
+  if (Model.hasEnoughFunds(account, formData.amount)) {
+    const transferObj = Model.createTransfer({
+      amount: formData.amount,
+      from: account.name,
+      to: mainAccount.name,
+    });
+    View.renderTransaction(transferObj);
+  } else {
+    alertView.displayAlert("Insuficient funds in the account", "error");
+  }
+};
+
 const submitButtonClicked = (formData) => {
   console.log(formData);
   switch (formData.target) {
@@ -138,19 +154,24 @@ const submitButtonClicked = (formData) => {
     case "updateBudget":
       budgetSubmited(formData);
       break;
+    case "savingsWithdrawl":
+      savingsWithdrawn(formData);
+      break;
     default:
       break;
   }
 };
 
 const changeAccountClicked = (accId) => {
-  Model.changeAccount(accId);
-  Model.initFilter();
-  View.renderAllTransactions(Model.filterTransactions());
-  updateOverview();
-  budgetView.renderBudget(Model.state);
-  filterView.renderDate(creatingDateObj());
-  filterView.uncheckCheckboxes();
+  console.log("ChangeAccountClicked");
+  savingsModalView.renderAccountSum(Model.findAccount(accId));
+  // Model.changeAccount(accId);
+  // Model.initFilter();
+  // View.renderAllTransactions(Model.filterTransactions());
+  // updateOverview();
+  // budgetView.renderBudget(Model.state);
+  // filterView.renderDate(creatingDateObj());
+  // filterView.uncheckCheckboxes();
 };
 
 const createNewAccountClicked = (accObj) => {

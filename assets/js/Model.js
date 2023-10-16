@@ -61,7 +61,10 @@ export const createTransaction = (obj) => {
     id: String(Date.now()),
   };
   state.currentAccount.movements.push(newTransaction);
-  state.currentAccount.balance += newTransaction.amount;
+  state.currentAccount.balance +=
+    newTransaction.type === "Expense"
+      ? -newTransaction.amount
+      : newTransaction.amount;
   saveLocalStorage();
   return newTransaction;
 };
@@ -202,6 +205,10 @@ export const changeAccount = (accId) => {
   state.currentAccount = acc;
 };
 
+export const findAccount = (accId) => {
+  return state.accounts.find((el) => el.accountID === accId);
+};
+
 export const deleteAccount = (accId) => {
   const account = state.accounts.find((el) => el.accountID === accId);
   if (state.currentAccount === account) {
@@ -217,19 +224,21 @@ export const createTransfer = (transferObj) => {
   const transfer = {
     type: "Transfer",
     from: transferObj.from,
-    to: transferObj.for,
+    to: transferObj.to,
     amount: transferObj.amount,
     date: Date.now(),
     id: String(Date.now()),
   };
-  const fromAccount = state.accounts.find((el) => el.name === transferObj.from);
-  const toAccount = state.accounts.find((el) => el.name === transferObj.for);
-
+  const fromAccount = state.accounts.find((el) => el.name === transfer.from);
+  const toAccount = state.accounts.find((el) => el.name === transfer.to);
   fromAccount.balance -= transfer.amount;
   toAccount.balance += transfer.amount;
 
-  fromAccount.movements.push({ ...transfer, category: "Out" });
-  toAccount.movements.push({ ...transfer, category: "In" });
+  if (fromAccount.name === "native") {
+    state.currentAccount.movements.push({ ...transfer, category: "Out" });
+  } else {
+    state.currentAccount.movements.push({ ...transfer, category: "In" });
+  }
   saveLocalStorage();
   return { ...transfer, category: "Out" };
 };
@@ -247,6 +256,10 @@ export const initFilter = (categories = []) => {
   }
 
   filters.categories = categories;
+};
+
+export const hasEnoughFunds = (acc, amount) => {
+  return acc.balance >= amount;
 };
 
 export const isSameMonth = (mov) => {
