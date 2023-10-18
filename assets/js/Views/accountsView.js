@@ -3,6 +3,7 @@
 const parentElement = document.querySelector(".accounts-container--list");
 
 const generateProgressBarMarkup = (account) => {
+  if (!account.goal) return "";
   const progress =
     account.balance / account.goal > 1
       ? 100
