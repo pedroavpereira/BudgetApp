@@ -2,34 +2,44 @@
 
 const parentElement = document.querySelector(".accounts-container--list");
 
+const generateProgressBarMarkup = (account) => {
+  return `<div class="progress-container">
+  <div class="progress-box">
+  
+    <span class="balance">Balance:${account.balance}</span>
+    <span class="goal">${account.goal}</span>
+  </div>
+  <div class="skill-bar">
+    <div class="skill-per" style="width: ${
+      (account.balance / account.goal) * 100
+    }%"></div>
+  </div>
+</div>`;
+};
+
 const generateAccountMarkup = (account) => {
   return `<div class="row accounts-row p-2 accounts-event accounts-acc--container" data-target="account" data-account-id=${
     account.accountID
   }>
-  <div class="col-8" ><i class="bi text-primary bi-${
+  <p class="account--name"><i class="bi text-primary bi-${
     account.type === "Savings"
       ? "bank"
       : account.type === "Investing"
       ? "currency-exchange"
       : "credit-card"
-  }"></i> ${account.name}</div>
+  }"></i> ${account.name} </p>
+  ${account.accountID != "native" ? generateProgressBarMarkup(account) : ""}
   ${
     account.accountID != "native"
-      ? `<div class="col-4" >
+      ? `
       <button
   type="button"
-  class="btn btn-sm btn-outline-danger accounts-event accounts-btn--delete"
+  class="btn btn-sm btn-danger accounts-event accounts-btn--delete"
   data-target="deleteAccount" data-account-id="${account.accountID}"
 ><i class="bi bi-trash"></i>
-</button> </div>`
+</button>`
       : ""
   }
-</div>`;
-};
-
-const generateNewAccountMarkup = () => {
-  return `<div class="row accounts-row p-2">
-  <div class="col"></div>
 </div>`;
 };
 

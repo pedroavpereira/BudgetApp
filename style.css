@@ -31,12 +31,70 @@ option[disabled] {
 }
 
 /* Accounts View */
+.accounts-acc--container {
+  position: relative;
+}
 .accounts-acc--container:hover .accounts-btn--delete {
   display: inline;
 }
 
 .accounts-btn--delete {
+  position: absolute;
+  width: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 5%;
   display: none;
+}
+
+.account--name {
+  display: inline-block;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.account-container {
+  display: flex;
+  background: white;
+  max-width: 500px;
+
+  align-items: center;
+}
+
+.progress-container {
+  position: relative;
+  width: 100%;
+}
+
+.progress-box span {
+  font-weight: bolder;
+  font-size: 8px;
+  font-family: "Courier New", Courier, monospace;
+  color: #ccc;
+}
+
+.goal {
+  text-align: end;
+  justify-content: space-between;
+  font-weight: bolder;
+}
+.progress-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.skill-bar {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}
+
+.skill-per {
+  height: 6px;
+  background-color: green;
+  border-radius: 6px;
+  position: relative;
 }
 
 /* modalView */
