@@ -3,16 +3,22 @@
 const parentElement = document.querySelector(".accounts-container--list");
 
 const generateProgressBarMarkup = (account) => {
+  const progress =
+    account.balance / account.goal > 1
+      ? 100
+      : (account.balance / account.goal) * 100;
   return `<div class="progress-container">
   <div class="progress-box">
   
-    <span class="balance">Balance:${account.balance}</span>
-    <span class="goal">${account.goal}</span>
+    <span class="balance"></span>
+    <span class="goal">${
+      progress === 100
+        ? "Goal Achieved"
+        : `Goal: ${account.goal} (${Math.trunc(progress)}%)`
+    }</span>
   </div>
   <div class="skill-bar">
-    <div class="skill-per" style="width: ${
-      (account.balance / account.goal) * 100
-    }%"></div>
+    <div class="skill-per" style="width: ${progress}%"></div>
   </div>
 </div>`;
 };
@@ -27,7 +33,7 @@ const generateAccountMarkup = (account) => {
       : account.type === "Investing"
       ? "currency-exchange"
       : "credit-card"
-  }"></i> ${account.name} </p>
+  }"></i> ${account.name} (${account.balance}£) </p>
   ${account.accountID != "native" ? generateProgressBarMarkup(account) : ""}
   ${
     account.accountID != "native"

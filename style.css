@@ -67,13 +67,13 @@ option[disabled] {
 }
 
 .progress-box span {
-  font-weight: bolder;
+  font-weight: bold;
   font-size: 8px;
-  font-family: "Courier New", Courier, monospace;
-  color: #ccc;
+  font-family: sans-serif;
+  color: black;
 }
 
-.goal {
+.progress-box .goal {
   text-align: end;
   justify-content: space-between;
   font-weight: bolder;
