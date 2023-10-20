@@ -192,9 +192,10 @@ export const createAccount = (accObj) => {
 };
 
 export const updateSavingsAccount = (accObj) => {
+  const account = findAccount(accObj.account);
   Object.keys(accObj).forEach((el) => {
-    if (state.currentAccount.hasOwnProperty(el)) {
-      state.currentAccount[el] = accObj[el];
+    if (account.hasOwnProperty(el)) {
+      account[el] = accObj[el];
     }
   });
   saveLocalStorage();

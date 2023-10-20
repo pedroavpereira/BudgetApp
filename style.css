@@ -31,12 +31,79 @@ option[disabled] {
 }
 
 /* Accounts View */
+.accounts-acc--container {
+  position: relative;
+}
 .accounts-acc--container:hover .accounts-btn--delete {
   display: inline;
 }
 
 .accounts-btn--delete {
+  position: absolute;
+  width: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 5%;
   display: none;
+}
+
+.account--name__container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.account--name__container p {
+  margin: 0;
+}
+
+.account--name {
+  /* margin: 0; */
+  overflow: hidden;
+}
+
+.account--balance {
+  /* margin: 0; */
+  color: rgba(0, 160, 0, 0.75);
+}
+
+.account-container {
+  background: white;
+  max-width: 500px;
+
+  align-items: center;
+}
+
+.progress-container {
+  position: relative;
+  width: 100%;
+}
+
+.progress-box span {
+  font-weight: bold;
+  font-size: 8px;
+  font-family: sans-serif;
+  color: black;
+}
+
+.progress-box .goal {
+  font-weight: bold;
+  font-size: 0.5rem;
+  margin: 0;
+  text-align: end;
+}
+
+.skill-bar {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}
+
+.skill-per {
+  height: 6px;
+  background-color: green;
+  border-radius: 6px;
+  position: relative;
 }
 
 /* modalView */

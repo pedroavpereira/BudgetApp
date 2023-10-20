@@ -2,34 +2,56 @@
 
 const parentElement = document.querySelector(".accounts-container--list");
 
+const generateProgressBarMarkup = (account) => {
+  if (!account.goal) return "";
+  const progress =
+    account.balance / account.goal > 1
+      ? 100
+      : (account.balance / account.goal) * 100;
+  return `<div class="progress-container">
+  <div class="progress-box">
+    <p class="goal">${
+      progress === 100
+        ? "Goal Achieved"
+        : `Goal: ${account.goal} (${Math.trunc(progress)}%)`
+    }</p>
+  </div>
+  <div class="skill-bar">
+    <div class="skill-per" style="width: ${progress}%"></div>
+  </div>
+</div>`;
+};
+
 const generateAccountMarkup = (account) => {
   return `<div class="row accounts-row p-2 accounts-event accounts-acc--container" data-target="account" data-account-id=${
     account.accountID
   }>
-  <div class="col-8" ><i class="bi text-primary bi-${
+  <div class="account--name__container">
+  <p class="account--name"><i class="bi text-primary bi-${
     account.type === "Savings"
       ? "bank"
       : account.type === "Investing"
       ? "currency-exchange"
       : "credit-card"
-  }"></i> ${account.name}</div>
+  }"></i> ${
+    account.name.length > 13 ? `${account.name.slice(0, 12)}...` : account.name
+  }</p>
+
+  <p class="account--balance">${account.balance}£</p>
+
+  </div>
+  ${account.accountID != "native" ? generateProgressBarMarkup(account) : ""}
   ${
     account.accountID != "native"
-      ? `<div class="col-4" >
+      ? `
       <button
   type="button"
-  class="btn btn-sm btn-outline-danger accounts-event accounts-btn--delete"
+  class="btn btn-sm btn-danger accounts-event accounts-btn--delete"
   data-target="deleteAccount" data-account-id="${account.accountID}"
 ><i class="bi bi-trash"></i>
-</button> </div>`
+</button>`
       : ""
   }
-</div>`;
-};
-
-const generateNewAccountMarkup = () => {
-  return `<div class="row accounts-row p-2">
-  <div class="col"></div>
 </div>`;
 };
 
