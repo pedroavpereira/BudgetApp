@@ -1,6 +1,8 @@
-const parentElement = document.querySelector(".overviewContainer");
+const overviewParentElement = document.querySelector(".overviewContainer");
+const balanceElement = document.querySelector("overview__balance");
 
 const generateMarkup = (obj) => {
+  debugger;
   const difference = obj.totalIncome - obj.totalExpense;
   return `<p class="${
     obj.totalExpense === 0 && obj.totalIncome === 0 ? "d-none" : ""
@@ -16,6 +18,10 @@ const generateMarkup = (obj) => {
 };
 
 export const updateOverview = (obj) => {
-  parentElement.innerHTML = "";
-  parentElement.insertAdjacentHTML("afterbegin", generateMarkup(obj));
+  debugger;
+  overviewParentElement.innerHTML = "";
+  overviewParentElement.insertAdjacentHTML(
+    "afterbegin",
+    generateMarkup(obj.overview)
+  );
 };
