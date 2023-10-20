@@ -47,14 +47,26 @@ option[disabled] {
   display: none;
 }
 
+.account--name__container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.account--name__container p {
+  margin: 0;
+}
+
 .account--name {
-  display: inline-block;
-  margin-bottom: 0;
+  /* margin: 0; */
   overflow: hidden;
 }
 
+.account--balance {
+  /* margin: 0; */
+  color: rgba(0, 160, 0, 0.75);
+}
+
 .account-container {
-  display: flex;
   background: white;
   max-width: 500px;
 
@@ -74,13 +86,10 @@ option[disabled] {
 }
 
 .progress-box .goal {
+  font-weight: bold;
+  font-size: 0.5rem;
+  margin: 0;
   text-align: end;
-  justify-content: space-between;
-  font-weight: bolder;
-}
-.progress-box {
-  display: flex;
-  justify-content: space-between;
 }
 
 .skill-bar {

@@ -10,13 +10,11 @@ const generateProgressBarMarkup = (account) => {
       : (account.balance / account.goal) * 100;
   return `<div class="progress-container">
   <div class="progress-box">
-  
-    <span class="balance"></span>
-    <span class="goal">${
+    <p class="goal">${
       progress === 100
         ? "Goal Achieved"
         : `Goal: ${account.goal} (${Math.trunc(progress)}%)`
-    }</span>
+    }</p>
   </div>
   <div class="skill-bar">
     <div class="skill-per" style="width: ${progress}%"></div>
@@ -28,13 +26,20 @@ const generateAccountMarkup = (account) => {
   return `<div class="row accounts-row p-2 accounts-event accounts-acc--container" data-target="account" data-account-id=${
     account.accountID
   }>
+  <div class="account--name__container">
   <p class="account--name"><i class="bi text-primary bi-${
     account.type === "Savings"
       ? "bank"
       : account.type === "Investing"
       ? "currency-exchange"
       : "credit-card"
-  }"></i> ${account.name} (${account.balance}£) </p>
+  }"></i> ${
+    account.name.length > 13 ? `${account.name.slice(0, 12)}...` : account.name
+  }</p>
+
+  <p class="account--balance">${account.balance}£</p>
+
+  </div>
   ${account.accountID != "native" ? generateProgressBarMarkup(account) : ""}
   ${
     account.accountID != "native"

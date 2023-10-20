@@ -78,7 +78,6 @@ const transferCreated = (obj) => {
 };
 
 const savingsAccountUpdated = (accObj) => {
-  debugger;
   Model.updateSavingsAccount(accObj);
   accountsView.renderAccounts(Model.state.accounts);
 };
