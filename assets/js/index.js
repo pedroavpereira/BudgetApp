@@ -16,7 +16,7 @@ import * as alertView from "./Views/alertView.js";
 
 const updateOverview = () => {
   Model.modifyStateOverview(Model.filterTransactions());
-  overviewView.updateOverview(Model.state.overview);
+  overviewView.updateOverview(Model.state);
 };
 
 const btnDeleteClicked = (id) => {
@@ -26,7 +26,7 @@ const btnDeleteClicked = (id) => {
   Model.deleteTransaction(id);
   View.deleteTransaction(id);
   budgetView.renderBudget(Model.state);
-  overviewView.updateOverview(Model.state.overview);
+  overviewView.updateOverview(Model.state);
 };
 
 const addTransactionClicked = () => {
@@ -40,7 +40,7 @@ const addTransactionClicked = () => {
 const transactionUpdated = (obj) => {
   const updatedTransaction = Model.updateTransaction(obj);
   View.deleteTransaction(obj.id);
-  overviewView.updateOverview(Model.state.overview);
+  overviewView.updateOverview(Model.state);
   if (Model.isSameMonth(updatedTransaction)) {
     View.renderTransaction(
       updatedTransaction,
@@ -78,6 +78,7 @@ const transferCreated = (obj) => {
 };
 
 const savingsAccountUpdated = (accObj) => {
+  debugger;
   Model.updateSavingsAccount(accObj);
   accountsView.renderAccounts(Model.state.accounts);
 };
@@ -99,7 +100,7 @@ const applyFilterClicked = (obj) => {
   const transactions = Model.filterTransactions(obj);
   View.renderAllTransactions(transactions);
   Model.modifyStateOverview(transactions);
-  overviewView.updateOverview(Model.state.overview);
+  overviewView.updateOverview(Model.state);
   Model.calculateBudget(transactions);
   budgetView.renderBudget(Model.state);
 };

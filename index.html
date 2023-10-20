@@ -55,26 +55,32 @@
     </header>
 
     <main>
+      <div class="container">
+         <div class="overview--container">
+        <h2 class="overview__balance"></h2>
+        <div class="overviewContainer">
+          <p>
+            Income
+            <span class="text-success">0</span>
+            Expenses
+            <span class="text-danger">0</span>
+            <span class="text-danger">(0)</span>
+          </p>
+        </div>
+      </div></div>
+      
       <!-- Action buttons -->
       <div class="container-lg movements--nav">
         <div class="row justify-content-start g-0">
-          <div class="col-10 col-lg-2 w-auto">
+          <div class="col-8">
             <button
               class="btn btn-sm btn-outline-secondary btn--addTransaction"
             >
               Add transaction
             </button>
           </div>
-          <div class="col-lg-7 d-lg-block text-center overviewContainer">
-            <p>
-              Income
-              <span class="text-success">0</span>
-              Expenses
-              <span class="text-danger">0</span>
-              <span class="text-danger">(0)</span>
-            </p>
-          </div>
-          <div class="col-2 col-lg-1 w-auto">
+         
+          <div class="col-4">
             <div class="dropdown">
               <a
                 class="btn btn-outline-secondary btn-sm dropdown-toggle"

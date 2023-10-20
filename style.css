@@ -1,3 +1,7 @@
+* {
+  cursor: default;
+}
+
 .form-select--from,
 .movement--row:hover,
 .accounts-row:hover {
@@ -7,6 +11,17 @@
 
 option[disabled] {
   background-color: #eee;
+}
+
+/* OverviewView */
+.overview--container {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.overview__balance {
+  color: rgba(0, 160, 0, 0.75);
 }
 
 /* MovementView */
