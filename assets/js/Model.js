@@ -2,7 +2,7 @@
 
 export let state = {
   overview: { totalIncome: 0, totalExpense: 0 },
-  pagination:{page:1,resultsPerPage:10},
+  pagination:{page:1,totalPages:1,resultsPerPage:10},
   budget: [
     { type: "Income", name: "Salary", value: 0, target: 0, native: true },
     {
@@ -116,7 +116,8 @@ export const filterTransactions = (
 };
 
 export const paginationTransactions = (page,transactions)=>{
-  state.pagination.page = page;
+  state.pagination.maxPages = Math.ceil(transactions.length / state.pagination.resultsPerPage)
+  state.pagination.page > state.pagination.maxPages ? page : 1;
   const start = (page-1) * state.pagination.resultsPerPage;
   const end = (page) * state.pagination.resultsPerPage;
 
