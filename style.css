@@ -28,8 +28,6 @@ option[disabled] {
 /* MovementView */
 .movement--container {
   height: 600px;
-  overflow: scroll;
-  overflow-x: hidden;
 }
 
 .movement--row {
@@ -168,4 +166,42 @@ option[disabled] {
 .modal-checkbox--input:checked ~ .modal-checkbox--label {
   border: 1px solid rgba(73, 160, 252, 0.75);
   background-color: rgba(73, 160, 252, 0.5);
+}
+
+
+/* Pagination */
+.pagination-container{
+  background-color: #ccc;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+
+.pagination-info{
+  margin: 0.5rem 1rem 0;
+}
+
+.pagination-arrow{
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  background-color: #eee;
+  border: 1px solid #9c9c9c;
+  border-radius: 50%;
+  position: relative;
+}
+
+.pagination-arrow__icon{
+  cursor: pointer;
+  color: #9c9c9c;
+}
+
+
+.hidden{
+  visibility: hidden;
 }

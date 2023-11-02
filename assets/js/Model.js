@@ -2,6 +2,7 @@
 
 export let state = {
   overview: { totalIncome: 0, totalExpense: 0 },
+  pagination:{page:1,totalPages:1,resultsPerPage:10},
   budget: [
     { type: "Income", name: "Salary", value: 0, target: 0, native: true },
     {
@@ -83,6 +84,7 @@ export const updateTransaction = (newMov) => {
 export const findTransaction = (id) => {
   return state.currentAccount.movements.find((el) => el.id === id);
 };
+
 export const deleteTransaction = (id) => {
   const mov = findTransaction(id);
   state.currentAccount.balance -= mov.amount;
@@ -93,11 +95,16 @@ export const deleteTransaction = (id) => {
   saveLocalStorage();
 };
 
+export const updateFilters = (filtersObj = { categories: [], date: Date.now() })=>{
+  filters.categories = filtersObj.categories;
+  filters.date = filtersObj.date;
+}
+
 export const filterTransactions = (
   obj = { categories: [], date: Date.now() }
 ) => {
-  filters.categories = obj.categories;
-  filters.date = obj.date;
+  // filters.categories = obj.categories;
+  // filters.date = obj.date;
 
   let filteredTransactions = state.currentAccount.movements;
   if (obj.date) {
@@ -112,6 +119,20 @@ export const filterTransactions = (
   }
   return filteredTransactions;
 };
+
+export const paginationTransactions = (page,transactions)=>{
+  state.pagination.maxPages = Math.ceil(transactions.length / state.pagination.resultsPerPage)
+  state.pagination.page = state.pagination.page < state.pagination.maxPages ? page : 1;
+  const start = (page-1) * state.pagination.resultsPerPage;
+  const end = (page) * state.pagination.resultsPerPage;
+
+  return transactions.sort((a,b)=>a.date-b.date).slice(start,end)
+}
+
+export const getTransactions = (page,skip=false) =>{
+  if(skip) return filterTransactions(filters);
+  return paginationTransactions(page,filterTransactions(filters));
+}
 
 export const newBudget = (budgetObj) => {
   state.budget.forEach((el) => {

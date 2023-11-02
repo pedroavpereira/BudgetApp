@@ -4,6 +4,7 @@ import * as Model from "./Model.js";
 import * as accountsView from "./Views/accountsView.js";
 import * as budgetView from "./Views/budgetView.js";
 import * as filterView from "./Views/filterView.js";
+import * as paginationView from "./Views/paginationView.js"
 import * as budgetModalView from "./Views/modal/budgetModal.js";
 import * as modalBase from "./Views/modal/modalBase.js";
 import * as savingsModalView from "./Views/modal/savingsModal.js";
@@ -15,7 +16,7 @@ import * as overviewView from "./Views/overviewView.js";
 import * as alertView from "./Views/alertView.js";
 
 const updateOverview = () => {
-  Model.modifyStateOverview(Model.filterTransactions());
+  Model.modifyStateOverview(Model.getTransactions(1,true));
   overviewView.updateOverview(Model.state);
 };
 
@@ -24,9 +25,11 @@ const btnDeleteClicked = (id) => {
   Model.updateBudget({ category: mov.category, amount: 0 }, mov);
   Model.updateStateOverview({ type: mov.type, amount: 0 }, mov);
   Model.deleteTransaction(id);
-  View.deleteTransaction(id);
+  View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
+  paginationView.renderPagination(Model.state.pagination);
   budgetView.renderBudget(Model.state);
   overviewView.updateOverview(Model.state);
+
 };
 
 const addTransactionClicked = () => {
@@ -61,7 +64,8 @@ const newTransactionCreated = (obj) => {
   ) {
     Model.updateBudget(newTransaction);
     updateOverview();
-    View.renderTransaction(newTransaction);
+    View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
+    paginationView.renderPagination(Model.state.pagination);
   } else {
     Model.initFilter(Model.filters.categories);
     filterView.renderDate(creatingDateObj());
@@ -97,12 +101,14 @@ const transactionClicked = (id) => {
 };
 
 const applyFilterClicked = (obj) => {
-  const transactions = Model.filterTransactions(obj);
+  Model.updateFilters(obj)
+  const transactions = Model.getTransactions(Model.state.pagination.page);
   View.renderAllTransactions(transactions);
   Model.modifyStateOverview(transactions);
   overviewView.updateOverview(Model.state);
   Model.calculateBudget(transactions);
   budgetView.renderBudget(Model.state);
+  paginationView.renderPagination(Model.state.pagination)
 };
 
 const datePickerYearChanged = (yearSelected) => {
@@ -163,6 +169,11 @@ const submitButtonClicked = (formData) => {
   }
 };
 
+const pageChanged = (page) =>{
+  View.renderAllTransactions(Model.getTransactions(page));
+  paginationView.renderPagination(Model.state.pagination)
+}
+
 const changeAccountClicked = (accId) => {
   console.log("ChangeAccountClicked");
   savingsModalView.renderAccountSum(Model.findAccount(accId));
@@ -183,7 +194,6 @@ const createNewAccountClicked = (accObj) => {
 const deleteAccountClicked = (accId) => {
   Model.deleteAccount(accId);
   accountsView.renderAccounts(Model.state.accounts);
-  View.renderAllTransactions(Model.filterTransactions());
   updateOverview();
 };
 
@@ -199,7 +209,11 @@ function init() {
 
   filterView.renderDate(creatingDateObj());
 
-  View.renderAllTransactions(Model.filterTransactions());
+  View.renderAllTransactions(Model.getTransactions(1));
+  paginationView.renderPagination(Model.state.pagination);
+  paginationView.paginationEvent(pageChanged);
+
+
   updateOverview();
   accountsView.renderAccounts(Model.state.accounts);
 
