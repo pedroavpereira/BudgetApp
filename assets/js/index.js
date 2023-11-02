@@ -16,7 +16,7 @@ import * as overviewView from "./Views/overviewView.js";
 import * as alertView from "./Views/alertView.js";
 
 const updateOverview = () => {
-  Model.modifyStateOverview(Model.filterTransactions());
+  Model.modifyStateOverview(Model.getTransactions(1,true));
   overviewView.updateOverview(Model.state);
 };
 
@@ -101,12 +101,14 @@ const transactionClicked = (id) => {
 };
 
 const applyFilterClicked = (obj) => {
-  const transactions = Model.filterTransactions(obj);
+  Model.updateFilters(obj)
+  const transactions = Model.getTransactions(Model.state.pagination.page);
   View.renderAllTransactions(transactions);
   Model.modifyStateOverview(transactions);
   overviewView.updateOverview(Model.state);
   Model.calculateBudget(transactions);
   budgetView.renderBudget(Model.state);
+  paginationView.renderPagination(Model.state.pagination)
 };
 
 const datePickerYearChanged = (yearSelected) => {
@@ -192,7 +194,6 @@ const createNewAccountClicked = (accObj) => {
 const deleteAccountClicked = (accId) => {
   Model.deleteAccount(accId);
   accountsView.renderAccounts(Model.state.accounts);
-  View.renderAllTransactions(Model.filterTransactions());
   updateOverview();
 };
 

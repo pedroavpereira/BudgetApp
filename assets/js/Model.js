@@ -95,11 +95,16 @@ export const deleteTransaction = (id) => {
   saveLocalStorage();
 };
 
+export const updateFilters = (filtersObj = { categories: [], date: Date.now() })=>{
+  filters.categories = filtersObj.categories;
+  filters.date = filtersObj.date;
+}
+
 export const filterTransactions = (
   obj = { categories: [], date: Date.now() }
 ) => {
-  filters.categories = obj.categories;
-  filters.date = obj.date;
+  // filters.categories = obj.categories;
+  // filters.date = obj.date;
 
   let filteredTransactions = state.currentAccount.movements;
   if (obj.date) {
@@ -124,7 +129,8 @@ export const paginationTransactions = (page,transactions)=>{
   return transactions.sort((a,b)=>a.date-b.date).slice(start,end)
 }
 
-export const getTransactions = (page) =>{
+export const getTransactions = (page,skip=false) =>{
+  if(skip) return filterTransactions(filters);
   return paginationTransactions(page,filterTransactions(filters));
 }
 
