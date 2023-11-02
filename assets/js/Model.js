@@ -117,11 +117,11 @@ export const filterTransactions = (
 
 export const paginationTransactions = (page,transactions)=>{
   state.pagination.maxPages = Math.ceil(transactions.length / state.pagination.resultsPerPage)
-  state.pagination.page > state.pagination.maxPages ? page : 1;
+  state.pagination.page = state.pagination.page < state.pagination.maxPages ? page : 1;
   const start = (page-1) * state.pagination.resultsPerPage;
   const end = (page) * state.pagination.resultsPerPage;
 
-  return transactions.sort((a,b)=> Date.parse(a.date) - Date.parse(b.date)).slice(start,end)
+  return transactions.sort((a,b)=>a.date-b.date).slice(start,end)
 }
 
 export const getTransactions = (page) =>{

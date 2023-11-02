@@ -26,6 +26,7 @@ const btnDeleteClicked = (id) => {
   Model.updateStateOverview({ type: mov.type, amount: 0 }, mov);
   Model.deleteTransaction(id);
   View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
+  paginationView.renderPagination(Model.state.pagination);
   budgetView.renderBudget(Model.state);
   overviewView.updateOverview(Model.state);
 
@@ -63,7 +64,8 @@ const newTransactionCreated = (obj) => {
   ) {
     Model.updateBudget(newTransaction);
     updateOverview();
-    View.renderTransaction(newTransaction);
+    View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
+    paginationView.renderPagination(Model.state.pagination);
   } else {
     Model.initFilter(Model.filters.categories);
     filterView.renderDate(creatingDateObj());
