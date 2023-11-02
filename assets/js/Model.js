@@ -2,6 +2,7 @@
 
 export let state = {
   overview: { totalIncome: 0, totalExpense: 0 },
+  pagination:{page:1,resultsPerPage:10},
   budget: [
     { type: "Income", name: "Salary", value: 0, target: 0, native: true },
     {
@@ -83,6 +84,7 @@ export const updateTransaction = (newMov) => {
 export const findTransaction = (id) => {
   return state.currentAccount.movements.find((el) => el.id === id);
 };
+
 export const deleteTransaction = (id) => {
   const mov = findTransaction(id);
   state.currentAccount.balance -= mov.amount;
@@ -112,6 +114,18 @@ export const filterTransactions = (
   }
   return filteredTransactions;
 };
+
+export const paginationTransactions = (page,transactions)=>{
+  state.pagination.page = page;
+  const start = (page-1) * state.pagination.resultsPerPage;
+  const end = (page) * state.pagination.resultsPerPage;
+
+  return transactions.sort((a,b)=> Date.parse(a.date) - Date.parse(b.date)).slice(start,end)
+}
+
+export const getTransactions = (page) =>{
+  return paginationTransactions(page,filterTransactions(filters));
+}
 
 export const newBudget = (budgetObj) => {
   state.budget.forEach((el) => {

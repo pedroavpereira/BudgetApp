@@ -197,9 +197,11 @@ function init() {
   console.log(Model.state);
   // Model.addMovement();
 
+  console.log(Model.paginationTransactions(1,Model.state.currentAccount.movements));
+
   filterView.renderDate(creatingDateObj());
 
-  View.renderAllTransactions(Model.filterTransactions());
+  View.renderAllTransactions(Model.getTransactions(1));
   updateOverview();
   accountsView.renderAccounts(Model.state.accounts);
 
