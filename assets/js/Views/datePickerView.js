@@ -27,3 +27,22 @@ export const selectDate = (date)=>{
   document.querySelector(`#datepicker-year__${year}`).checked = true;
   document.querySelector(`#datepicker-month__${month}`).checked = true;
 }
+
+export const datePickerEvent = (handler)=>{
+  const parentElement = document.querySelector(".datepicker-form__element");
+
+  parentElement.addEventListener("click",function(e){
+
+    e.preventDefault()
+    const target = e.target.closest(".datepicker-input__container");
+    if(!target) return
+
+    target.querySelector("input").checked = true;
+    const formData = new FormData(this);
+    const formObj = Object.fromEntries(formData);
+
+    const newDate = Date.parse(`01 ${formObj.month} ${formObj.year}`)
+    handler(newDate)
+
+  })
+}

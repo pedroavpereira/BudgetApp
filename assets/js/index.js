@@ -113,6 +113,17 @@ const applyFilterClicked = (obj) => {
   paginationView.renderPagination(Model.state.pagination)
 };
 
+const datePickerClicked = (newDate) =>{
+  Model.updateDateFilter(newDate);
+  const transactions = Model.getTransactions()
+  Model.modifyStateOverview(transactions);
+  overviewView.updateOverview(Model.state);
+  Model.calculateBudget(transactions);
+  budgetView.renderBudget(Model.state);
+  View.renderAllTransactions(Model.getTransactions())
+  paginationView.renderPagination(Model.state.pagination)
+}
+
 const datePickerYearChanged = (yearSelected) => {
   filterView.renderDate(creatingDateObj(yearSelected), false);
 };
@@ -228,11 +239,16 @@ function init() {
   Model.calculateBudget(Model.filterTransactions());
   budgetView.renderBudget(Model.state);
 
+
+
+
   accountsView.accountContainerEvent(
     changeAccountClicked,
     createNewAccountClicked,
     deleteAccountClicked
   );
+
+  datePickerView.datePickerEvent(datePickerClicked);
   filterView.datePickerYearEvent(datePickerYearChanged);
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);

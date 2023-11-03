@@ -133,7 +133,7 @@ export const paginationTransactions = (page,transactions)=>{
   return transactions.sort((a,b)=>a.date-b.date).slice(start,end)
 }
 
-export const getTransactions = (page,skip=false) =>{
+export const getTransactions = (page=1,skip=false) =>{
   if(skip) return filterTransactions(filters);
   return paginationTransactions(page,filterTransactions(filters));
 }
