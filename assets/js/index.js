@@ -4,6 +4,7 @@ import * as Model from "./Model.js";
 import * as accountsView from "./Views/accountsView.js";
 import * as budgetView from "./Views/budgetView.js";
 import * as filterView from "./Views/filterView.js";
+import * as datePickerView from "./Views/datePickerView.js"
 import * as paginationView from "./Views/paginationView.js"
 import * as budgetModalView from "./Views/modal/budgetModal.js";
 import * as modalBase from "./Views/modal/modalBase.js";
@@ -218,7 +219,12 @@ function init() {
   updateOverview();
   accountsView.renderAccounts(Model.state.accounts);
 
+  //Filters and Date init
   filterView.renderCheckboxes(Model.state.budget);
+  datePickerView.generateYears(creatingDateObj())
+  datePickerView.selectDate(Model.filters.date)
+
+
   Model.calculateBudget(Model.filterTransactions());
   budgetView.renderBudget(Model.state);
 
@@ -241,6 +247,7 @@ function init() {
   // );
   movementsNavView.addTransactionEvent(addTransactionClicked);
   budgetView.changeBudgetClicked(updateBudgetClicked);
+
 }
 
 init();
