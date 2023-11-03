@@ -101,7 +101,8 @@ const transactionClicked = (id) => {
 };
 
 const applyFilterClicked = (obj) => {
-  Model.updateEntireFilters(obj)
+  console.log(obj)
+  Model.updateCategoriesFilter(obj)
   const transactions = Model.getTransactions(Model.state.pagination.page);
   View.renderAllTransactions(transactions);
   Model.modifyStateOverview(transactions);

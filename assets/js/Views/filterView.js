@@ -97,23 +97,19 @@ export const applyFilterEvent = (handler) => {
   document
     .querySelector(".dropdown-menu")
     .addEventListener("click", function (e) {
+      ;
       if (e.target.classList.contains("btn")) {
-        const obj = {};
         if (e.target.dataset.target === "apply") {
-          const month = document.querySelector("#selectMonth").value;
-          const year = document.querySelector("#selectYear").value;
-          obj.date = Date.parse(`01 ${month} ${year}`);
-          obj.categories = [
-            ...document.querySelectorAll(".dropdown--category:checked"),
-          ].map((el) => el.dataset.category);
         } else if (e.target.dataset.target === "clear") {
-          [...document.querySelectorAll(".dropdown--category:checked")].forEach(
-            (el) => (el.checked = false)
+          [...document.querySelectorAll(".dropdown--category")].forEach(
+            (el) => (el.checked = true)
           );
-          obj.date = Date.now();
-          obj.categories = [];
         }
-        handler(obj);
+
+        const categoriesArr = [
+          ...document.querySelectorAll(".dropdown--category:checked"),
+        ].map((el) => el.dataset.category);
+        handler(categoriesArr);
       } else {
         e.stopPropagation();
       }
