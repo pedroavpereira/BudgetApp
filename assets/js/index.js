@@ -4,6 +4,7 @@ import * as Model from "./Model.js";
 import * as accountsView from "./Views/accountsView.js";
 import * as budgetView from "./Views/budgetView.js";
 import * as filterView from "./Views/filterView.js";
+import * as datePickerView from "./Views/datePickerView.js"
 import * as paginationView from "./Views/paginationView.js"
 import * as budgetModalView from "./Views/modal/budgetModal.js";
 import * as modalBase from "./Views/modal/modalBase.js";
@@ -51,7 +52,7 @@ const transactionUpdated = (obj) => {
     );
   } else {
     Model.initFilter(Model.filters.categories);
-    filterView.renderDate(creatingDateObj());
+    datePickerView.generateYears(creatingDateObj());
   }
 };
 
@@ -68,7 +69,7 @@ const newTransactionCreated = (obj) => {
     paginationView.renderPagination(Model.state.pagination);
   } else {
     Model.initFilter(Model.filters.categories);
-    filterView.renderDate(creatingDateObj());
+    datePickerView.generateYears(creatingDateObj());
   }
 };
 
@@ -101,7 +102,8 @@ const transactionClicked = (id) => {
 };
 
 const applyFilterClicked = (obj) => {
-  Model.updateFilters(obj)
+  console.log(obj)
+  Model.updateCategoriesFilter(obj)
   const transactions = Model.getTransactions(Model.state.pagination.page);
   View.renderAllTransactions(transactions);
   Model.modifyStateOverview(transactions);
@@ -111,9 +113,17 @@ const applyFilterClicked = (obj) => {
   paginationView.renderPagination(Model.state.pagination)
 };
 
-const datePickerYearChanged = (yearSelected) => {
-  filterView.renderDate(creatingDateObj(yearSelected), false);
-};
+const datePickerClicked = (newDate) =>{
+  Model.updateDateFilter(newDate);
+  const transactions = Model.getTransactions()
+  Model.modifyStateOverview(transactions);
+  overviewView.updateOverview(Model.state);
+  Model.calculateBudget(transactions);
+  budgetView.renderBudget(Model.state);
+  View.renderAllTransactions(Model.getTransactions())
+  paginationView.renderPagination(Model.state.pagination)
+}
+
 
 const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   const earliestMovDate = Model.filters.earliestDate;
@@ -207,7 +217,6 @@ function init() {
   console.log(Model.state);
   // Model.addMovement();
 
-  filterView.renderDate(creatingDateObj());
 
   View.renderAllTransactions(Model.getTransactions(1));
   paginationView.renderPagination(Model.state.pagination);
@@ -217,16 +226,25 @@ function init() {
   updateOverview();
   accountsView.renderAccounts(Model.state.accounts);
 
+  //Filters and Date init
   filterView.renderCheckboxes(Model.state.budget);
+  datePickerView.generateYears(creatingDateObj())
+  datePickerView.selectDate(Model.filters.date)
+
+
   Model.calculateBudget(Model.filterTransactions());
   budgetView.renderBudget(Model.state);
+
+
+
 
   accountsView.accountContainerEvent(
     changeAccountClicked,
     createNewAccountClicked,
     deleteAccountClicked
   );
-  filterView.datePickerYearEvent(datePickerYearChanged);
+
+  datePickerView.datePickerEvent(datePickerClicked);
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);
   modalBase.deleteBtnEvent(btnDeleteClicked);
@@ -240,6 +258,7 @@ function init() {
   // );
   movementsNavView.addTransactionEvent(addTransactionClicked);
   budgetView.changeBudgetClicked(updateBudgetClicked);
+
 }
 
 init();

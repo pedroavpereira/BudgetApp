@@ -201,6 +201,62 @@ option[disabled] {
   color: #9c9c9c;
 }
 
+.datepicker-container{
+  width: 100%;
+  display: flex;
+  /* background-color: #ccc; */
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.datepicker-input__container{
+  display: flex;
+  position: relative;
+}
+
+.datepicker-radios{
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.datepicker-label{
+  font-family: sans-serif;
+  cursor: pointer;
+  padding: 0 1rem;
+  position: relative;   
+}
+
+.datepicker-radios:checked + .datepicker-label{
+  font-weight: bold;
+}
+
+.datepicker-radios:checked + .datepicker-label::before{
+  content: '';
+  display: inline-block;
+
+  position: absolute;
+  top: 50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  z-index: -1;
+  background-color: #ccc;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}
+
+.datepicker-month__label:hover{
+  font-weight: bold;
+}
+
+
+
+
 
 .hidden{
   visibility: hidden;
