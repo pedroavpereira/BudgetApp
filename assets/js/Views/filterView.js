@@ -27,60 +27,6 @@ const generateMarkupCheckbox = (el) => {
   </li>`;
 };
 
-const generateMarkupMonth = (i) => {
-  return `<option data-monthId="${i}" value="${months[i]}">${months[i]}</option>`;
-};
-
-const generateMarkupYear = (year) => {
-  return `<option value="${year}">${year}</option>`;
-};
-
-export const renderDate = (obj, init = true) => {
-  if (init) {
-    renderYear(obj);
-  }
-  renderMonths(obj);
-};
-
-export const renderYear = (obj) => {
-  const yearElement = document.querySelector("#selectYear");
-  yearElement.innerHTML = "";
-
-  let year = obj.earliest.year;
-
-  while (year <= new Date().getFullYear()) {
-    const markup = generateMarkupYear(year);
-    yearElement.insertAdjacentHTML("afterbegin", markup);
-    year++;
-  }
-  if (obj.yearSelected === obj.current.year)
-    yearElement.value = obj.current.year;
-};
-
-const renderMonths = (obj) => {
-  const monthElement = document.querySelector("#selectMonth");
-  monthElement.innerHTML = "";
-  if (obj.yearSelected === obj.current.year) {
-    for (let i = 0; i <= obj.current.month; i++) {
-      const markup = generateMarkupMonth(i);
-      monthElement.insertAdjacentHTML("beforeend", markup);
-    }
-    monthElement.value = months[obj.current.month];
-  } else if (obj.yearSelected === obj.earliest.year) {
-    for (let i = 11; i >= obj.earliest.month; i--) {
-      const markup = generateMarkupMonth(i);
-      monthElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    monthElement.value = months[obj.earliest.month];
-  } else {
-    months.forEach((el, i) => {
-      const markup = generateMarkupMonth(i);
-      monthElement.insertAdjacentHTML("beforeend", markup);
-    });
-    monthElement.value = months[0];
-  }
-};
-
 export const renderCheckboxes = (obj) => {
   const markup = obj.map((el) => generateMarkupCheckbox(el)).join("");
 

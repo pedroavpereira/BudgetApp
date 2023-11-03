@@ -52,7 +52,7 @@ const transactionUpdated = (obj) => {
     );
   } else {
     Model.initFilter(Model.filters.categories);
-    filterView.renderDate(creatingDateObj());
+    datePickerView.generateYears(creatingDateObj());
   }
 };
 
@@ -69,7 +69,7 @@ const newTransactionCreated = (obj) => {
     paginationView.renderPagination(Model.state.pagination);
   } else {
     Model.initFilter(Model.filters.categories);
-    filterView.renderDate(creatingDateObj());
+    datePickerView.generateYears(creatingDateObj());
   }
 };
 
@@ -124,9 +124,6 @@ const datePickerClicked = (newDate) =>{
   paginationView.renderPagination(Model.state.pagination)
 }
 
-const datePickerYearChanged = (yearSelected) => {
-  filterView.renderDate(creatingDateObj(yearSelected), false);
-};
 
 const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   const earliestMovDate = Model.filters.earliestDate;
@@ -220,7 +217,6 @@ function init() {
   console.log(Model.state);
   // Model.addMovement();
 
-  filterView.renderDate(creatingDateObj());
 
   View.renderAllTransactions(Model.getTransactions(1));
   paginationView.renderPagination(Model.state.pagination);
@@ -249,7 +245,6 @@ function init() {
   );
 
   datePickerView.datePickerEvent(datePickerClicked);
-  filterView.datePickerYearEvent(datePickerYearChanged);
   filterView.applyFilterEvent(applyFilterClicked);
   View.movementContainerEvent(transactionClicked);
   modalBase.deleteBtnEvent(btnDeleteClicked);
