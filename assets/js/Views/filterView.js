@@ -22,7 +22,7 @@ export const uncheckCheckboxes = () => {
 
 const generateMarkupCheckbox = (el) => {
   return `<li class="dropdown-item">
-    <input type="checkbox" class="dropdown--category" id="cat${el.name}" data-category="${el.name}"/>
+    <input type="checkbox" class="dropdown--category" id="cat${el.name}" data-category="${el.name}" checked/>
     <label for="cat${el.name}">${el.name}</label>
   </li>`;
 };

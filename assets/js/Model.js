@@ -95,28 +95,32 @@ export const deleteTransaction = (id) => {
   saveLocalStorage();
 };
 
-export const updateFilters = (filtersObj = { categories: [], date: Date.now() })=>{
+export const updateEntireFilters = (filtersObj = { categories: [], date: Date.now() })=>{
   filters.categories = filtersObj.categories;
   filters.date = filtersObj.date;
 }
 
-export const filterTransactions = (
-  obj = { categories: [], date: Date.now() }
-) => {
+export const updateDateFilter = (newDate) =>{
+  filters.date = newDate;
+}
+
+export const updateCategoriesFilter = (categoriesArray) =>{
+  filters.categories = categoriesArray;
+}
+
+export const filterTransactions = () => {
   // filters.categories = obj.categories;
   // filters.date = obj.date;
-
   let filteredTransactions = state.currentAccount.movements;
-  if (obj.date) {
+ 
     filteredTransactions = filteredTransactions.filter((el) => {
       return isSameMonth(el);
     });
-  }
-  if (obj.categories && obj.categories.length != 0) {
+    console.log(filteredTransactions);
     filteredTransactions = filteredTransactions.filter((el) =>
-      obj.categories.includes(el.category)
+      filters.categories.includes(el.category)
     );
-  }
+    console.log(filteredTransactions);
   return filteredTransactions;
 };
 
@@ -266,6 +270,15 @@ export const createTransfer = (transferObj) => {
 };
 
 export const initFilter = (categories = []) => {
+  const newCategories = categories
+  
+  if(newCategories.length === 0){
+    state.budget.forEach(el=>{
+      newCategories.push(el.name)
+    })
+  }
+
+
   if (state.currentAccount.movements.length > 0) {
     filters.earliestDate = state.currentAccount.movements.reduce(
       (lowest, el) => {
@@ -277,7 +290,7 @@ export const initFilter = (categories = []) => {
     filters.earliestDate = Date.now();
   }
 
-  filters.categories = categories;
+  filters.categories = newCategories;
 };
 
 export const hasEnoughFunds = (acc, amount) => {
