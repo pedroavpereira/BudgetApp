@@ -3,6 +3,47 @@
   box-sizing: border-box;
 }
 
+.main-container{
+  width: 80%;
+  margin: auto;
+  display: grid;
+}
+
+@media(min-width:40rem){
+  .main-container{
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: repeat(5,auto);
+    grid-template-areas: "overview overview"
+                         "date ."
+                         "controls ."
+                         "transactions accordion"
+                         "pagination .";
+  }
+
+  .overview--container{
+    grid-area:overview;
+  }
+
+  .datepicker{
+    grid-area:date;
+  }
+
+  .movement--nav{
+    grid-area: controls;
+  }
+
+  .transactions--container{
+    width: 100%;
+    grid-area: transactions;
+  }
+
+  .accordion-container{
+    grid-area: accordion;
+  }
+
+
+}
+
 .form-select--from,
 .movement--row:hover,
 .accounts-row:hover {
