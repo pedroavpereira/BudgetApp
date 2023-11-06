@@ -7,7 +7,39 @@
   width: 80%;
   margin: auto;
   display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows : repeat(6,auto);
+  grid-template-areas: "overview"
+                        "date"
+                        "accordion"
+                        "controls"
+                        "transactions"
+                        "pagination"
+
+
 }
+
+.overview--container{
+  grid-area:overview;
+}
+
+.datepicker{
+  grid-area:date;
+}
+
+.movement--nav{
+  grid-area: controls;
+  display: flex;
+}
+
+.transactions--container{
+  grid-area: transactions;
+}
+
+.accordion-container{
+  grid-area: accordion;
+}
+
 
 @media(min-width:40rem){
   .main-container{
@@ -19,28 +51,6 @@
                          "transactions accordion"
                          "pagination .";
   }
-
-  .overview--container{
-    grid-area:overview;
-  }
-
-  .datepicker{
-    grid-area:date;
-  }
-
-  .movement--nav{
-    grid-area: controls;
-  }
-
-  .transactions--container{
-    width: 100%;
-    grid-area: transactions;
-  }
-
-  .accordion-container{
-    grid-area: accordion;
-  }
-
 
 }
 
