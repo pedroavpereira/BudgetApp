@@ -35,6 +35,8 @@
 
 .transactions--container{
   grid-area: transactions;
+  height: 600px;
+  border: 1px solid #ccc;
 }
 
 .accordion-container{
@@ -81,14 +83,20 @@ option[disabled] {
   color: rgba(0, 160, 0, 0.75);
 }
 
-/* MovementView */
-.movement--container {
-  height: 600px;
-}
 
 .movement--row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   height: 10%;
 }
+
+.transaction-section{
+  text-align: center;
+  margin: 0 5rem;
+}
+
+
 
 .movement-category {
   color: white;
