@@ -4,14 +4,13 @@
 }
 
 .main-container{
-  width: 80%;
+ 
   margin: auto;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows : repeat(6,auto);
+  grid-template-rows : repeat(5,auto);
   grid-template-areas: "overview"
                         "date"
-                        "accordion"
                         "controls"
                         "transactions"
                         "pagination";
@@ -21,6 +20,7 @@
 
 .overview--container{
   grid-area:overview;
+  justify-content: center;
 }
 
 .datepicker{
@@ -48,18 +48,6 @@
 }
 
 
-@media(min-width:40rem){
-  .main-container{
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: repeat(5,auto);
-    grid-template-areas: "overview overview"
-                         "date accordion"
-                         "controls accordion"
-                         "transactions accordion"
-                         "pagination .";
-  }
-
-}
 
 .form-select--from,
 .movement--row:hover,
@@ -318,10 +306,80 @@ option[disabled] {
   font-weight: bold;
 }
 
+.accordion-controls{
+  text-align: center;
+  border-radius: 150px;
+}
 
+.accordion-controls--radio{
+  display: none;
+}
+
+.accordion-controls--label {
+  display: block;
+  font-weight: 500;
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.accordion-content{
+  padding: 1rem;
+  display: none;
+}
+
+.accordion-controls--radio:checked ~ .accordion-controls--label{
+  background-color: #e3e3e3;
+}
+
+
+.accordion-controls--radio:checked ~.accordion-content{
+  display: block;
+}
+
+
+.accounts-container{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.accounts-new--account{
+  align-self: center;
+}
 
 
 
 .hidden{
   visibility: hidden;
+}
+
+.desktop-only{
+  display: none;
+}
+
+
+
+
+
+
+
+@media(min-width:40rem){
+  .main-container{
+    width: 80%;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: repeat(5,auto);
+    grid-template-areas: "overview overview"
+                         "date accordion"
+                         "controls accordion"
+                         "transactions accordion"
+                         "pagination .";
+  }
+
+  .overview--container{
+    justify-content: start;
+  }
+
+  .desktop-only{
+    display: block;
+  }
 }

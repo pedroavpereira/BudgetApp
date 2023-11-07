@@ -170,7 +170,7 @@
     </div>
     </form>
     </div>
-
+              <!-- Transactions container -->
     <div class="transactions--container">
           <div class="row text-center movements--container border">
             <div class="col-12 p-3 text-muted">No more transactions</div>
@@ -182,11 +182,95 @@
     </div>
  
 
-          <!-- Transactions container -->
-        
+
 
           <!-- Accordion -->
-          <div class="accordion-container">
+      <div class="accordion-container desktop-only">
+        <div class="accordion-item accordion-item--budget">
+          <input type="radio" name="accordion-controls" id="accordion-control--budget" class="accordion-control accordion-controls--radio">
+          <label for="accordion-control--budget" class="accordion-controls--label">Budget</label>
+          <div class="accordion-content">
+            <div class="overview--body">
+              <p class="text-center text-muted">Budget</p>
+            </div>
+            <button
+              class="btn btn-outline-secondary btn-sm btn--budget"
+            >
+              Change Budget
+            </button>
+          </div>
+        </div>
+        <div class="accordion-item accordion-item--accounts">
+          <input type="radio" name="accordion-controls" id="accordion-control--accounts" class="accordion-control accordion-controls--radio">
+          <label for="accordion-control--accounts" class="accordion-controls--label">Accounts</label>
+          <div class="accordion-content">
+            <div class="accounts-container">
+            <div class="accounts-container--list">
+              <div>Main Account</div>
+            </div>
+
+            <div class="accounts-form d-none">
+                <select
+                  name="month"
+                  class="form-select form-select-sm"
+                  id="selectAccountType"
+                >
+                  <option value="Savings">Savings</option>
+                  <option value="Investing">Investing</option>
+                </select>
+                <div class="col-8 p-1">
+                  <input
+                    class="form-control accounts-form--input"
+                    type="text"
+                    placeholder="Account name"
+                    aria-label="insert new account name"
+                  />
+                <div class="col-4 p-1">
+                  <div
+                    class="btn-group"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-outline-success btn-accounts-add accounts-event"
+                      data-target="addAccount"
+                    >
+                      <i class="bi bi-check-circle"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger btn-accounts-cancel accounts-event"
+                      data-target="cancelAdition"
+                    >
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </div>
+                </div>
+            
+              </div>
+              
+            </div>
+            <div class="accounts-new--account">
+              <button
+                class="btn btn-sm btn-outline-secondary accounts-display--form accounts-event"
+                data-target="display-newAccountForm"
+              >
+                <i class="bi bi-plus-lg"></i> New Account
+              </button>
+            </div>
+          </div>
+        </div>
+        </div>   
+
+        <div class="accordion-item">
+          <input type="radio" name="accordion-controls" id="accordion-control--goals" class="accordion-control accordion-controls--radio">
+          <label for="accordion-control--goals" class="accordion-control accordion-controls--label">Goals</label>
+          <div class="accordion-content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima ab tenetur optio libero. Officia alias ea odit blanditiis veniam? Consectetur a, temporibus nihil voluptates modi non beatae laborum praesentium tenetur.</div>
+        </div>
+      </div>
+
+          <div class="accordion-container desktop-only hidden">
             <div class="accordion accordion-flush" id="accordionFlushExample">
               <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -207,102 +291,9 @@
                   data-bs-parent="#accordionFlushExample"
                 >
                   <div class="accordion-body">
-                    <div class="overview--body">
-                      <p class="text-center text-muted">Budget</p>
-                    </div>
-                    <button
-                      class="btn btn-outline-secondary btn-sm btn--budget"
-                    >
-                      Change Budget
-                    </button>
-                  </div>
+                    
                 </div>
               </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#flush-collapseTwo"
-                    aria-expanded="false"
-                    aria-controls="flush-collapseTwo"
-                  >
-                    Accounts
-                  </button>
-                </h2>
-                <div
-                  id="flush-collapseTwo"
-                  class="accordion-collapse collapse"
-                  data-bs-parent="#accordionFlushExample"
-                >
-                  <div class="accordion-body accounts-container p-0">
-                    <div class="container-fluid m-0">
-                      <div
-                        class="row p-2 accounts-container--list"
-                        data-target="account"
-                      >
-                        <div class="col">Main Account</div>
-                      </div>
-                    </div>
-                    <div class="row g-2 mt-2 mb-2 accounts-form d-none">
-                      <div class="row p-0">
-                        <select
-                          name="month"
-                          class="form-select form-select-sm"
-                          id="selectAccountType"
-                        >
-                          <option value="Savings">Savings</option>
-                          <option value="Investing">Investing</option>
-                        </select>
-                      </div>
-                      <div class="row p-0">
-                        <div class="col-8 p-1">
-                          <input
-                            class="form-control accounts-form--input"
-                            type="text"
-                            placeholder="Account name"
-                            aria-label="insert new account name"
-                          />
-                        </div>
-                        <div class="col-4 p-1">
-                          <div
-                            class="btn-group"
-                            role="group"
-                            aria-label="Basic example"
-                          >
-                            <button
-                              type="button"
-                              class="btn btn-outline-success btn-accounts-add accounts-event"
-                              data-target="addAccount"
-                            >
-                              <i class="bi bi-check-circle"></i>
-                            </button>
-                            <button
-                              type="button"
-                              class="btn btn-outline-danger btn-accounts-cancel accounts-event"
-                              data-target="cancelAdition"
-                            >
-                              <i class="bi bi-x-lg"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row p-2 text-center">
-                      <div class="col">
-                        <button
-                          class="btn btn-sm btn-outline-secondary accounts-display--form accounts-event"
-                          data-target="display-newAccountForm"
-                        >
-                          <i class="bi bi-plus-lg"></i> New Account
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <div class="accordion-item">
                 <h2 class="accordion-header">
                   <button

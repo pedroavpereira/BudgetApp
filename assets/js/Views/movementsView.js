@@ -77,7 +77,7 @@ export const renderAllTransactions = (arr) => {
 
 export const movementContainerEvent = (handler) => {
   parentElement.addEventListener("click", function (e) {
-    const target = e.target.closest(".movements--row");
+    const target = e.target.closest(".movement--row");
     if (!target) return;
 
     target.classList.add("mov--active");
