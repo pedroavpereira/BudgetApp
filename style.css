@@ -353,6 +353,10 @@ option[disabled] {
   visibility: hidden;
 }
 
+.display-none{
+  display: none;
+}
+
 .desktop-only{
   display: none;
 }

@@ -66,9 +66,10 @@ export const renderAccounts = (arr) => {
   parentElement.insertAdjacentHTML("afterbegin", markup);
 };
 
-const toggleNewAccountForm = (addClass, removeClass) => {
-  document.querySelector(addClass).classList.add("d-none");
-  document.querySelector(removeClass).classList.remove("d-none");
+const toggleNewAccountForm = () => {
+  document.querySelector(".accounts-form").classList.toggle("display-none");
+  document.querySelector(".accounts-new--account").classList.toggle("display-none");
+
 };
 
 export const accountContainerEvent = (
@@ -93,12 +94,12 @@ export const accountContainerEvent = (
           type: accountTypeSelect.value,
         });
         formInput.value = "";
-        toggleNewAccountForm(".accounts-form", ".accounts-display--form");
+        toggleNewAccountForm();
       } else if (datasetTarget.target === "cancelAdition") {
         formInput.value = "";
-        toggleNewAccountForm(".accounts-form", ".accounts-display--form");
+        toggleNewAccountForm();
       } else if (datasetTarget.target === "display-newAccountForm") {
-        toggleNewAccountForm(".accounts-display--form", ".accounts-form");
+        toggleNewAccountForm();
       } else if (datasetTarget.target === "deleteAccount") {
         handlerDeleteAccount(datasetTarget.accountId);
       }
