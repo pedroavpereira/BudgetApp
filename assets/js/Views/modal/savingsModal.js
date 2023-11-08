@@ -7,19 +7,17 @@ let selectedAccount;
 const generateModalTypeMarkup = () => {
   return `
   <div class="modal-content--container modal-content--savings">
-  <div class="form-check col-3 modal-checkbox--container">
       <input class="form-check-input check-input--type form-input modal-checkbox--input" type="radio" name="account" id="transaction-type--withdrawl" data-target="Withdrawl" value="${selectedAccount.accountID}" checked>
       <label class="form-check-label modal-checkbox--label" for="transaction-type--withdrawl">
         Withdral
       </label>
-      </div>
-      <div class="form-check col-3">
+      <div class="modal-grid--content">${generateWithdrawlMarkup()}</div>
       <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="account" id="transaction-type--account" value="${selectedAccount.accountID}" data-target="account">
       <label class="form-check-label modal-checkbox--label" for="transaction-type--account">
         Account
       </label>
-    </div>
-    </div>`;
+      <div class="modal-grid--content">${generateAccSumMarkup()}</div>
+      `;
 };
 
 const generateTransactionMarkup = (trans) => {
@@ -60,10 +58,7 @@ const generateWithdrawlMarkup = () => {
 };
 
 const generateInitialMarkup = () => {
-  return `${generateModalTypeMarkup()}
-  <div class="modal--content">
-   ${generateWithdrawlMarkup()}
-  </div>`;
+  return `${generateModalTypeMarkup()}`
 };
 
 const generateAccSumMarkup = () => {
@@ -153,7 +148,6 @@ const updateModalContent = (e) => {
 
 export const renderAccountSum = (accObj) => {
   selectedAccount = accObj;
-  console.log(selectedAccount);
   modalBase.transactionModal.show();
   const markup = generateInitialMarkup();
   modalBase.updateBaseModal({
@@ -162,18 +156,4 @@ export const renderAccountSum = (accObj) => {
   });
   modalBase.insertHTML(markup);
   typePickerEvent(updateModalContent);
-};
-
-export const renderTransactionSum = (trans) => {
-  const markup = generateTransactionMarkup(trans);
-  modalBase.updateBaseModal({
-    title: `Transfer from: ${new Date(trans.date).toLocaleDateString("pt-pt", {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-    })}`,
-    submitBtn: ["Close", "close"],
-    deleteBtn: ["Delete", true],
-  });
-  modalBase.insertHTML(markup);
 };

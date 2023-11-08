@@ -190,11 +190,11 @@ option[disabled] {
 
 .modal-content--container{
   display: grid;
-  gap:0 10px;
+  gap:0 0.2rem;
 }
 
 .modal-content--transactions{
-  grid-template-columns: 75px 75px 75px 1fr;
+  grid-template-columns: 100px 100px 100px 1fr;
   grid-template-rows: repeat(auto,4);
   grid-template-areas : "expense income transfer ."
                         "date date date date"
@@ -202,7 +202,16 @@ option[disabled] {
                         "amount amount . .";
 }
 
-.modal-category--content{
+.modal-content--savings{
+  grid-template-columns: 100px 100px 1fr;
+  grid-template-rows: repeat(auto,2);
+  grid-template-areas:"withdraw account ."
+                      "content content content";
+  gap:0.5rem 0.2rem;
+}
+
+
+.modal-grid--content{
   display: none;
   grid-area: content;
 }
@@ -249,7 +258,8 @@ option[disabled] {
 }
 
 .modal-checkbox--label {
-  display: inline-block;
+  display: block;
+  text-align: center;
   padding: 10px;
 }
 
@@ -262,7 +272,7 @@ option[disabled] {
   background-color: rgba(73, 160, 252, 0.5);
 }
 
-.modal-checkbox--input:checked + .modal-checkbox--label + .modal-category--content{
+.modal-checkbox--input:checked + .modal-checkbox--label + .modal-grid--content{
   display: block;
 }
 
