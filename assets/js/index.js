@@ -10,7 +10,6 @@ import * as budgetModalView from "./Views/modal/budgetModal.js";
 import * as modalBase from "./Views/modal/modalBase.js";
 import * as savingsModalView from "./Views/modal/savingsModal.js";
 import * as transactionModalView from "./Views/modal/transactionModal.js";
-// import * as modalView from "./Views/modalView.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
 import * as View from "./Views/movementsView.js";
 import * as overviewView from "./Views/overviewView.js";
