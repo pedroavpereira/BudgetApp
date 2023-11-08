@@ -6,11 +6,6 @@ const parentElement = document.querySelector(".overview--body");
 
 export const renderBudget = (arr) => {
   let markup;
-  if (arr.currentAccount.type === "Savings") {
-    markup = `<p>${arr.currentAccount.balance} of the goal ${arr.currentAccount.goal}</p>`;
-    document.querySelector(".btn--budget").classList.add("d-none");
-  } else {
-    document.querySelector(".btn--budget").classList.remove("d-none");
     markup = arr.budget
       .map((el) => {
         if (el.value) {
@@ -20,7 +15,7 @@ export const renderBudget = (arr) => {
         }
       })
       .join(" ");
-  }
+  
 
   parentElement.innerHTML = "";
   parentElement.insertAdjacentHTML("beforeend", markup);
