@@ -8,20 +8,20 @@ const generateTransTypeMarkup = (stateObj) => {
   Expense
   </label>
       
-    <div class="modal-category--content">${generateCategoriesCheckboxes(stateObj, "Expense")}</div>
+    <div class="modal-grid--content">${generateCategoriesCheckboxes(stateObj, "Expense")}</div>
   
     <input class="form-check-input check-input--type modal-checkbox--input modal-checkbox--input__income" type="radio" name="type" id="transaction-type--Income" value="Income" data-target="Income">
       <label class="form-check-label modal-checkbox--label" for="transaction-type--Income">
       Income
       </label>
-      <div class="modal-category--content">${generateCategoriesCheckboxes(stateObj, "Income")}</div>
+      <div class="modal-grid--content">${generateCategoriesCheckboxes(stateObj, "Income")}</div>
       <input class="form-check-input check-input--type modal-checkbox--input modal-checkbox--input__transfer" type="radio" name="type" id="transaction-type--Transfer" data-target="Transfer" value="Transfer" ${
         stateObj.accounts.length <= 1 ? "disabled" : ""
       }>
       <label class="form-check-label modal-checkbox--label" for="transaction-type--Transfer">
       Transfer
       </label>
-      <div class="modal-category--content">${generateCategoriesCheckboxes(stateObj, "Transfer")}</div>
+      <div class="modal-grid--content">${generateCategoriesCheckboxes(stateObj, "Transfer")}</div>
     `;
 };
 
@@ -102,7 +102,7 @@ const generateCategoriesCheckboxes = (stateObj, type = "Expense") => {
 
 const generateContentMarkup = (stateObj, type) => {
   return `
-  <div class="modal-content--container modal-content-transactions">
+  <div class="modal-content--container modal-content--transactions">
     ${generateTransTypeMarkup(stateObj)}
 
     <fieldset class="modal-transaction--fieldset modal-section-date">

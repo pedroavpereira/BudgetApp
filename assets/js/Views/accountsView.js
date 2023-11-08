@@ -95,13 +95,11 @@ export const accountContainerEvent = (
         });
         formInput.value = "";
         toggleNewAccountForm();
-      } else if (datasetTarget.target === "cancelAdition") {
-        formInput.value = "";
-        toggleNewAccountForm();
-      } else if (datasetTarget.target === "display-newAccountForm") {
-        toggleNewAccountForm();
       } else if (datasetTarget.target === "deleteAccount") {
         handlerDeleteAccount(datasetTarget.accountId);
+      } else{
+        formInput.value = "";
+        toggleNewAccountForm();
       }
     });
 };

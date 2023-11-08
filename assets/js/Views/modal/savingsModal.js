@@ -1,48 +1,24 @@
 import * as modalBase from "./modalBase.js";
 
-const modalContent = document.querySelector(".modalContent");
-
 let selectedAccount;
 
-const generateModalTypeMarkup = () => {
-  return `<div class="row check-type">
-  <div class="form-check col-3 modal-checkbox--container">
-      <input class="form-check-input check-input--type form-input modal-checkbox--input" type="radio" name="account" id="transaction-type--withdrawl" data-target="Withdrawl" value="${selectedAccount.accountID}" checked>
+const generateMarkup = () => {
+  return `
+  <div class="modal-content--container modal-content--savings">
+      <input class="form-check-input check-input--type form-input modal-checkbox--input" type="radio" name="type" id="transaction-type--withdrawl" data-target="Withdrawl" value="withdrawl" checked>
       <label class="form-check-label modal-checkbox--label" for="transaction-type--withdrawl">
         Withdral
       </label>
-      </div>
-      <div class="form-check col-3">
-      <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="account" id="transaction-type--account" value="${selectedAccount.accountID}" data-target="account">
+      <div class="modal-grid--content">${generateWithdrawlMarkup()}</div>
+      <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="type" id="transaction-type--account" value="account" data-target="account">
       <label class="form-check-label modal-checkbox--label" for="transaction-type--account">
         Account
       </label>
-    </div>
-    </div>`;
+      <div class="modal-grid--content">${generateAccSumMarkup()}</div>
+      <div class="display-none"><input type="text" name="account" value="${selectedAccount.accountID}"></div>
+      `;
 };
 
-const generateTransactionMarkup = (trans) => {
-  return `<div>
-    <div class="form-floating">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
-    <option value="1" selected>${trans.from}</option>
-    </select>
-    <label for="floatingSelect">From</label>
-    </div>
-    <div class="form-floating mt-2 mb-2">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
-    <option value="1" selected>${trans.to}</option>
-    </select>
-    <label for="floatingSelect">To</label>
-    </div>
-    <div class="form-floating">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
-    <option value="1" selected>${trans.amount}</option>
-    </select>
-    <label for="floatingSelect">Amount</label>
-    </div>
-    </div>`;
-};
 
 const generateWithdrawlMarkup = () => {
   return ` <div>
@@ -58,12 +34,6 @@ const generateWithdrawlMarkup = () => {
 </div>`;
 };
 
-const generateInitialMarkup = () => {
-  return `${generateModalTypeMarkup()}
-  <div class="modal--content">
-   ${generateWithdrawlMarkup()}
-  </div>`;
-};
 
 const generateAccSumMarkup = () => {
   return `
@@ -105,74 +75,15 @@ const generateAccSumMarkup = () => {
 </div>`;
 };
 
-const clearContent = () => {
-  modalContent.innerHTML = "";
-};
 
-const insertHTML = (markup) => {
-  clearContent();
-  modalContent.insertAdjacentHTML("afterbegin", markup);
-};
 
-const typePickerEvent = (handler) => {
-  const parentElement = document.querySelector(".check-type");
-
-  parentElement.addEventListener("click", function (e) {
-    handler(e);
-  });
-};
-
-const updateModalContent = (e) => {
-  const target = e.target.dataset.target;
-  if (!target) {
-    return;
-  }
-
-  const modalContentElement = document.querySelector(".modal--content");
-  modalContentElement.innerHTML = "";
-
-  if (target === "account") {
-    modalContentElement.insertAdjacentHTML(
-      "afterbegin",
-      generateAccSumMarkup()
-    );
-    modalBase.updateBaseModal({
-      submitBtn: ["Update Account", "updateAccount"],
-    });
-  } else {
-    modalContentElement.insertAdjacentHTML(
-      "afterbegin",
-      generateWithdrawlMarkup()
-    );
-    modalBase.updateBaseModal({
-      submitBtn: ["Withdrawl", "savingsWithdrawl"],
-    });
-  }
-};
-
-export const renderAccountSum = (accObj) => {
+export const renderSavingsModal = (accObj) => {
   selectedAccount = accObj;
-  console.log(selectedAccount);
   modalBase.transactionModal.show();
-  const markup = generateInitialMarkup();
+  const markup = generateMarkup();
   modalBase.updateBaseModal({
     title: `Account: ${selectedAccount.name}`,
-    submitBtn: ["Withdraw", "savingsWithdrawl"],
-  });
-  modalBase.insertHTML(markup);
-  typePickerEvent(updateModalContent);
-};
-
-export const renderTransactionSum = (trans) => {
-  const markup = generateTransactionMarkup(trans);
-  modalBase.updateBaseModal({
-    title: `Transfer from: ${new Date(trans.date).toLocaleDateString("pt-pt", {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-    })}`,
-    submitBtn: ["Close", "close"],
-    deleteBtn: ["Delete", true],
+    submitBtn: ["Continue", "savingsModal"],
   });
   modalBase.insertHTML(markup);
 };

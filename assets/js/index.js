@@ -10,7 +10,6 @@ import * as budgetModalView from "./Views/modal/budgetModal.js";
 import * as modalBase from "./Views/modal/modalBase.js";
 import * as savingsModalView from "./Views/modal/savingsModal.js";
 import * as transactionModalView from "./Views/modal/transactionModal.js";
-// import * as modalView from "./Views/modalView.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
 import * as View from "./Views/movementsView.js";
 import * as overviewView from "./Views/overviewView.js";
@@ -34,11 +33,7 @@ const btnDeleteClicked = (id) => {
 };
 
 const addTransactionClicked = () => {
-  if (Model.state.currentAccount.type === "Savings") {
-    savingsModalView.renderAccountSum(Model.state.currentAccount);
-  } else {
     transactionModalView.renderTransactionModal(Model.state);
-  }
 };
 
 const transactionUpdated = (obj) => {
@@ -82,11 +77,7 @@ const transferCreated = (obj) => {
   View.renderTransaction(transferObj);
 };
 
-const savingsAccountUpdated = (accObj) => {
-  debugger;
-  Model.updateSavingsAccount(accObj);
-  accountsView.renderAccounts(Model.state.accounts);
-};
+
 
 const updateBudgetClicked = () => {
   budgetModalView.renderUpdateModal(Model.state);
@@ -94,11 +85,8 @@ const updateBudgetClicked = () => {
 
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
-  if (Model.state.currentAccount.type === "Savings") {
-    savingsModalView.renderTransactionSum(mov);
-  } else {
     transactionModalView.renderTransactionModal(Model.state, mov);
-  }
+  
 };
 
 const applyFilterClicked = (obj) => {
@@ -137,7 +125,23 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   return dateObj;
 };
 
+
+const savingsModalEvent = (data) =>{
+  console.log(data)
+  if(data.type === "withdrawl") {
+    savingsWithdrawn(data);
+  }else if(data.type==="account"){
+    savingsAccountUpdated(data)
+  }
+}
+
+const savingsAccountUpdated = (accObj) => {
+  Model.updateSavingsAccount(accObj);
+  accountsView.renderAccounts(Model.state.accounts);
+};
+
 const savingsWithdrawn = (formData) => {
+  console.log("here")
   const account = Model.findAccount(formData.account);
   const mainAccount = Model.findAccount("native");
   if (Model.hasEnoughFunds(account, formData.amount)) {
@@ -165,8 +169,8 @@ const submitButtonClicked = (formData) => {
     case "updateTrans":
       transactionUpdated(formData);
       break;
-    case "updateAccount":
-      savingsAccountUpdated(formData);
+    case "savingsModal":
+      savingsModalEvent(formData);
       break;
     case "updateBudget":
       budgetSubmited(formData);
@@ -184,16 +188,9 @@ const pageChanged = (page) =>{
   paginationView.renderPagination(Model.state.pagination)
 }
 
-const changeAccountClicked = (accId) => {
-  console.log("ChangeAccountClicked");
-  savingsModalView.renderAccountSum(Model.findAccount(accId));
-  // Model.changeAccount(accId);
-  // Model.initFilter();
-  // View.renderAllTransactions(Model.filterTransactions());
-  // updateOverview();
-  // budgetView.renderBudget(Model.state);
-  // filterView.renderDate(creatingDateObj());
-  // filterView.uncheckCheckboxes();
+const accountClicked = (accId) => {
+  if(accId === "native") return
+  savingsModalView.renderSavingsModal(Model.findAccount(accId));
 };
 
 const createNewAccountClicked = (accObj) => {
@@ -239,7 +236,7 @@ function init() {
 
 
   accountsView.accountContainerEvent(
-    changeAccountClicked,
+    accountClicked,
     createNewAccountClicked,
     deleteAccountClicked
   );
