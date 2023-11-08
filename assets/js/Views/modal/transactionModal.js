@@ -2,28 +2,27 @@ import * as modalBase from "./modalBase.js";
 import * as config from "./../../config.js";
 
 const generateTransTypeMarkup = (stateObj) => {
-  return `<div class="row check-type">
-  <div class="form-check col-3 modal-checkbox--container">
-      <input class="form-check-input check-input--type  form-input modal-checkbox--input" type="radio" name="type" id="transaction-type--Expense" data-target="Expense" value="Expense" checked>
-      <label class="form-check-label modal-checkbox--label" for="transaction-type--Expense">
-        Expense
-      </label>
-      </div>
-      <div class="form-check col-3">
-      <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="type" id="transaction-type--Income" value="Income" data-target="Income">
+  return `
+  <input class="form-check-input check-input--type  form-input modal-checkbox--input modal-checkbox--input__expense" type="radio" name="type" id="transaction-type--Expense" data-target="Expense" value="Expense" checked>
+  <label class="form-check-label modal-checkbox--label" for="transaction-type--Expense">
+  Expense
+  </label>
+      
+    <div class="modal-category--content">${generateCategoriesCheckboxes(stateObj, "Expense")}</div>
+  
+    <input class="form-check-input check-input--type modal-checkbox--input modal-checkbox--input__income" type="radio" name="type" id="transaction-type--Income" value="Income" data-target="Income">
       <label class="form-check-label modal-checkbox--label" for="transaction-type--Income">
-        Income
+      Income
       </label>
-    </div>
-    <div class="form-check col-3">
-      <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="type" id="transaction-type--Transfer" data-target="Transfer" value="Transfer" ${
+      <div class="modal-category--content">${generateCategoriesCheckboxes(stateObj, "Income")}</div>
+      <input class="form-check-input check-input--type modal-checkbox--input modal-checkbox--input__transfer" type="radio" name="type" id="transaction-type--Transfer" data-target="Transfer" value="Transfer" ${
         stateObj.accounts.length <= 1 ? "disabled" : ""
       }>
       <label class="form-check-label modal-checkbox--label" for="transaction-type--Transfer">
-        Transfer
+      Transfer
       </label>
-    </div>
-    </div>`;
+      <div class="modal-category--content">${generateCategoriesCheckboxes(stateObj, "Transfer")}</div>
+    `;
 };
 
 const generateDatePickerMarkup = () => {
@@ -39,7 +38,7 @@ const generateDatePickerMarkup = () => {
         .join("")}
     </select>
 
-    <input type="number"  class="datePickerModal col-2" name="year" id="getYearModal" value="${new Date().getFullYear()}" />
+    <input type="number" class="datePickerModal col-2" name="year" id="getYearModal" value="${new Date().getFullYear()}" />
     </div>`;
 };
 
@@ -81,7 +80,7 @@ const transactionCheckboxesMarkup = (stateObj, type) => {
         id="modal-cat--${el.name}"
         value="${el.name}"
         data-category="${el.name}"
-        ${i === 0 ? "checked" : ""}
+        ${i === 0 && el.type === "Expense" ? "checked" : ""}
       />
       <label class="form-check-label modal-checkbox--label" for="modal-cat--${
         el.name
@@ -102,31 +101,18 @@ const generateCategoriesCheckboxes = (stateObj, type = "Expense") => {
 };
 
 const generateContentMarkup = (stateObj, type) => {
-  return `<div class="col">
-    <fieldset class="modal-transaction--fieldset">
-    <legend class="modal-transaction--legend">Type:</legend>  
+  return `
     ${generateTransTypeMarkup(stateObj)}
-    </fieldset>
 
-    <fieldset class="modal-transaction--fieldset">
+    <fieldset class="modal-transaction--fieldset modal-section-date">
     <legend class="modal-transaction--legend">Date:</legend>
     ${generateDatePickerMarkup()}
     </fieldset>
     
-    <fieldset class="modal-transaction--fieldset">
-    <legend class="modal-transaction--legend">Categories:</legend>
-    <div class="col my-2 modal-transaction--categories">
-    ${generateCategoriesCheckboxes(stateObj, type)}
-    </div>
-    </fieldset>
       
-  <div class="col my-2">
-  <fieldset class="modal-transaction--fieldset">
+    <fieldset class="modal-transaction--fieldset modal-section-amount">
     <legend class="modal-transaction--legend">Amount:</legend>  
     <input type="number" name="amount"  id="newTransactionAmount" value ="0"/>
-    </fieldset>
-  </div>
-  </div>
     `;
 };
 
@@ -150,7 +136,6 @@ const createOptionsObj = (mov) => {
 };
 
 const movFillInputs = (mov) => {
-  // BUG NOT WORKING NO IDEA WHY
   document.getElementById(`transaction-type--${mov.type}`).checked = true;
   document.getElementById(`modal-cat--${mov.category}`).checked = true;
 

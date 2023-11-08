@@ -188,6 +188,46 @@ option[disabled] {
 #addTransactionModal .row {
   text-align: center;
 }
+
+.modal-content--container{
+  display: grid;
+  grid-template-columns: 75px 75px 75px 1fr;
+  grid-template-rows: repeat(auto,4);
+  grid-template-areas : "expense income transfer ."
+                        "date date date date"
+                        "content content content content"
+                        "amount amount . .";
+  gap:0 10px;
+}
+
+.modal-category--content{
+  display: none;
+  grid-area: content;
+}
+
+.modal-section-date{
+  grid-area:date;
+}
+
+.modal-section-amount{
+  grid-area: amount;
+}
+
+.modal-checkbox--input__transfer{
+  grid-area: transfer;
+}
+
+.modal-checkbox--input__income{
+  grid-area: income;
+}
+
+.modal-checkbox--input__expense{
+  grid-area: expense;
+}
+
+
+
+
 .modal-checkbox--container {
   text-align: center;
   display: inline-block;
@@ -203,7 +243,7 @@ option[disabled] {
 .modal-checkbox--input {
   width: 0;
   height: 0;
-  visibility: hidden;
+  display: none;
 }
 
 .modal-checkbox--label {
@@ -215,9 +255,13 @@ option[disabled] {
   cursor: pointer;
 }
 
-.modal-checkbox--input:checked ~ .modal-checkbox--label {
+.modal-checkbox--input:checked + .modal-checkbox--label{
   border: 1px solid rgba(73, 160, 252, 0.75);
   background-color: rgba(73, 160, 252, 0.5);
+}
+
+.modal-checkbox--input:checked + .modal-checkbox--label + .modal-category--content{
+  display: block;
 }
 
 

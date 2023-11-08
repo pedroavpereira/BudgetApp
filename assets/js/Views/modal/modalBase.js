@@ -23,7 +23,7 @@ modalParentElement.addEventListener("hidden.bs.modal", function () {
 End of Bootstrap 
 */
 
-const modalContent = document.querySelector(".modalContent");
+const modalContent = document.querySelector(".modal-body");
 
 //Code used to update Base Modal
 export const updateBaseModal = (options) => {
