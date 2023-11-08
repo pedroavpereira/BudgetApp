@@ -52,11 +52,11 @@ const transactionUpdated = (obj) => {
 };
 
 const newTransactionCreated = (obj) => {
+  debugger;
   const newTransaction = Model.createTransaction(obj);
   if (
-    (Model.filters.categories.includes(newTransaction.category) ||
-      Model.filters.categories.length == 0) &&
-    Model.isSameMonth(newTransaction)
+    (Model.filters.categories.includes(newTransaction.category) &&
+    Model.isSameMonth(newTransaction))
   ) {
     Model.updateBudget(newTransaction);
     updateOverview();
