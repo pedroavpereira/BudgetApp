@@ -111,41 +111,6 @@ const insertHTML = (markup) => {
   modalContent.insertAdjacentHTML("afterbegin", markup);
 };
 
-const typePickerEvent = (handler) => {
-  const parentElement = document.querySelector(".check-type");
-
-  parentElement.addEventListener("click", function (e) {
-    handler(e);
-  });
-};
-
-const updateModalContent = (e) => {
-  const target = e.target.dataset.target;
-  if (!target) {
-    return;
-  }
-
-  const modalContentElement = document.querySelector(".modal--content");
-  modalContentElement.innerHTML = "";
-
-  if (target === "account") {
-    modalContentElement.insertAdjacentHTML(
-      "afterbegin",
-      generateAccSumMarkup()
-    );
-    modalBase.updateBaseModal({
-      submitBtn: ["Update Account", "updateAccount"],
-    });
-  } else {
-    modalContentElement.insertAdjacentHTML(
-      "afterbegin",
-      generateWithdrawlMarkup()
-    );
-    modalBase.updateBaseModal({
-      submitBtn: ["Withdrawl", "savingsWithdrawl"],
-    });
-  }
-};
 
 export const renderAccountSum = (accObj) => {
   selectedAccount = accObj;

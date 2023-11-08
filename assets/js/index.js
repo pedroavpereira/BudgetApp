@@ -34,11 +34,7 @@ const btnDeleteClicked = (id) => {
 };
 
 const addTransactionClicked = () => {
-  if (Model.state.currentAccount.type === "Savings") {
-    savingsModalView.renderAccountSum(Model.state.currentAccount);
-  } else {
     transactionModalView.renderTransactionModal(Model.state);
-  }
 };
 
 const transactionUpdated = (obj) => {
