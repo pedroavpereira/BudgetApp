@@ -68,29 +68,6 @@ export const insertHTML = (markup) => {
   modalContent.insertAdjacentHTML("afterbegin", markup);
 };
 
-//Event Listner for type picker
-export const typePickerEvent = (stateObj, mov, handler) => {
-  document
-    .querySelector(".check-type")
-    ?.addEventListener("click", function (e) {
-      updateCategories(e, stateObj, handler);
-    });
-};
-
-const updateCategories = (e, stateObj, handler) => {
-  const target = e.target;
-  const categoriesContainer = document.querySelector(
-    ".modal-transaction--categories"
-  );
-  const categoryType = target.dataset.target;
-  if (categoryType) {
-    categoriesContainer.innerHTML = "";
-    categoriesContainer.insertAdjacentHTML(
-      "afterbegin",
-      handler(stateObj, categoryType)
-    );
-  }
-};
 
 export const deleteBtnEvent = (handler) => {
   const btnDeleteTrans = document.querySelector(".btn--deleteTransaction");

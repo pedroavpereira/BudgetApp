@@ -102,6 +102,7 @@ const generateCategoriesCheckboxes = (stateObj, type = "Expense") => {
 
 const generateContentMarkup = (stateObj, type) => {
   return `
+  <div class="modal-content--container">
     ${generateTransTypeMarkup(stateObj)}
 
     <fieldset class="modal-transaction--fieldset modal-section-date">
@@ -113,6 +114,8 @@ const generateContentMarkup = (stateObj, type) => {
     <fieldset class="modal-transaction--fieldset modal-section-amount">
     <legend class="modal-transaction--legend">Amount:</legend>  
     <input type="number" name="amount"  id="newTransactionAmount" value ="0"/>
+
+  </div>
     `;
 };
 
@@ -153,5 +156,4 @@ export const renderTransactionModal = (stateObj, mov) => {
   modalBase.insertHTML(markup);
   modalBase.transactionModal.show();
   if (mov) movFillInputs(mov);
-  modalBase.typePickerEvent(stateObj, mov, generateCategoriesCheckboxes);
 };
