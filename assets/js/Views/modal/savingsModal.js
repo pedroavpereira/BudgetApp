@@ -1,7 +1,5 @@
 import * as modalBase from "./modalBase.js";
 
-const modalContent = document.querySelector(".modalContent");
-
 let selectedAccount;
 
 const generateMarkup = () => {
@@ -21,28 +19,6 @@ const generateMarkup = () => {
       `;
 };
 
-const generateTransactionMarkup = (trans) => {
-  return `<div>
-    <div class="form-floating">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
-    <option value="1" selected>${trans.from}</option>
-    </select>
-    <label for="floatingSelect">From</label>
-    </div>
-    <div class="form-floating mt-2 mb-2">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
-    <option value="1" selected>${trans.to}</option>
-    </select>
-    <label for="floatingSelect">To</label>
-    </div>
-    <div class="form-floating">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
-    <option value="1" selected>${trans.amount}</option>
-    </select>
-    <label for="floatingSelect">Amount</label>
-    </div>
-    </div>`;
-};
 
 const generateWithdrawlMarkup = () => {
   return ` <div>
@@ -58,9 +34,6 @@ const generateWithdrawlMarkup = () => {
 </div>`;
 };
 
-const generateInitialMarkup = () => {
-  return `${generateModalTypeMarkup()}`
-};
 
 const generateAccSumMarkup = () => {
   return `
@@ -102,14 +75,6 @@ const generateAccSumMarkup = () => {
 </div>`;
 };
 
-const clearContent = () => {
-  modalContent.innerHTML = "";
-};
-
-const insertHTML = (markup) => {
-  clearContent();
-  modalContent.insertAdjacentHTML("afterbegin", markup);
-};
 
 
 export const renderSavingsModal = (accObj) => {
