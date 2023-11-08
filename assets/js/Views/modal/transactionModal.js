@@ -102,7 +102,7 @@ const generateCategoriesCheckboxes = (stateObj, type = "Expense") => {
 
 const generateContentMarkup = (stateObj, type) => {
   return `
-  <div class="modal-content--container modal-content-transactions">
+  <div class="modal-content--container modal-content--transactions">
     ${generateTransTypeMarkup(stateObj)}
 
     <fieldset class="modal-transaction--fieldset modal-section-date">

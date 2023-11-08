@@ -193,7 +193,7 @@ option[disabled] {
   gap:0 10px;
 }
 
-.modal-content-transactions{
+.modal-content--transactions{
   grid-template-columns: 75px 75px 75px 1fr;
   grid-template-rows: repeat(auto,4);
   grid-template-areas : "expense income transfer ."

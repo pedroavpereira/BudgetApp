@@ -185,7 +185,7 @@ const pageChanged = (page) =>{
 }
 
 const changeAccountClicked = (accId) => {
-  console.log("ChangeAccountClicked");
+  if(accId === "native") return
   savingsModalView.renderAccountSum(Model.findAccount(accId));
   // Model.changeAccount(accId);
   // Model.initFilter();
