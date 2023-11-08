@@ -13,7 +13,7 @@ document.querySelector(".btn-close").addEventListener("click", function () {
 
 //Code to remove every unnecessary class when the modal is closed
 modalParentElement.addEventListener("hidden.bs.modal", function () {
-  document.querySelector(".modal-error").classList.add("d-none");
+  // document.querySelector(".modal-error").classList.add("d-none");
   if (document.querySelector(".mov--active")) {
     document.querySelector(".mov--active").classList.remove("mov--active");
   }
@@ -23,7 +23,7 @@ modalParentElement.addEventListener("hidden.bs.modal", function () {
 End of Bootstrap 
 */
 
-const modalContent = document.querySelector(".modalContent");
+const modalContent = document.querySelector(".modal-body");
 
 //Code used to update Base Modal
 export const updateBaseModal = (options) => {
@@ -68,29 +68,6 @@ export const insertHTML = (markup) => {
   modalContent.insertAdjacentHTML("afterbegin", markup);
 };
 
-//Event Listner for type picker
-export const typePickerEvent = (stateObj, mov, handler) => {
-  document
-    .querySelector(".check-type")
-    ?.addEventListener("click", function (e) {
-      updateCategories(e, stateObj, handler);
-    });
-};
-
-const updateCategories = (e, stateObj, handler) => {
-  const target = e.target;
-  const categoriesContainer = document.querySelector(
-    ".modal-transaction--categories"
-  );
-  const categoryType = target.dataset.target;
-  if (categoryType) {
-    categoriesContainer.innerHTML = "";
-    categoriesContainer.insertAdjacentHTML(
-      "afterbegin",
-      handler(stateObj, categoryType)
-    );
-  }
-};
 
 export const deleteBtnEvent = (handler) => {
   const btnDeleteTrans = document.querySelector(".btn--deleteTransaction");
