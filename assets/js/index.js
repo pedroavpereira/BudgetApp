@@ -94,11 +94,7 @@ const updateBudgetClicked = () => {
 
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
-  if (Model.state.currentAccount.type === "Savings") {
-    savingsModalView.renderTransactionSum(mov);
-  } else {
     transactionModalView.renderTransactionModal(Model.state, mov);
-  }
 };
 
 const applyFilterClicked = (obj) => {
@@ -187,13 +183,6 @@ const pageChanged = (page) =>{
 const changeAccountClicked = (accId) => {
   if(accId === "native") return
   savingsModalView.renderAccountSum(Model.findAccount(accId));
-  // Model.changeAccount(accId);
-  // Model.initFilter();
-  // View.renderAllTransactions(Model.filterTransactions());
-  // updateOverview();
-  // budgetView.renderBudget(Model.state);
-  // filterView.renderDate(creatingDateObj());
-  // filterView.uncheckCheckboxes();
 };
 
 const createNewAccountClicked = (accObj) => {

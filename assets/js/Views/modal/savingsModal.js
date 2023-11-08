@@ -5,7 +5,8 @@ const modalContent = document.querySelector(".modalContent");
 let selectedAccount;
 
 const generateModalTypeMarkup = () => {
-  return `<div class="row check-type">
+  return `
+  <div class="modal-content--container modal-content--savings">
   <div class="form-check col-3 modal-checkbox--container">
       <input class="form-check-input check-input--type form-input modal-checkbox--input" type="radio" name="account" id="transaction-type--withdrawl" data-target="Withdrawl" value="${selectedAccount.accountID}" checked>
       <label class="form-check-label modal-checkbox--label" for="transaction-type--withdrawl">
