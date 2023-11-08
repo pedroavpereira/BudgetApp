@@ -4,19 +4,20 @@ const modalContent = document.querySelector(".modalContent");
 
 let selectedAccount;
 
-const generateModalTypeMarkup = () => {
+const generateMarkup = () => {
   return `
   <div class="modal-content--container modal-content--savings">
-      <input class="form-check-input check-input--type form-input modal-checkbox--input" type="radio" name="account" id="transaction-type--withdrawl" data-target="Withdrawl" value="${selectedAccount.accountID}" checked>
+      <input class="form-check-input check-input--type form-input modal-checkbox--input" type="radio" name="type" id="transaction-type--withdrawl" data-target="Withdrawl" value="withdrawl" checked>
       <label class="form-check-label modal-checkbox--label" for="transaction-type--withdrawl">
         Withdral
       </label>
       <div class="modal-grid--content">${generateWithdrawlMarkup()}</div>
-      <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="account" id="transaction-type--account" value="${selectedAccount.accountID}" data-target="account">
+      <input class="form-check-input check-input--type modal-checkbox--input" type="radio" name="type" id="transaction-type--account" value="account" data-target="account">
       <label class="form-check-label modal-checkbox--label" for="transaction-type--account">
         Account
       </label>
       <div class="modal-grid--content">${generateAccSumMarkup()}</div>
+      <div class="display-none"><input type="text" name="account" value="${selectedAccount.accountID}"></div>
       `;
 };
 
@@ -149,11 +150,10 @@ const updateModalContent = (e) => {
 export const renderAccountSum = (accObj) => {
   selectedAccount = accObj;
   modalBase.transactionModal.show();
-  const markup = generateInitialMarkup();
+  const markup = generateMarkup();
   modalBase.updateBaseModal({
     title: `Account: ${selectedAccount.name}`,
-    submitBtn: ["Withdraw", "savingsWithdrawl"],
+    submitBtn: ["Continue", "savingsModal"],
   });
   modalBase.insertHTML(markup);
-  typePickerEvent(updateModalContent);
 };

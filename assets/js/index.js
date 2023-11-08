@@ -82,11 +82,7 @@ const transferCreated = (obj) => {
   View.renderTransaction(transferObj);
 };
 
-const savingsAccountUpdated = (accObj) => {
-  debugger;
-  Model.updateSavingsAccount(accObj);
-  accountsView.renderAccounts(Model.state.accounts);
-};
+
 
 const updateBudgetClicked = () => {
   budgetModalView.renderUpdateModal(Model.state);
@@ -95,6 +91,7 @@ const updateBudgetClicked = () => {
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
     transactionModalView.renderTransactionModal(Model.state, mov);
+  
 };
 
 const applyFilterClicked = (obj) => {
@@ -133,7 +130,23 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   return dateObj;
 };
 
+
+const savingsModalEvent = (data) =>{
+  console.log(data)
+  if(data.type === "withdrawl") {
+    savingsWithdrawn(data);
+  }else if(data.type==="account"){
+    savingsAccountUpdated(data)
+  }
+}
+
+const savingsAccountUpdated = (accObj) => {
+  Model.updateSavingsAccount(accObj);
+  accountsView.renderAccounts(Model.state.accounts);
+};
+
 const savingsWithdrawn = (formData) => {
+  console.log("here")
   const account = Model.findAccount(formData.account);
   const mainAccount = Model.findAccount("native");
   if (Model.hasEnoughFunds(account, formData.amount)) {
@@ -161,8 +174,8 @@ const submitButtonClicked = (formData) => {
     case "updateTrans":
       transactionUpdated(formData);
       break;
-    case "updateAccount":
-      savingsAccountUpdated(formData);
+    case "savingsModal":
+      savingsModalEvent(formData);
       break;
     case "updateBudget":
       budgetSubmited(formData);

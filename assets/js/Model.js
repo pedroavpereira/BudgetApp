@@ -217,8 +217,13 @@ export const createAccount = (accObj) => {
 };
 
 export const updateSavingsAccount = (accObj) => {
+  const updateFields = {
+    name :accObj.name,
+    goal:accObj.goal,
+  }
+
   const account = findAccount(accObj.account);
-  Object.keys(accObj).forEach((el) => {
+  Object.keys(updateFields).forEach((el) => {
     if (account.hasOwnProperty(el)) {
       account[el] = accObj[el];
     }
