@@ -251,7 +251,7 @@ function init() {
   // );
   movementsNavView.addTransactionEvent(addTransactionClicked);
   budgetView.changeBudgetClicked(updateBudgetClicked);
-  console.log(Model.generateBudgetViewObject());
+  budgetView.generatePieChartMarkup(Model.generateBudgetViewObject().pie);
 }
 
 init();
