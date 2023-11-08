@@ -181,6 +181,33 @@ export const updateBudget = (newMov, oldMov) => {
   return;
 };
 
+export const budgetPieChartCalculation = ()=>{
+  const expenseArr = state.budget.filter(el=>el.type==="Expense")
+  const totalExpense = expenseArr.reduce((acc,a)=>{return acc+= a.value},0);
+  const otherPercentages = {name:"other",percentage:0};
+  const calculation = [];
+  expenseArr.forEach(el=>{
+    const percentage = Number((el.value / totalExpense).toFixed(2))
+    if(percentage <= 0.01){
+      otherPercentages.percentage += percentage
+      return;
+    }
+    const category = {name:el.name,percentage:percentage*100,degree:360*percentage}
+    calculation.push(category);
+  })
+  calculation.push(otherPercentages);
+  return calculation;
+}
+
+export const generateBudgetViewObject = ()=>{
+  const budgetViewObject = {
+  };
+  budgetViewObject.budget = state.budget;
+  budgetViewObject.pie = budgetPieChartCalculation();
+  return budgetViewObject;
+}
+
+
 export const modifyStateOverview = (arr) => {
   resetStateOverview();
   arr.forEach((el) => {
