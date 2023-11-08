@@ -4,7 +4,6 @@
 }
 
 .main-container{
- 
   margin: auto;
   display: grid;
   grid-template-columns: 1fr;
@@ -191,13 +190,16 @@ option[disabled] {
 
 .modal-content--container{
   display: grid;
+  gap:0 10px;
+}
+
+.modal-content-transactions{
   grid-template-columns: 75px 75px 75px 1fr;
   grid-template-rows: repeat(auto,4);
   grid-template-areas : "expense income transfer ."
                         "date date date date"
                         "content content content content"
                         "amount amount . .";
-  gap:0 10px;
 }
 
 .modal-category--content{
