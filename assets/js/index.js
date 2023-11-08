@@ -52,11 +52,11 @@ const transactionUpdated = (obj) => {
 };
 
 const newTransactionCreated = (obj) => {
+  debugger;
   const newTransaction = Model.createTransaction(obj);
   if (
-    (Model.filters.categories.includes(newTransaction.category) ||
-      Model.filters.categories.length == 0) &&
-    Model.isSameMonth(newTransaction)
+    (Model.filters.categories.includes(newTransaction.category) &&
+    Model.isSameMonth(newTransaction))
   ) {
     Model.updateBudget(newTransaction);
     updateOverview();
@@ -90,7 +90,6 @@ const transactionClicked = (id) => {
 };
 
 const applyFilterClicked = (obj) => {
-  console.log(obj)
   Model.updateCategoriesFilter(obj)
   const transactions = Model.getTransactions(Model.state.pagination.page);
   View.renderAllTransactions(transactions);
@@ -127,7 +126,6 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
 
 
 const savingsModalEvent = (data) =>{
-  console.log(data)
   if(data.type === "withdrawl") {
     savingsWithdrawn(data);
   }else if(data.type==="account"){
@@ -141,7 +139,6 @@ const savingsAccountUpdated = (accObj) => {
 };
 
 const savingsWithdrawn = (formData) => {
-  console.log("here")
   const account = Model.findAccount(formData.account);
   const mainAccount = Model.findAccount("native");
   if (Model.hasEnoughFunds(account, formData.amount)) {
@@ -157,7 +154,6 @@ const savingsWithdrawn = (formData) => {
 };
 
 const submitButtonClicked = (formData) => {
-  console.log(formData);
   switch (formData.target) {
     case "newTrans":
       if (formData.type === "Transfer") {

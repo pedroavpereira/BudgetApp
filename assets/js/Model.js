@@ -116,11 +116,9 @@ export const filterTransactions = () => {
     filteredTransactions = filteredTransactions.filter((el) => {
       return isSameMonth(el);
     });
-    console.log(filteredTransactions);
     filteredTransactions = filteredTransactions.filter((el) =>
       filters.categories.includes(el.category)
     );
-    console.log(filteredTransactions);
   return filteredTransactions;
 };
 
