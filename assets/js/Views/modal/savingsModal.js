@@ -112,7 +112,7 @@ const insertHTML = (markup) => {
 };
 
 
-export const renderAccountSum = (accObj) => {
+export const renderSavingsModal = (accObj) => {
   selectedAccount = accObj;
   modalBase.transactionModal.show();
   const markup = generateMarkup();

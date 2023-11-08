@@ -189,9 +189,9 @@ const pageChanged = (page) =>{
   paginationView.renderPagination(Model.state.pagination)
 }
 
-const changeAccountClicked = (accId) => {
+const accountClicked = (accId) => {
   if(accId === "native") return
-  savingsModalView.renderAccountSum(Model.findAccount(accId));
+  savingsModalView.renderSavingsModal(Model.findAccount(accId));
 };
 
 const createNewAccountClicked = (accObj) => {
@@ -237,7 +237,7 @@ function init() {
 
 
   accountsView.accountContainerEvent(
-    changeAccountClicked,
+    accountClicked,
     createNewAccountClicked,
     deleteAccountClicked
   );
