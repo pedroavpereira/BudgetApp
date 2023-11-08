@@ -13,7 +13,7 @@ document.querySelector(".btn-close").addEventListener("click", function () {
 
 //Code to remove every unnecessary class when the modal is closed
 modalParentElement.addEventListener("hidden.bs.modal", function () {
-  document.querySelector(".modal-error").classList.add("d-none");
+  // document.querySelector(".modal-error").classList.add("d-none");
   if (document.querySelector(".mov--active")) {
     document.querySelector(".mov--active").classList.remove("mov--active");
   }
