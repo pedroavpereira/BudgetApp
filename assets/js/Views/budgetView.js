@@ -22,10 +22,15 @@ const generateIndividualBudgetMarkup = (budgetArr)=>{
   .map((el) => {
     if (el.value) {
       return `
-      <div class="budget-square"></div>
-      <p class="text-${
-        el.value <= el.target ? "success" : "danger"
-      }">${el.name} - ${el.value} / ${el.target}</p>`;
+      <div class="budget-item">
+        <div class="budget-square" style="background-color: ${colorsMap.get(`${el.name}`)};"></div>
+        <div>
+          <p class="budget-item__info text-${
+            el.value <= el.target ? "success" : "danger"
+          }">${el.name} - ${el.value} / ${el.target}</p>
+        </div>
+      </div>
+      `;
     }
   })
   .join(" ");
@@ -35,7 +40,9 @@ const generateIndividualBudgetMarkup = (budgetArr)=>{
 
 export const renderBudget = (arr) => {
   const  markup = `${generatePieChartMarkup(arr.pie)}
+  <div class="budget-items">
   ${generateIndividualBudgetMarkup(arr.budget)}
+  </div>
   `;
   
   parentElement.innerHTML = "";

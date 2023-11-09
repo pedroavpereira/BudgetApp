@@ -420,6 +420,29 @@ option[disabled] {
   margin-bottom: 0.2rem;
 }
 
+.budget-items{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 0;
+  margin:1.5rem 0;
+}
+
+.budget-item{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.budget-item__info{
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.budget-square{
+  width: 15px;
+  height: 15px;
+}
+
 
 
 .accounts-container{
