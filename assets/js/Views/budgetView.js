@@ -8,16 +8,18 @@ const parentElement = document.querySelector(".overview--body");
 const colorsMap = config.budgetColours();
 
 export const generatePieChartMarkup = (pie)=>{
-  console.log(pie)
+  console.log(pie);
+  debugger;
+
   const gradientString = pie.reduce((obj,el)=>{
-    if(obj.prevDeg >= 360) return obj
-    obj.string += `${colorsMap.get(`${el.name}`)} ${obj.prevDeg}deg ${(obj.prevDeg + el.degree).toFixed(2)}deg`
-    obj.prevDeg = obj.prevDeg + el.degree;
-    if(obj.prevDeg >= 360) return obj
-    obj.string += ", "
+    if(obj.prevDeg >= 360) return obj;
+    obj.string += `${colorsMap.get(`${el.name}`)} ${obj.prevDeg}deg ${(obj.prevDeg + el.degree).toFixed(0)}deg`
+    obj.prevDeg =  +(obj.prevDeg + el.degree).toFixed(0);
+    if(obj.prevDeg >= 360) return obj;
+    obj.string += ", ";
     return obj
   },{string:"",prevDeg:0});
-  const style = `background:repeating-conic-gradient(${gradientString.string})`
+  const style = `background: conic-gradient(${gradientString.string})`
   return `<div class="budget-chart" style="${style}"></div>`
 }
 

@@ -19,14 +19,14 @@ export const months = [
 export const budgetColours = ()=>{
   const colorMap = new Map();
 
-  colorMap.set("Housing","#3498db")
-  colorMap.set("Transportation","#2ecc71");
-  colorMap.set("Groceries","#e74c3c");
-  colorMap.set("Food","#9b59b6");
-  colorMap.set("Utilities","#f1c40f");
-  colorMap.set("Subscriptions","#e67e22");
-  colorMap.set("Misc","#e91e63");
-  colorMap.set("other", "#1abc9c");
+  colorMap.set("Housing","#F02B5F")
+  colorMap.set("Transportation","#6066E6");
+  colorMap.set("Groceries","#6AEC7E");
+  colorMap.set("Food","#FFFB72");
+  colorMap.set("Utilities","#EE29E2");
+  colorMap.set("Subscriptions","#FE23A3");
+  colorMap.set("Misc","#1BFBDB");
+  colorMap.set("other", "#BBBFC1");
   colorMap.set("Investing", "#95a5a6");
 
   return colorMap;
