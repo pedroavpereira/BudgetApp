@@ -8,15 +8,9 @@ const parentElement = document.querySelector(".overview--body");
 const colorsMap = config.budgetColours();
 
 export const generatePieChartMarkup = (pie)=>{
-  console.log(pie);
-  debugger;
-
   const gradientString = pie.reduce((obj,el)=>{
-    if(obj.prevDeg >= 360) return obj;
-    obj.string += `${colorsMap.get(`${el.name}`)} ${obj.prevDeg}deg ${(obj.prevDeg + el.degree).toFixed(0)}deg`
-    obj.prevDeg =  +(obj.prevDeg + el.degree).toFixed(0);
-    if(obj.prevDeg >= 360) return obj;
-    obj.string += ", ";
+    obj.string += `${colorsMap.get(`${el.name}`)} ${obj.prevDeg}deg ${(obj.prevDeg + el.degree).toFixed(4)}deg ${el.name!=="other" ? "," : ""}`
+    obj.prevDeg =  +(obj.prevDeg + el.degree).toFixed(4);
     return obj
   },{string:"",prevDeg:0});
   const style = `background: conic-gradient(${gradientString.string})`
@@ -27,7 +21,9 @@ const generateIndividualBudgetMarkup = (budgetArr)=>{
   return budgetArr
   .map((el) => {
     if (el.value) {
-      return `<p class="text-${
+      return `
+      <div class="budget-square"></div>
+      <p class="text-${
         el.value <= el.target ? "success" : "danger"
       }">${el.name} - ${el.value} / ${el.target}</p>`;
     }
@@ -38,13 +34,10 @@ const generateIndividualBudgetMarkup = (budgetArr)=>{
 
 
 export const renderBudget = (arr) => {
-  console.log(arr);
-  let markup = "";
-    markup +=  generatePieChartMarkup(arr.pie);
-    console.log(markup);
-    markup +=  generateIndividualBudgetMarkup(arr.budget);
+  const  markup = `${generatePieChartMarkup(arr.pie)}
+  ${generateIndividualBudgetMarkup(arr.budget)}
+  `;
   
-
   parentElement.innerHTML = "";
   parentElement.insertAdjacentHTML("beforeend", markup);
 };

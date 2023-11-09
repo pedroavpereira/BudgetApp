@@ -187,14 +187,16 @@ export const budgetPieChartCalculation = ()=>{
   const otherPercentages = {name:"other",percentage:0};
   const calculation = [];
   expenseArr.forEach(el=>{
-    const percentage = Number((el.value / totalExpense).toFixed(2))
+    const percentage = Number((el.value / totalExpense).toFixed(4))
     if(percentage <= 0.01){
       otherPercentages.percentage += percentage
+      otherPercentages.degree = +(360 * otherPercentages.percentage)
       return;
     }
     const category = {name:el.name,percentage:percentage*100,degree:360*percentage}
     calculation.push(category);
   })
+
   calculation.push(otherPercentages);
   return calculation;
 }
