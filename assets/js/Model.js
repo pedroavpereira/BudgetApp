@@ -55,17 +55,6 @@ export let filters = {
 
 
 
-export const updateTransaction = (newMov) => {
-  const mov = findTransaction(newMov.id);
-  updateBudget(newMov, mov);
-  updateStateOverview(newMov, mov);
-  state.currentAccount.balance += newMov.amount;
-  state.currentAccount.balance -= mov.amount;
-  Object.keys(mov).forEach((el) => (mov[el] = newMov[el]));
-  saveLocalStorage();
-  return mov;
-};
-
 export const findTransaction = (id) => {
   return state.currentAccount.movements.find((el) => el.id === id);
 };
@@ -392,12 +381,26 @@ export const createTransaction = (obj) => {
 
   addToBudget(newTransaction);
   addToStateOverview(newTransaction);
-  
+
   saveLocalStorage();
   return newTransaction;
 };
 
+export const updateTransaction = (newTransaction) => {
+  const transaction = findTransaction(newTransaction.id);
+  removeFromBudget(transaction);
+  addToBudget(newTransaction);
 
+  removeFromStateOverview(transaction);
+  addToStateOverview(newTransaction);
+
+  state.currentAccount.balance += newTransaction.amount;
+  state.currentAccount.balance -= transaction.amount;
+
+  Object.keys(transaction).forEach((el) => (transaction[el] = newTransaction[el]));
+  saveLocalStorage();
+  return transaction;
+};
 
 
 
