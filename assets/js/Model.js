@@ -54,7 +54,6 @@ export let filters = {
 };
 
 
-
 export const findTransaction = (id) => {
   return state.currentAccount.movements.find((el) => el.id === id);
 };
@@ -305,13 +304,7 @@ export const initFilter = (categories = []) => {
 
 
   if (state.currentAccount.movements.length > 0) {
-    //Sort would probably do something similar
-    filters.earliestDate = state.currentAccount.movements.reduce(
-      (lowest, el) => {
-        return (lowest = el.date < lowest ? el.date : lowest);
-      },
-      state.currentAccount.movements[0].date
-    );
+    filters.earliestDate = state.currentAccount.movements.sort((a,b)=>a.date-b.date)[0].date;
   } else {
     filters.earliestDate = Date.now();
   }
