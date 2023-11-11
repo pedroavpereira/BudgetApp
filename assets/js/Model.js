@@ -53,22 +53,7 @@ export let filters = {
   earliestDate: Date.now(),
 };
 
-export const createTransaction = (obj) => {
-  const newTransaction = {
-    type: obj.type,
-    amount: obj.amount,
-    category: obj.category,
-    date: obj.date,
-    id: String(Date.now()),
-  };
-  state.currentAccount.movements.push(newTransaction);
-  state.currentAccount.balance +=
-    newTransaction.type === "Expense"
-      ? -newTransaction.amount
-      : newTransaction.amount;
-  saveLocalStorage();
-  return newTransaction;
-};
+
 
 export const updateTransaction = (newMov) => {
   const mov = findTransaction(newMov.id);
@@ -389,7 +374,28 @@ export const transactionDeleted = (id) =>{
 }
 
 
+export const createTransaction = (obj) => {
+  const newTransaction = {
+    type: obj.type,
+    amount: obj.amount,
+    category: obj.category,
+    date: obj.date,
+    id: String(Date.now()),
+  };
+  state.currentAccount.movements.push(newTransaction);
+  state.currentAccount.balance +=
+    newTransaction.type === "Expense"
+      ? -newTransaction.amount
+      : newTransaction.amount;
 
+
+
+  addToBudget(newTransaction);
+  addToStateOverview(newTransaction);
+  
+  saveLocalStorage();
+  return newTransaction;
+};
 
 
 

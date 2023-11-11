@@ -64,17 +64,14 @@ const transactionUpdated = (obj) => {
 };
 
 const newTransactionCreated = (obj) => {
-  debugger;
   const newTransaction = Model.createTransaction(obj);
+  
   if (
     (Model.filters.categories.includes(newTransaction.category) &&
     Model.isSameMonth(newTransaction))
   ) {
-    Model.updateBudget(newTransaction);
-    updateOverview();
     View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
-    budgetView.renderBudget(Model.generateBudgetViewObject());
-    paginationView.renderPagination(Model.state.pagination);
+    updateAllViews();
   } else {
     Model.initFilter(Model.filters.categories);
     datePickerView.generateYears(creatingDateObj());
