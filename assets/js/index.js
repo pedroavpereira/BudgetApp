@@ -53,13 +53,13 @@ const transactionUpdated = (obj) => {
   const updatedTransaction = Model.updateTransaction(obj);
   updateAllViews();
 
-  if (Model.isSameMonth(updatedTransaction)) {
-    View.renderAllTransactions(Model.getTransactions());
-  } else {
+  if (!Model.isSameMonth(updatedTransaction)) {
     View.deleteTransaction(updatedTransaction.id);
     Model.initFilter(Model.filters.categories);
     datePickerView.generateYears(creatingDateObj());
   }
+
+  View.renderAllTransactions(Model.getTransactions());
 };
 
 const newTransactionCreated = (obj) => {
@@ -230,7 +230,7 @@ function init() {
   //Filters and Date init
   filterView.renderCheckboxes(Model.state.budget);
   datePickerView.generateYears(creatingDateObj())
-  datePickerView.selectDate(Model.filters.date)
+  datePickerView.selectDate(Model.filters.date);
 
 
   Model.calculateBudget(Model.filterTransactions());

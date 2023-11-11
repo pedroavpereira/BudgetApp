@@ -24,8 +24,7 @@ export const generateYears = (obj) =>{
 
 export const selectDate = (date)=>{
   const year = new Date(date).getFullYear();
-  const month = config.months[ new Date(date).getMonth()].toLowerCase();;
-  console.log(year,month)
+  const month = config.months[ new Date(date).getMonth()].toLowerCase();
   document.querySelector(`#datepicker-year__${year}`).checked = true;
   document.querySelector(`#datepicker-month__${month}`).checked = true;
 }

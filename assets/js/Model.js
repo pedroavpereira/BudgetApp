@@ -315,6 +315,10 @@ export const initFilter = (categories = []) => {
   } else {
     filters.earliestDate = Date.now();
   }
+  
+  if(filters.date < filters.earliestDate){
+    filters.date = Date.now();
+  }
 
   filters.categories = newCategories;
 };
