@@ -106,6 +106,7 @@ export const submitFormEvent = (handler) => {
     if (document.querySelector(".mov--active")) {
       data.id = document.querySelector(".mov--active").dataset.id;
     }
+    console.log(data);
 
     handler(data);
     transactionModal.hide();
