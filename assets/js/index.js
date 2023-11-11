@@ -47,17 +47,16 @@ const addTransactionClicked = () => {
     transactionModalView.renderTransactionModal(Model.state);
 };
 
+
+//BUG: Filters bug when the yearSelected is deleted when updating a transaction
 const transactionUpdated = (obj) => {
   const updatedTransaction = Model.updateTransaction(obj);
-  View.deleteTransaction(obj.id);
-  overviewView.updateOverview(Model.state);
+  updateAllViews();
 
   if (Model.isSameMonth(updatedTransaction)) {
-    View.renderTransaction(
-      updatedTransaction,
-      `.movement--row[data-id="${obj.id}"]`
-    );
+    View.renderAllTransactions(Model.getTransactions());
   } else {
+    View.deleteTransaction(updatedTransaction.id);
     Model.initFilter(Model.filters.categories);
     datePickerView.generateYears(creatingDateObj());
   }
@@ -65,7 +64,7 @@ const transactionUpdated = (obj) => {
 
 const newTransactionCreated = (obj) => {
   const newTransaction = Model.createTransaction(obj);
-  
+
   if (
     (Model.filters.categories.includes(newTransaction.category) &&
     Model.isSameMonth(newTransaction))

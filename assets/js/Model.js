@@ -389,10 +389,14 @@ export const createTransaction = (obj) => {
 export const updateTransaction = (newTransaction) => {
   const transaction = findTransaction(newTransaction.id);
   removeFromBudget(transaction);
-  addToBudget(newTransaction);
-
   removeFromStateOverview(transaction);
+
+  if(isSameMonth(newTransaction)){
+  addToBudget(newTransaction);
   addToStateOverview(newTransaction);
+  }
+
+
 
   state.currentAccount.balance += newTransaction.amount;
   state.currentAccount.balance -= transaction.amount;

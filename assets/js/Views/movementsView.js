@@ -48,17 +48,21 @@ const generateTransactionMarkup = (mov) => {
   }
 };
 
-export const renderTransaction = (
-  mov,
-  selectorDOM = ".transactions--container"
-) => {
-  const markup = generateTransactionMarkup(mov);
+export const renderTransaction = (trans) => {
+  const markup = generateTransactionMarkup(trans);
 
-  document.querySelector(selectorDOM).insertAdjacentHTML("afterbegin", markup);
+  document.querySelector(".transactions--container").insertAdjacentHTML("afterbegin", markup);
 };
 
+
+export const updateTransaction = (trans,element)=>{
+  const markup = generateTransactionMarkup(trans)
+  console.log(document.querySelector(element))
+  document.querySelector(element).innerHTML = markup;
+}
+
 export const deleteTransaction = (id) => {
-  document.querySelector(`.movement--row[data-id="${id}"]`).innerHTML = "";
+  document.querySelector(`.movement--row[data-id="${id}"]`).remove();
 };
 
 export const renderAllTransactions = (arr) => {

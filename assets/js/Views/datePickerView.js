@@ -18,6 +18,8 @@ export const generateYears = (obj) =>{
         yearContainer.insertAdjacentHTML("beforeend", markup);
         year++;
       }
+
+    document.getElementById(`datepicker-year__${obj.yearSelected}`).checked = true;
 }
 
 export const selectDate = (date)=>{
