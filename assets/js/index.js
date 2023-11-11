@@ -48,7 +48,6 @@ const addTransactionClicked = () => {
 };
 
 
-//BUG: Filters bug when the yearSelected is deleted when updating a transaction
 const transactionUpdated = (obj) => {
   const updatedTransaction = Model.updateTransaction(obj);
   updateAllViews();
