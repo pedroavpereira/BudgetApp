@@ -55,11 +55,6 @@ export const renderTransaction = (trans) => {
 };
 
 
-export const updateTransaction = (trans,element)=>{
-  const markup = generateTransactionMarkup(trans)
-  console.log(document.querySelector(element))
-  document.querySelector(element).innerHTML = markup;
-}
 
 export const deleteTransaction = (id) => {
   document.querySelector(`.movement--row[data-id="${id}"]`).remove();

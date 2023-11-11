@@ -98,7 +98,7 @@ const transactionClicked = (id) => {
 
 const applyFilterClicked = (obj) => {
   Model.updateCategoriesFilter(obj)
-  const transactions = Model.getTransactions(Model.state.pagination.page);
+  const transactions = Model.getTransactions();
   View.renderAllTransactions(transactions);
   Model.modifyStateOverview(transactions);
   overviewView.updateOverview(Model.state);
@@ -216,7 +216,6 @@ function init() {
   Model.saveLocalStorage();
   console.log(Model.state);
   // Model.addMovement();
-
 
   View.renderAllTransactions(Model.getTransactions(1));
   paginationView.renderPagination(Model.state.pagination);
