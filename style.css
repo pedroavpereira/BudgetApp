@@ -392,6 +392,58 @@ option[disabled] {
   display: block;
 }
 
+.budget-chart::before{
+  content: "Expenses";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #4f4f4f;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  left: 50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+}
+
+
+.budget-chart{
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: auto;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin-bottom: 0.2rem;
+}
+
+.budget-items{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 0;
+  margin:1.5rem 0;
+}
+
+.budget-item{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.budget-item__info{
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.budget-square{
+  width: 15px;
+  height: 15px;
+}
+
+
 
 .accounts-container{
   display: flex;

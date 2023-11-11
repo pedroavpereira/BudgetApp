@@ -27,7 +27,7 @@ const btnDeleteClicked = (id) => {
   Model.deleteTransaction(id);
   View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
   paginationView.renderPagination(Model.state.pagination);
-  budgetView.renderBudget(Model.state);
+  budgetView.renderBudget(Model.generateBudgetViewObject());
   overviewView.updateOverview(Model.state);
 
 };
@@ -61,6 +61,7 @@ const newTransactionCreated = (obj) => {
     Model.updateBudget(newTransaction);
     updateOverview();
     View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
+    budgetView.renderBudget(Model.generateBudgetViewObject());
     paginationView.renderPagination(Model.state.pagination);
   } else {
     Model.initFilter(Model.filters.categories);
@@ -96,7 +97,7 @@ const applyFilterClicked = (obj) => {
   Model.modifyStateOverview(transactions);
   overviewView.updateOverview(Model.state);
   Model.calculateBudget(transactions);
-  budgetView.renderBudget(Model.state);
+  budgetView.renderBudget(Model.generateBudgetViewObject());
   paginationView.renderPagination(Model.state.pagination)
 };
 
@@ -106,7 +107,7 @@ const datePickerClicked = (newDate) =>{
   Model.modifyStateOverview(transactions);
   overviewView.updateOverview(Model.state);
   Model.calculateBudget(transactions);
-  budgetView.renderBudget(Model.state);
+  budgetView.renderBudget(Model.generateBudgetViewObject());
   View.renderAllTransactions(Model.getTransactions())
   paginationView.renderPagination(Model.state.pagination)
 }
@@ -226,7 +227,7 @@ function init() {
 
 
   Model.calculateBudget(Model.filterTransactions());
-  budgetView.renderBudget(Model.state);
+  budgetView.renderBudget(Model.generateBudgetViewObject());
 
 
 
@@ -251,7 +252,7 @@ function init() {
   // );
   movementsNavView.addTransactionEvent(addTransactionClicked);
   budgetView.changeBudgetClicked(updateBudgetClicked);
-
+  budgetView.generatePieChartMarkup(Model.generateBudgetViewObject().pie);
 }
 
 init();

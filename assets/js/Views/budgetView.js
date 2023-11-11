@@ -1,27 +1,52 @@
 "use strict";
 
 import { transactionModal } from "./modal/modalBase.js";
+import * as config from "../config.js"
 
 const parentElement = document.querySelector(".overview--body");
 
-export const renderBudget = (arr) => {
-  let markup;
-  if (arr.currentAccount.type === "Savings") {
-    markup = `<p>${arr.currentAccount.balance} of the goal ${arr.currentAccount.goal}</p>`;
-    document.querySelector(".btn--budget").classList.add("d-none");
-  } else {
-    document.querySelector(".btn--budget").classList.remove("d-none");
-    markup = arr.budget
-      .map((el) => {
-        if (el.value) {
-          return `<p class="text-${
-            el.value <= el.target ? "success" : "danger"
-          }">${el.name} - ${el.value} / ${el.target}</p>`;
-        }
-      })
-      .join(" ");
-  }
+const colorsMap = config.budgetColours();
 
+export const generatePieChartMarkup = (pie)=>{
+
+  let prevDegree = 0;
+  const gradientString = pie.map(el=>{
+    const add = `${colorsMap.get(`${el.name}`)} ${prevDegree}deg ${(prevDegree + el.degree).toFixed(4)}deg`
+    prevDegree =  +(prevDegree + el.degree).toFixed(4);
+    return add
+  }).join(",")
+  const style = `background: conic-gradient(${gradientString})`
+  return `<div class="budget-chart" style="${style}"></div>`
+}
+
+const generateIndividualBudgetMarkup = (budgetArr)=>{
+  return budgetArr
+  .map((el) => {
+    if (el.value) {
+      return `
+      <div class="budget-item">
+        <div class="budget-square" style="background-color: ${colorsMap.get(`${el.name}`)};"></div>
+        <div>
+          <p class="budget-item__info text-${
+            el.value <= el.target ? "success" : "danger"
+          }">${el.name} - ${el.value} / ${el.target}</p>
+        </div>
+      </div>
+      `;
+    }
+  })
+  .join(" ");
+}
+
+
+
+export const renderBudget = (arr) => {
+  const  markup = `${generatePieChartMarkup(arr.pie)}
+  <div class="budget-items">
+  ${generateIndividualBudgetMarkup(arr.budget)}
+  </div>
+  `;
+  
   parentElement.innerHTML = "";
   parentElement.insertAdjacentHTML("beforeend", markup);
 };
