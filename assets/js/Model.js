@@ -42,7 +42,7 @@ export let state = {
     { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
   ],
   accounts: [
-    { name: "Main account", accountID: `native`, movements: [], balance: 0 },
+    { name: "Main account", accountID: `native`, movements: [], balance: 0 }
   ],
   currentAccount: {},
 };
@@ -53,33 +53,6 @@ export let filters = {
   earliestDate: Date.now(),
 };
 
-export const createTransaction = (obj) => {
-  const newTransaction = {
-    type: obj.type,
-    amount: obj.amount,
-    category: obj.category,
-    date: obj.date,
-    id: String(Date.now()),
-  };
-  state.currentAccount.movements.push(newTransaction);
-  state.currentAccount.balance +=
-    newTransaction.type === "Expense"
-      ? -newTransaction.amount
-      : newTransaction.amount;
-  saveLocalStorage();
-  return newTransaction;
-};
-
-export const updateTransaction = (newMov) => {
-  const mov = findTransaction(newMov.id);
-  updateBudget(newMov, mov);
-  updateStateOverview(newMov, mov);
-  state.currentAccount.balance += newMov.amount;
-  state.currentAccount.balance -= mov.amount;
-  Object.keys(mov).forEach((el) => (mov[el] = newMov[el]));
-  saveLocalStorage();
-  return mov;
-};
 
 export const findTransaction = (id) => {
   return state.currentAccount.movements.find((el) => el.id === id);
@@ -87,7 +60,6 @@ export const findTransaction = (id) => {
 
 export const deleteTransaction = (id) => {
   const mov = findTransaction(id);
-  state.currentAccount.balance -= mov.amount;
   state.currentAccount.movements.splice(
     state.currentAccount.movements.indexOf(mov),
     1
@@ -159,6 +131,16 @@ export const calculateBudget = (arr) => {
   });
 };
 
+const addToBudget = (trans) =>{
+  const category = state.budget.find((el) => el.name === trans.category);
+  category.value += trans.amount;
+}
+
+const removeFromBudget = (trans) => {
+  const category = state.budget.find((el) => el.name === trans.category);
+  category.value -= trans.amount;
+}
+
 export const updateBudget = (newMov, oldMov) => {
   if (oldMov) {
     const oldCategory = state.budget.find((el) => el.name === oldMov.category);
@@ -218,9 +200,18 @@ export const modifyStateOverview = (arr) => {
   return state.overview;
 };
 
+
+const addToStateOverview = (trans) =>{
+  state.overview[`total${trans.type}`] += trans.amount;
+}
+
+const removeFromStateOverview = (trans) =>{
+  state.overview[`total${trans.type}`] -= trans.amount;
+}
+
 export const updateStateOverview = (newMov, oldMov) => {
-  if (oldMov) state.overview[`total${oldMov.type}`] -= oldMov.amount;
-  state.overview[`total${newMov.type}`] += newMov.amount;
+  if (oldMov) removeFromStateOverview(oldMov);
+  addToStateOverview(newMov);
 };
 
 const resetStateOverview = () => {
@@ -312,14 +303,13 @@ export const initFilter = (categories = []) => {
 
 
   if (state.currentAccount.movements.length > 0) {
-    filters.earliestDate = state.currentAccount.movements.reduce(
-      (lowest, el) => {
-        return (lowest = el.date < lowest ? el.date : lowest);
-      },
-      state.currentAccount.movements[0].date
-    );
+    filters.earliestDate = state.currentAccount.movements.sort((a,b)=>a.date-b.date)[0].date;
   } else {
     filters.earliestDate = Date.now();
+  }
+  
+  if(filters.date < filters.earliestDate){
+    filters.date = Date.now();
   }
 
   filters.categories = newCategories;
@@ -349,6 +339,89 @@ export const loadLocalStorage = () => {
 export const saveLocalStorage = () => {
   localStorage.setItem("state", JSON.stringify(state));
 };
+
+
+
+
+
+
+
+
+
+
+
+export const transactionDeleted = (id) =>{
+  const transaction = findTransaction(id);
+
+  state.currentAccount.balance +=
+  transaction.type === "Expense"
+    ? +transaction.amount
+    : -transaction.amount;
+
+  removeFromBudget(transaction);
+  removeFromStateOverview(transaction);
+  deleteTransaction(id);
+  saveLocalStorage();
+}
+
+
+export const createTransaction = (obj) => {
+  const newTransaction = {
+    type: obj.type,
+    amount: obj.amount,
+    category: obj.category,
+    date: obj.date,
+    id: String(Date.now()),
+  };
+  state.currentAccount.movements.push(newTransaction);
+  state.currentAccount.balance +=
+    newTransaction.type === "Expense"
+      ? -newTransaction.amount
+      : newTransaction.amount;
+
+
+
+  addToBudget(newTransaction);
+  addToStateOverview(newTransaction);
+
+  saveLocalStorage();
+  return newTransaction;
+};
+
+export const updateTransaction = (newTransaction) => {
+  const transaction = findTransaction(newTransaction.id);
+  removeFromBudget(transaction);
+  removeFromStateOverview(transaction);
+
+  if(isSameMonth(newTransaction)){
+  addToBudget(newTransaction);
+  addToStateOverview(newTransaction);
+  }
+
+
+
+  state.currentAccount.balance += newTransaction.amount;
+  state.currentAccount.balance -= transaction.amount;
+
+  Object.keys(transaction).forEach((el) => (transaction[el] = newTransaction[el]));
+  saveLocalStorage();
+  return transaction;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Add movement to testing porpuses should not be used and should be deleted before production
 export const addMovement = () => {

@@ -15,20 +15,31 @@ import * as View from "./Views/movementsView.js";
 import * as overviewView from "./Views/overviewView.js";
 import * as alertView from "./Views/alertView.js";
 
+const updateBudgetView = () =>{
+  budgetView.renderBudget(Model.generateBudgetViewObject());
+}
+
 const updateOverview = () => {
   Model.modifyStateOverview(Model.getTransactions(1,true));
   overviewView.updateOverview(Model.state);
 };
 
-const btnDeleteClicked = (id) => {
-  const mov = Model.findTransaction(id);
-  Model.updateBudget({ category: mov.category, amount: 0 }, mov);
-  Model.updateStateOverview({ type: mov.type, amount: 0 }, mov);
-  Model.deleteTransaction(id);
-  View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
+
+const updateAllViews = () =>{
+  updateOverview();
+  updateBudgetView();
   paginationView.renderPagination(Model.state.pagination);
-  budgetView.renderBudget(Model.generateBudgetViewObject());
-  overviewView.updateOverview(Model.state);
+  accountsView.renderAccounts(Model.state.accounts);
+}
+
+
+const btnDeleteClicked = (id) => {
+  Model.transactionDeleted(id);
+  View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
+  updateAllViews();
+  // paginationView.renderPagination(Model.state.pagination);
+  // budgetView.renderBudget(Model.generateBudgetViewObject());
+  // overviewView.updateOverview(Model.state);
 
 };
 
@@ -36,33 +47,30 @@ const addTransactionClicked = () => {
     transactionModalView.renderTransactionModal(Model.state);
 };
 
+
 const transactionUpdated = (obj) => {
   const updatedTransaction = Model.updateTransaction(obj);
-  View.deleteTransaction(obj.id);
-  overviewView.updateOverview(Model.state);
-  if (Model.isSameMonth(updatedTransaction)) {
-    View.renderTransaction(
-      updatedTransaction,
-      `.movement--row[data-id="${obj.id}"]`
-    );
-  } else {
+  updateAllViews();
+
+  if (!Model.isSameMonth(updatedTransaction)) {
+    View.deleteTransaction(updatedTransaction.id);
     Model.initFilter(Model.filters.categories);
     datePickerView.generateYears(creatingDateObj());
   }
+
+  View.renderAllTransactions(Model.getTransactions());
 };
 
 const newTransactionCreated = (obj) => {
   debugger;
   const newTransaction = Model.createTransaction(obj);
+
   if (
     (Model.filters.categories.includes(newTransaction.category) &&
     Model.isSameMonth(newTransaction))
   ) {
-    Model.updateBudget(newTransaction);
-    updateOverview();
     View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
-    budgetView.renderBudget(Model.generateBudgetViewObject());
-    paginationView.renderPagination(Model.state.pagination);
+    updateAllViews();
   } else {
     Model.initFilter(Model.filters.categories);
     datePickerView.generateYears(creatingDateObj());
@@ -87,12 +95,11 @@ const updateBudgetClicked = () => {
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
     transactionModalView.renderTransactionModal(Model.state, mov);
-  
 };
 
 const applyFilterClicked = (obj) => {
   Model.updateCategoriesFilter(obj)
-  const transactions = Model.getTransactions(Model.state.pagination.page);
+  const transactions = Model.getTransactions();
   View.renderAllTransactions(transactions);
   Model.modifyStateOverview(transactions);
   overviewView.updateOverview(Model.state);
@@ -204,13 +211,11 @@ const deleteAccountClicked = (accId) => {
 function init() {
   Model.loadLocalStorage();
   Model.state.currentAccount = Model.state.accounts[0];
-  if (Model.state.currentAccount.movements.length > 0) {
-    Model.initFilter();
-  }
+  Model.initFilter();
+
   Model.saveLocalStorage();
   console.log(Model.state);
   // Model.addMovement();
-
 
   View.renderAllTransactions(Model.getTransactions(1));
   paginationView.renderPagination(Model.state.pagination);
@@ -223,7 +228,7 @@ function init() {
   //Filters and Date init
   filterView.renderCheckboxes(Model.state.budget);
   datePickerView.generateYears(creatingDateObj())
-  datePickerView.selectDate(Model.filters.date)
+  datePickerView.selectDate(Model.filters.date);
 
 
   Model.calculateBudget(Model.filterTransactions());

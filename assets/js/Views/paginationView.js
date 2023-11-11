@@ -1,7 +1,6 @@
 const parentElement = document.querySelector(".pagination-container");
 
 const generateMarkup = (data) =>{
-    console.log(data)
     return `
     <button class="pagination-arrow ${data.page === 1 ? "hidden" : ""}" data-goto="${data.page -1}"><i class="pagination-arrow__icon bi bi-arrow-left"></i></button>
     <p class="pagination-info ">Page: <span class="pagination-current__Page">${data.page}</span>/<span class="pagination-number__Pages">${data.maxPages}</span></p>

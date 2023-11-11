@@ -18,12 +18,13 @@ export const generateYears = (obj) =>{
         yearContainer.insertAdjacentHTML("beforeend", markup);
         year++;
       }
+
+    document.getElementById(`datepicker-year__${obj.yearSelected}`).checked = true;
 }
 
 export const selectDate = (date)=>{
   const year = new Date(date).getFullYear();
-  const month = config.months[ new Date(date).getMonth()].toLowerCase();;
-  console.log(year,month)
+  const month = config.months[ new Date(date).getMonth()].toLowerCase();
   document.querySelector(`#datepicker-year__${year}`).checked = true;
   document.querySelector(`#datepicker-month__${month}`).checked = true;
 }
