@@ -159,6 +159,16 @@ export const calculateBudget = (arr) => {
   });
 };
 
+const addToBudget = (trans) =>{
+  const category = state.budget.find((el) => el.name === trans.category);
+  category.value += trans.amount;
+}
+
+const removeFromBudget = (trans) => {
+  const category = state.budget.find((el) => el.name === trans.category);
+  category.value -= trans.amount;
+}
+
 export const updateBudget = (newMov, oldMov) => {
   if (oldMov) {
     const oldCategory = state.budget.find((el) => el.name === oldMov.category);
@@ -218,9 +228,18 @@ export const modifyStateOverview = (arr) => {
   return state.overview;
 };
 
+
+const addToStateOverview = (trans) =>{
+  state.overview[`total${trans.type}`] += trans.amount;
+}
+
+const removeFromStateOverview = (trans) =>{
+  state.overview[`total${trans.type}`] -= trans.amount;
+}
+
 export const updateStateOverview = (newMov, oldMov) => {
-  if (oldMov) state.overview[`total${oldMov.type}`] -= oldMov.amount;
-  state.overview[`total${newMov.type}`] += newMov.amount;
+  if (oldMov) removeFromStateOverview(oldMov);
+  addToStateOverview(newMov);
 };
 
 const resetStateOverview = () => {
@@ -312,6 +331,7 @@ export const initFilter = (categories = []) => {
 
 
   if (state.currentAccount.movements.length > 0) {
+    //Sort would probably do something similar
     filters.earliestDate = state.currentAccount.movements.reduce(
       (lowest, el) => {
         return (lowest = el.date < lowest ? el.date : lowest);
@@ -349,6 +369,44 @@ export const loadLocalStorage = () => {
 export const saveLocalStorage = () => {
   localStorage.setItem("state", JSON.stringify(state));
 };
+
+
+
+
+
+
+
+
+
+
+
+export const transactionDeleted = (id) =>{
+  const transaction = findTransaction(id);
+  removeFromBudget(transaction);
+  removeFromStateOverview(transaction);
+  deleteTransaction(id);
+  saveLocalStorage();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Add movement to testing porpuses should not be used and should be deleted before production
 export const addMovement = () => {

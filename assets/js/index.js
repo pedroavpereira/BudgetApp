@@ -15,20 +15,31 @@ import * as View from "./Views/movementsView.js";
 import * as overviewView from "./Views/overviewView.js";
 import * as alertView from "./Views/alertView.js";
 
+const updateBudgetView = () =>{
+  budgetView.renderBudget(Model.generateBudgetViewObject());
+}
+
 const updateOverview = () => {
   Model.modifyStateOverview(Model.getTransactions(1,true));
   overviewView.updateOverview(Model.state);
 };
 
-const btnDeleteClicked = (id) => {
-  const mov = Model.findTransaction(id);
-  Model.updateBudget({ category: mov.category, amount: 0 }, mov);
-  Model.updateStateOverview({ type: mov.type, amount: 0 }, mov);
-  Model.deleteTransaction(id);
-  View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
+
+const updateAllViews = () =>{
+  updateOverview();
+  updateBudgetView();
   paginationView.renderPagination(Model.state.pagination);
-  budgetView.renderBudget(Model.generateBudgetViewObject());
-  overviewView.updateOverview(Model.state);
+  accountsView.renderAccounts(Model.state.accounts);
+}
+
+
+const btnDeleteClicked = (id) => {
+  Model.transactionDeleted(id);
+  View.renderAllTransactions(Model.getTransactions(Model.state.pagination.page));
+  updateAllViews();
+  // paginationView.renderPagination(Model.state.pagination);
+  // budgetView.renderBudget(Model.generateBudgetViewObject());
+  // overviewView.updateOverview(Model.state);
 
 };
 
@@ -40,6 +51,7 @@ const transactionUpdated = (obj) => {
   const updatedTransaction = Model.updateTransaction(obj);
   View.deleteTransaction(obj.id);
   overviewView.updateOverview(Model.state);
+
   if (Model.isSameMonth(updatedTransaction)) {
     View.renderTransaction(
       updatedTransaction,
@@ -87,7 +99,6 @@ const updateBudgetClicked = () => {
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
     transactionModalView.renderTransactionModal(Model.state, mov);
-  
 };
 
 const applyFilterClicked = (obj) => {
