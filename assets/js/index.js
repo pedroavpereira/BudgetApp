@@ -62,6 +62,7 @@ const transactionUpdated = (obj) => {
 };
 
 const newTransactionCreated = (obj) => {
+  debugger;
   const newTransaction = Model.createTransaction(obj);
 
   if (
@@ -210,9 +211,8 @@ const deleteAccountClicked = (accId) => {
 function init() {
   Model.loadLocalStorage();
   Model.state.currentAccount = Model.state.accounts[0];
-  if (Model.state.currentAccount.movements.length > 0) {
-    Model.initFilter();
-  }
+  Model.initFilter();
+
   Model.saveLocalStorage();
   console.log(Model.state);
   // Model.addMovement();

@@ -42,7 +42,7 @@ export let state = {
     { type: "Expense", name: "Misc", value: 0, target: 0, native: true },
   ],
   accounts: [
-    { name: "Main account", accountID: `native`, movements: [], balance: 0 },
+    { name: "Main account", accountID: `native`, movements: [], balance: 0 }
   ],
   currentAccount: {},
 };
@@ -60,7 +60,6 @@ export const findTransaction = (id) => {
 
 export const deleteTransaction = (id) => {
   const mov = findTransaction(id);
-  state.currentAccount.balance -= mov.amount;
   state.currentAccount.movements.splice(
     state.currentAccount.movements.indexOf(mov),
     1
@@ -353,6 +352,12 @@ export const saveLocalStorage = () => {
 
 export const transactionDeleted = (id) =>{
   const transaction = findTransaction(id);
+
+  state.currentAccount.balance +=
+  transaction.type === "Expense"
+    ? +transaction.amount
+    : -transaction.amount;
+
   removeFromBudget(transaction);
   removeFromStateOverview(transaction);
   deleteTransaction(id);
