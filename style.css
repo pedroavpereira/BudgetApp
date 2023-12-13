@@ -1,3 +1,9 @@
+:root {
+  --modal-border: #9c9c9c;
+  --modal-background: #483285;
+  --modal-text: #2c2c2c;
+}
+
 * {
   cursor: default;
   box-sizing: border-box;
