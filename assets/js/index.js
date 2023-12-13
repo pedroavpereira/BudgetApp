@@ -101,7 +101,8 @@ const transactionClicked = (id) => {
     Model.state,
     mov,
     transactionUpdated,
-    btnDeleteClicked
+    btnDeleteClicked,
+    alertView.displayAlert
   );
 };
 

@@ -46,8 +46,9 @@ export default (stateObj, newTransactionHandler, errorAlertHandler) => {
           "error",
           4000
         );
+        return;
       }
-
+      errorAlertHandler("Transaction created successfully", "success", 4000);
       newTransactionHandler(validatedForm);
       modalBase.destroyModal();
     });

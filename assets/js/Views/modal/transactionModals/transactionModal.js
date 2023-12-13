@@ -43,7 +43,7 @@ export const renderTransactionModal = (
   mov,
   handleUpdateTransaction,
   handleDeleteTransaction,
-  handleErrorAlert
+  errorAlertHandler
 ) => {
   currentTransaction = mov;
   const contentmarkup = sharedTransactionModalLogic.generateContent(
@@ -59,6 +59,7 @@ export const renderTransactionModal = (
     .addEventListener("click", function () {
       console.log("Cliiicked");
       handleDeleteTransaction(currentTransaction.id);
+      errorAlertHandler("Transaction deleted successfully", "success", 4000);
       modalBase.destroyModal();
     });
 
@@ -72,9 +73,19 @@ export const renderTransactionModal = (
       const data = Object.fromEntries(dataArr);
 
       const validatedForm = sharedTransactionModalLogic.formValidatedData(data);
+
+      if (!validatedForm) {
+        errorAlertHandler(
+          "Form filled incorrectly, Please double check every field",
+          "error",
+          4000
+        );
+        return;
+      }
       validatedForm.id = currentTransaction.id;
 
       handleUpdateTransaction(validatedForm);
+      errorAlertHandler("Transaction updated successfully", "success", 4000);
       modalBase.destroyModal();
     });
   // modalBase.updateBaseModal(createOptionsObj(mov));
