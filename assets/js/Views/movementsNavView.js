@@ -1,6 +1,6 @@
 "use strict";
 
-import { transactionModal } from "./modal/modalBase.js";
+// import { transactionModal } from "./modal/modalBase.js";
 import * as bootstrap from "bootstrap";
 
 const parentElement = document.querySelector(".movements--nav");
@@ -19,6 +19,6 @@ export const addTransactionEvent = (handler) => {
 
   element.addEventListener("click", function () {
     handler();
-    transactionModal.show();
+    // transactionModal.show();
   });
 };

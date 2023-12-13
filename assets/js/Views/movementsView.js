@@ -1,6 +1,6 @@
 "use strict";
 
-import { transactionModal } from "./modal/modalBase.js";
+// import { transactionModal } from "./modal/modalBase.js";
 
 const parentElement = document.querySelector(".transactions--container");
 
@@ -8,14 +8,13 @@ const parentElement = document.querySelector(".transactions--container");
 const generateTransactionMarkup = (mov) => {
   if (mov.type === "Transfer") {
     return `<div class="movement--row" data-id="${mov.id}">
-    <div class="transaction-section transaction-section__date">${new Date(mov.date).toLocaleDateString(
-      "pt-pt",
-      {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-      }
-    )}</div>
+    <div class="transaction-section transaction-section__date">${new Date(
+      mov.date
+    ).toLocaleDateString("pt-pt", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    })}</div>
     <div class="transaction-section  transaction-section__category">
       
     <p class="movement-category movement-category--transfer
@@ -25,25 +24,28 @@ const generateTransactionMarkup = (mov) => {
     
       
     </div>
-    <div class="transaction-section  transaction-section__amount">${Math.abs(mov.amount)}</div>
+    <div class="transaction-section  transaction-section__amount">${Math.abs(
+      mov.amount
+    )}</div>
   </div>
   </div>`;
   } else {
     return `<div class="movement--row" data-id="${mov.id}">
-  <div class="transaction-section  transaction-section__date">${new Date(mov.date).toLocaleDateString(
-    "pt-pt",
-    {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-    }
-  )}</div>
+  <div class="transaction-section  transaction-section__date">${new Date(
+    mov.date
+  ).toLocaleDateString("pt-pt", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  })}</div>
   <div class="transaction-section  transaction-section__category">
     <p class="movement-category movement-category--${
       mov.type === "Income" ? "income" : "expense"
     }">${mov.category}</p> 
   </div>
-  <div class="transaction-section transaction-section__amount">${Math.abs(mov.amount)}</div>
+  <div class="transaction-section transaction-section__amount">${Math.abs(
+    mov.amount
+  )}</div>
 </div>`;
   }
 };
@@ -51,10 +53,10 @@ const generateTransactionMarkup = (mov) => {
 export const renderTransaction = (trans) => {
   const markup = generateTransactionMarkup(trans);
 
-  document.querySelector(".transactions--container").insertAdjacentHTML("afterbegin", markup);
+  document
+    .querySelector(".transactions--container")
+    .insertAdjacentHTML("afterbegin", markup);
 };
-
-
 
 export const deleteTransaction = (id) => {
   document.querySelector(`.movement--row[data-id="${id}"]`).remove();
@@ -81,6 +83,6 @@ export const movementContainerEvent = (handler) => {
 
     target.classList.add("mov--active");
     handler(target.dataset.id);
-    transactionModal.show();
+    // transactionModal.show();
   });
 };

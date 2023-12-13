@@ -1,4 +1,4 @@
-import * as parentView from "./modalBase.js";
+// import * as parentView from "./modalBase.js";
 
 const generateBudgetMarkup = (stateObj) => {
   return `<div class="col">

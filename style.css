@@ -3,50 +3,53 @@
   box-sizing: border-box;
 }
 
-.main-container{
+html,
+body {
+  margin: 0;
+}
+
+.main-container {
   margin: auto;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows : repeat(5,auto);
-  grid-template-areas: "overview"
-                        "date"
-                        "controls"
-                        "transactions"
-                        "pagination";
-  gap: 0.5rem 2rem
-
+  grid-template-rows: repeat(5, auto);
+  grid-template-areas:
+    "overview"
+    "date"
+    "controls"
+    "transactions"
+    "pagination";
+  gap: 0.5rem 2rem;
 }
 
-.overview--container{
-  grid-area:overview;
+.overview--container {
+  grid-area: overview;
   justify-content: center;
 }
 
-.datepicker{
-  grid-area:date;
+.datepicker {
+  grid-area: date;
 }
 
-.movement--nav{
+.movement--nav {
   grid-area: controls;
   display: flex;
   justify-content: space-between;
 }
 
-.transactions--container{
+.transactions--container {
   grid-area: transactions;
   height: 600px;
   border: 1px solid #ccc;
 }
 
-.accordion-container{
+.accordion-container {
   grid-area: accordion;
 }
 
-.pagination-container{
-  grid-area:pagination
+.pagination-container {
+  grid-area: pagination;
 }
-
-
 
 .form-select--from,
 .movement--row:hover,
@@ -70,7 +73,6 @@ option[disabled] {
   color: rgba(0, 160, 0, 0.75);
 }
 
-
 .movement--row {
   display: flex;
   justify-content: space-between;
@@ -78,12 +80,10 @@ option[disabled] {
   height: 10%;
 }
 
-.transaction-section{
+.transaction-section {
   text-align: center;
   margin: 0 5rem;
 }
-
-
 
 .movement-category {
   color: white;
@@ -188,56 +188,54 @@ option[disabled] {
   text-align: center;
 }
 
-.modal-content--container{
+.modal-content--container {
   display: grid;
-  gap:0 0.2rem;
+  gap: 0 0.2rem;
 }
 
-.modal-content--transactions{
+.modal-content--transactions {
   grid-template-columns: 100px 100px 100px 1fr;
-  grid-template-rows: repeat(auto,4);
-  grid-template-areas : "expense income transfer ."
-                        "date date date date"
-                        "content content content content"
-                        "amount amount . .";
+  grid-template-rows: repeat(auto, 4);
+  grid-template-areas:
+    "expense income transfer ."
+    "date date date date"
+    "content content content content"
+    "amount amount . .";
 }
 
-.modal-content--savings{
+.modal-content--savings {
   grid-template-columns: 100px 100px 1fr;
-  grid-template-rows: repeat(auto,2);
-  grid-template-areas:"withdraw account ."
-                      "content content content";
-  gap:0.5rem 0.2rem;
+  grid-template-rows: repeat(auto, 2);
+  grid-template-areas:
+    "withdraw account ."
+    "content content content";
+  gap: 0.5rem 0.2rem;
 }
 
-
-.modal-grid--content{
+.modal-grid--content {
   display: none;
   grid-area: content;
 }
 
-.modal-section-date{
-  grid-area:date;
+.modal-section-date {
+  grid-area: date;
 }
 
-.modal-section-amount{
+.modal-section-amount {
   grid-area: amount;
 }
 
-.modal-checkbox--input__transfer{
+.modal-checkbox--input__transfer {
   grid-area: transfer;
 }
 
-.modal-checkbox--input__income{
+.modal-checkbox--input__income {
   grid-area: income;
 }
 
-.modal-checkbox--input__expense{
+.modal-checkbox--input__expense {
   grid-area: expense;
 }
-
-
-
 
 .modal-checkbox--container {
   text-align: center;
@@ -267,18 +265,17 @@ option[disabled] {
   cursor: pointer;
 }
 
-.modal-checkbox--input:checked + .modal-checkbox--label{
+.modal-checkbox--input:checked + .modal-checkbox--label {
   border: 1px solid rgba(73, 160, 252, 0.75);
   background-color: rgba(73, 160, 252, 0.5);
 }
 
-.modal-checkbox--input:checked + .modal-checkbox--label + .modal-grid--content{
+.modal-checkbox--input:checked + .modal-checkbox--label + .modal-grid--content {
   display: block;
 }
 
-
 /* Pagination */
-.pagination-container{
+.pagination-container {
   background-color: #ccc;
   border-bottom-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -288,12 +285,11 @@ option[disabled] {
   align-items: baseline;
 }
 
-
-.pagination-info{
+.pagination-info {
   margin: 0.5rem 1rem 0;
 }
 
-.pagination-arrow{
+.pagination-arrow {
   cursor: pointer;
   width: 25px;
   height: 25px;
@@ -304,12 +300,12 @@ option[disabled] {
   position: relative;
 }
 
-.pagination-arrow__icon{
+.pagination-arrow__icon {
   cursor: pointer;
   color: #9c9c9c;
 }
 
-.datepicker-container{
+.datepicker-container {
   width: 100%;
   display: flex;
   /* background-color: #ccc; */
@@ -321,36 +317,36 @@ option[disabled] {
   border-radius: 5px;
 }
 
-.datepicker-input__container{
+.datepicker-input__container {
   display: flex;
   position: relative;
 }
 
-.datepicker-radios{
+.datepicker-radios {
   width: 0;
   height: 0;
   visibility: hidden;
 }
 
-.datepicker-label{
+.datepicker-label {
   font-family: sans-serif;
   cursor: pointer;
   padding: 0 1rem;
-  position: relative;   
+  position: relative;
 }
 
-.datepicker-radios:checked + .datepicker-label{
+.datepicker-radios:checked + .datepicker-label {
   font-weight: bold;
 }
 
-.datepicker-radios:checked + .datepicker-label::before{
-  content: '';
+.datepicker-radios:checked + .datepicker-label::before {
+  content: "";
   display: inline-block;
 
   position: absolute;
   top: 50%;
-  left:50%;
-  transform: translate(-50%,-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: -1;
   background-color: #ccc;
   width: 3rem;
@@ -358,16 +354,16 @@ option[disabled] {
   border-radius: 50%;
 }
 
-.datepicker-month__label:hover{
+.datepicker-month__label:hover {
   font-weight: bold;
 }
 
-.accordion-controls{
+.accordion-controls {
   text-align: center;
   border-radius: 150px;
 }
 
-.accordion-controls--radio{
+.accordion-controls--radio {
   display: none;
 }
 
@@ -378,21 +374,20 @@ option[disabled] {
   border-bottom: 1px solid #ccc;
 }
 
-.accordion-content{
+.accordion-content {
   padding: 1rem;
   display: none;
 }
 
-.accordion-controls--radio:checked ~ .accordion-controls--label{
+.accordion-controls--radio:checked ~ .accordion-controls--label {
   background-color: #e3e3e3;
 }
 
-
-.accordion-controls--radio:checked ~.accordion-content{
+.accordion-controls--radio:checked ~ .accordion-content {
   display: block;
 }
 
-.budget-chart::before{
+.budget-chart::before {
   content: "Expenses";
   display: flex;
   justify-content: center;
@@ -405,12 +400,11 @@ option[disabled] {
   background-color: white;
   position: absolute;
   left: 50%;
-  top:50%;
-  transform: translate(-50%,-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
-
-.budget-chart{
+.budget-chart {
   position: relative;
   width: 150px;
   height: 150px;
@@ -420,78 +414,144 @@ option[disabled] {
   margin-bottom: 0.2rem;
 }
 
-.budget-items{
+.budget-items {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem 0;
-  margin:1.5rem 0;
+  margin: 1.5rem 0;
 }
 
-.budget-item{
+.budget-item {
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-.budget-item__info{
+.budget-item__info {
   font-size: 0.8rem;
   margin: 0;
 }
 
-.budget-square{
+.budget-square {
   width: 15px;
   height: 15px;
 }
 
-
-
-.accounts-container{
+.accounts-container {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.accounts-new--account{
+.accounts-new--account {
   align-self: center;
 }
 
-
-
-.hidden{
+.hidden {
   visibility: hidden;
 }
 
-.display-none{
+.display-none {
   display: none;
 }
 
-.desktop-only{
+.desktop-only {
   display: none;
 }
 
-
-
-
-
-
-
-@media(min-width:40rem){
-  .main-container{
+@media (min-width: 40rem) {
+  .main-container {
     width: 80%;
     grid-template-columns: 3fr 1fr;
-    grid-template-rows: repeat(5,auto);
-    grid-template-areas: "overview overview"
-                         "date accordion"
-                         "controls accordion"
-                         "transactions accordion"
-                         "pagination .";
+    grid-template-rows: repeat(5, auto);
+    grid-template-areas:
+      "overview overview"
+      "date accordion"
+      "controls accordion"
+      "transactions accordion"
+      "pagination .";
   }
 
-  .overview--container{
+  .overview--container {
     justify-content: start;
   }
 
-  .desktop-only{
+  .desktop-only {
     display: block;
   }
+}
+
+.modal__i {
+  width: fit-content;
+  border: 1px solid var(--modal-border);
+  border-radius: 10px;
+  background-color: var(--modal-background);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  z-index: 2;
+}
+
+.modal-close__i {
+  cursor: pointer;
+}
+
+.modal__i div {
+  padding: 10px;
+}
+
+.modal__i .modal-header__i {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--modal-border);
+  padding: 15px;
+}
+
+.modal-header__i > h1 {
+  font-family: sans-serif;
+  margin: 0;
+  color: var(--modal-text);
+}
+
+.modal__i .modal-footer__i {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+
+  border-top: 2px solid var(--modal-border);
+}
+
+.btn {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  font-family: sans-serif;
+  border-radius: 4px;
+}
+
+.modal-btn {
+  padding: 0.5rem;
+  margin-right: 10px;
+  color: white;
+}
+
+.modal-btn__submit {
+  background-color: green;
+}
+
+.modal-btn__cancel {
+  background-color: red;
+}
+
+.overlay__i {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  width: 100vw;
+  max-width: 100%;
+  height: 100vh;
+  max-height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
 }

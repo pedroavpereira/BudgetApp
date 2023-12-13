@@ -1,4 +1,4 @@
-import * as modalBase from "./modalBase.js";
+// import * as modalBase from "./modalBase.js";
 import * as config from "./../../config.js";
 
 const generateTransTypeMarkup = (stateObj) => {
@@ -8,20 +8,29 @@ const generateTransTypeMarkup = (stateObj) => {
   Expense
   </label>
       
-    <div class="modal-grid--content">${generateCategoriesCheckboxes(stateObj, "Expense")}</div>
+    <div class="modal-grid--content">${generateCategoriesCheckboxes(
+      stateObj,
+      "Expense"
+    )}</div>
   
     <input class="form-check-input check-input--type modal-checkbox--input modal-checkbox--input__income" type="radio" name="type" id="transaction-type--Income" value="Income" data-target="Income">
       <label class="form-check-label modal-checkbox--label" for="transaction-type--Income">
       Income
       </label>
-      <div class="modal-grid--content">${generateCategoriesCheckboxes(stateObj, "Income")}</div>
+      <div class="modal-grid--content">${generateCategoriesCheckboxes(
+        stateObj,
+        "Income"
+      )}</div>
       <input class="form-check-input check-input--type modal-checkbox--input modal-checkbox--input__transfer" type="radio" name="type" id="transaction-type--Transfer" data-target="Transfer" value="Transfer" ${
         stateObj.accounts.length <= 1 ? "disabled" : ""
       }>
       <label class="form-check-label modal-checkbox--label" for="transaction-type--Transfer">
       Transfer
       </label>
-      <div class="modal-grid--content">${generateCategoriesCheckboxes(stateObj, "Transfer")}</div>
+      <div class="modal-grid--content">${generateCategoriesCheckboxes(
+        stateObj,
+        "Transfer"
+      )}</div>
     `;
 };
 
@@ -100,6 +109,29 @@ const generateCategoriesCheckboxes = (stateObj, type = "Expense") => {
   }
 };
 
+const generateModal = (markup) => {
+  return `<div class="modal__i">
+  <form action="">
+    <div class="modal-header__i">
+      <h1 class="modal-tittle__i">Tittle</h1>
+      <h1 class="modal-close__i">X</h1>
+    </div>
+    <div class="modal-content__i">
+      ${markup}
+    </div>
+    <div class="modal-footer__i">
+      <button type="button" class="btn modal-btn modal-btn__cancel">
+        Cancel
+      </button>
+      <button type="submit" class="btn modal-btn modal-btn__submit">
+        Update
+      </button>
+    </div>
+  </form>
+</div>
+<div class="overlay__i"></div>`;
+};
+
 const generateContentMarkup = (stateObj, type) => {
   return `
   <div class="modal-content--container modal-content--transactions">
@@ -151,9 +183,14 @@ const movFillInputs = (mov) => {
 };
 
 export const renderTransactionModal = (stateObj, mov) => {
-  const markup = generateContentMarkup(stateObj, mov ? mov.type : "Expense");
-  modalBase.updateBaseModal(createOptionsObj(mov));
-  modalBase.insertHTML(markup);
-  modalBase.transactionModal.show();
-  if (mov) movFillInputs(mov);
+  const contentmarkup = generateContentMarkup(
+    stateObj,
+    mov ? mov.type : "Expense"
+  );
+  const modalMarkup = generateModal(contentmarkup);
+  document.querySelector("body").insertAdjacentHTML("beforeend", modalMarkup);
+  // modalBase.updateBaseModal(createOptionsObj(mov));
+  // modalBase.insertHTML(markup);
+  // modalBase.transactionModal.show();
+  // if (mov) movFillInputs(mov);
 };
