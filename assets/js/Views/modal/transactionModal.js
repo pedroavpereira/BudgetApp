@@ -114,7 +114,7 @@ const generateModal = (markup) => {
   <form action="">
     <div class="modal-header__i">
       <h1 class="modal-tittle__i">Tittle</h1>
-      <h1 class="modal-close__i">X</h1>
+      <span class="modal-close__i">X</span>
     </div>
     <div class="modal-content__i">
       ${markup}

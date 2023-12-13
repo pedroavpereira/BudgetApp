@@ -1,7 +1,7 @@
 :root {
-  --modal-border: #9c9c9c;
-  --modal-background: #483285;
-  --modal-text: #2c2c2c;
+  --modal-border: #dee2e6;
+  --modal-background: #ffffff;
+  --modal-text: #212529;
 }
 
 * {
@@ -488,7 +488,7 @@ option[disabled] {
 }
 
 .modal__i {
-  width: fit-content;
+  /* width: fit-content; */
   border: 1px solid var(--modal-border);
   border-radius: 10px;
   background-color: var(--modal-background);
@@ -502,6 +502,9 @@ option[disabled] {
 
 .modal-close__i {
   cursor: pointer;
+  color: var(--modal-border);
+  margin-right: 0.5rem;
+  font-size: 2rem;
 }
 
 .modal__i div {
@@ -510,6 +513,7 @@ option[disabled] {
 
 .modal__i .modal-header__i {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   border-bottom: 2px solid var(--modal-border);
   padding: 15px;
