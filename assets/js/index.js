@@ -61,12 +61,17 @@ const transactionUpdated = (newTransaction) => {
     Model.initFilter(Model.filters.categories);
     datePickerView.generateYears(creatingDateObj());
   }
-
   View.renderAllTransactions(Model.getTransactions());
 };
 
-const newTransactionCreated = (obj) => {
-  const newTransaction = Model.createTransaction(obj);
+const newTransactionCreated = (tempTransaction) => {
+  let newTransaction;
+
+  if (tempTransaction.type === "Transfer") {
+    newTransaction = Model.createTransfer(tempTransaction);
+  } else {
+    newTransaction = Model.createTransaction(tempTransaction);
+  }
 
   if (
     Model.filters.categories.includes(newTransaction.category) &&
@@ -163,34 +168,9 @@ const savingsWithdrawn = (formData) => {
       to: mainAccount.name,
     });
     View.renderTransaction(transferObj);
+    updateAllViews();
   } else {
     alertView.displayAlert("Insuficient funds in the account", "error");
-  }
-};
-
-const submitButtonClicked = (formData) => {
-  switch (formData.target) {
-    case "newTrans":
-      if (formData.type === "Transfer") {
-        transferCreated(formData);
-      } else {
-        newTransactionCreated(formData);
-      }
-      break;
-    case "updateTrans":
-      transactionUpdated(formData);
-      break;
-    case "savingsModal":
-      savingsModalEvent(formData);
-      break;
-    case "updateBudget":
-      budgetSubmited(formData);
-      break;
-    case "savingsWithdrawl":
-      savingsWithdrawn(formData);
-      break;
-    default:
-      break;
   }
 };
 
@@ -201,7 +181,11 @@ const pageChanged = (page) => {
 
 const accountClicked = (accId) => {
   if (accId === "native") return;
-  savingsModalView.renderSavingsModal(Model.findAccount(accId));
+  savingsModalView.renderSavingsModal(
+    Model.findAccount(accId),
+    savingsAccountUpdated,
+    savingsWithdrawn
+  );
 };
 
 const createNewAccountClicked = (accObj) => {

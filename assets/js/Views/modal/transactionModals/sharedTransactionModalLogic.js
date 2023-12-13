@@ -128,22 +128,43 @@ export const generateContent = (stateObj, type) => {
 };
 
 export const formValidatedData = (formData) => {
-  if (formData.type === "Expense" || formData.type === "Income") {
-    return (
-      formData.amount > 0 &&
-      formData.day &&
-      formData.month &&
-      formData.year && {
-        type: formData.type,
-        category:
-          formData.type === "Expense"
-            ? formData.ExpenseCategory
-            : formData.IncomeCategory,
-        amount: Number(formData.amount),
-        date: Date.parse(
-          new Date(`${formData.day} ${formData.month} ${formData.year}`)
-        ),
-      }
-    );
+  const dateInputed = Date.parse(
+    new Date(`${formData.day} ${formData.month} ${formData.year}`)
+  );
+
+  if (
+    formData.amount <= 0 ||
+    !formData.day ||
+    !formData.month ||
+    !formData.year ||
+    dateInputed > Date.now()
+  ) {
+    return false;
   }
+
+  let mov;
+
+  if (formData.type === "Expense" || formData.type === "Income") {
+    mov = {
+      type: formData.type,
+      category:
+        formData.type === "Expense"
+          ? formData.ExpenseCategory
+          : formData.IncomeCategory,
+      amount: Number(formData.amount),
+      date: dateInputed,
+    };
+  }
+
+  if (formData.type === "Transfer") {
+    mov = {
+      type: formData.type,
+      to: formData.to,
+      from: formData.from,
+      amount: Number(formData.amount),
+      date: dateInputed,
+    };
+  }
+
+  return mov;
 };

@@ -27,7 +27,7 @@ const generateNewTransactionModal = (markup) => {
 export default (stateObj, newTransactionHandler, errorAlertHandler) => {
   const contentmarkup = sharedTransactionModalLogic.generateContent(stateObj);
   const modalMarkup = generateNewTransactionModal(contentmarkup);
-  document.querySelector("body").insertAdjacentHTML("beforeend", modalMarkup);
+  modalBase.insertModal(modalMarkup);
   modalBase.addClosingEventListeners([".modal-btn__cancel"]);
 
   document
@@ -38,14 +38,9 @@ export default (stateObj, newTransactionHandler, errorAlertHandler) => {
       const dataArr = [...formData];
       const data = Object.fromEntries(dataArr);
 
+      console.log(data);
       const validatedForm = sharedTransactionModalLogic.formValidatedData(data);
-
       if (!validatedForm) {
-        errorAlertHandler(
-          "Form filled incorrectly, Please double check every field",
-          "error",
-          4000
-        );
         return;
       }
       errorAlertHandler("Transaction created successfully", "success", 4000);

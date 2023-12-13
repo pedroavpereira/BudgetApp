@@ -151,6 +151,10 @@ export const destroyModal = () => {
   document.querySelector(".overlay__i").remove();
 };
 
+export const insertModal = (markup) => {
+  document.querySelector("body").insertAdjacentHTML("beforeend", markup);
+};
+
 export const addClosingEventListeners = (elements = []) => {
   [...elements, ".modal-close__i", ".overlay__i"].forEach((el) => {
     if (!el) return;

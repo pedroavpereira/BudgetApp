@@ -1,6 +1,30 @@
-// import * as modalBase from "./modalBase.js";
+import * as modalBase from "./modalBase.js";
+import * as alertView from "./../alertView.js";
 
 let selectedAccount;
+
+const generateModal = (markup) => {
+  return `<div class="modal__i">
+  <form action="">
+    <div class="modal-header__i">
+      <h1 class="modal-tittle__i">Account : ${selectedAccount.name}</h1>
+      <span class="modal-close__i">&#10060</span>
+    </div>
+    <div class="modal-content__i">
+      ${markup}
+    </div>
+    <div class="modal-footer__i">
+      <button type="button" class="btn modal-btn modal-btn__cancel">
+        Close
+      </button>
+      <button type="submit" class="btn modal-btn modal-btn__submit">
+        Update
+      </button>
+    </div>
+  </form>
+</div>
+<div class="overlay__i"></div>`;
+};
 
 const generateMarkup = () => {
   return `
@@ -15,10 +39,9 @@ const generateMarkup = () => {
         Account
       </label>
       <div class="modal-grid--content">${generateAccSumMarkup()}</div>
-      <div class="display-none"><input type="text" name="account" value="${selectedAccount.accountID}"></div>
+      </div>
       `;
 };
-
 
 const generateWithdrawlMarkup = () => {
   return ` <div>
@@ -33,7 +56,6 @@ const generateWithdrawlMarkup = () => {
   <p>All withdrawls will be automatically added to your main account</p>
 </div>`;
 };
-
 
 const generateAccSumMarkup = () => {
   return `
@@ -75,15 +97,68 @@ const generateAccSumMarkup = () => {
 </div>`;
 };
 
+const formValidation = (formData) => {
+  let validatedData;
 
+  if (formData.type === "withdrawl") {
+    if (formData.amount <= 0 || isNaN(formData.amount)) {
+      alertView.displayAlert("Please insert a valid amount", "error");
+      return;
+    }
+    validatedData = {
+      type: formData.type,
+      amount: Number(formData.amount),
+    };
+  }
 
-export const renderSavingsModal = (accObj) => {
+  if (formData.type === "account") {
+    if (!formData.name || formData.goal <= 0 || isNaN(formData.goal)) {
+      alertView.displayAlert("Invalid values", "error");
+      return;
+    }
+    validatedData = {
+      type: formData.type,
+      name: formData.name,
+      goal: Number(formData.goal),
+    };
+  }
+  return validatedData;
+};
+
+export const renderSavingsModal = (
+  accObj,
+  handleUpdateAccount,
+  handleWithdrawl
+) => {
   selectedAccount = accObj;
-  modalBase.transactionModal.show();
   const markup = generateMarkup();
-  modalBase.updateBaseModal({
-    title: `Account: ${selectedAccount.name}`,
-    submitBtn: ["Continue", "savingsModal"],
-  });
-  modalBase.insertHTML(markup);
+  const modalMarkup = generateModal(markup);
+  modalBase.insertModal(modalMarkup);
+  modalBase.addClosingEventListeners([".modal-btn__cancel"]);
+
+  document
+    .querySelector(".modal__i form")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+      const id = selectedAccount.accountID;
+
+      const formData = new FormData(this);
+      const dataArr = [...formData];
+      const data = Object.fromEntries(dataArr);
+
+      const validatedData = formValidation(data);
+
+      if (!validatedData) return;
+
+      validatedData.account = id;
+      if (validatedData.type === "withdrawl") {
+        handleWithdrawl(validatedData);
+      }
+
+      if (validatedData.type === "account") {
+        handleUpdateAccount(validatedData);
+      }
+
+      modalBase.destroyModal();
+    });
 };

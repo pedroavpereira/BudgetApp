@@ -3,7 +3,7 @@ import * as sharedTransactionModalLogic from "./sharedTransactionModalLogic.js";
 
 let currentTransaction;
 
-const generateNewTransactionModal = (markup) => {
+const generateTransactionModal = (markup) => {
   return `<div class="modal__i">
   <form action="">
     <div class="modal-header__i">
@@ -50,8 +50,9 @@ export const renderTransactionModal = (
     stateObj,
     mov.type
   );
-  const modalMarkup = generateNewTransactionModal(contentmarkup);
-  document.querySelector("body").insertAdjacentHTML("beforeend", modalMarkup);
+  const modalMarkup = generateTransactionModal(contentmarkup);
+  modalBase.insertModal(modalMarkup);
+  // document.querySelector("body").insertAdjacentHTML("beforeend", modalMarkup);
   modalBase.addClosingEventListeners();
 
   document
