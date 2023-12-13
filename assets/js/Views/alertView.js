@@ -6,11 +6,15 @@ const generateMarkup = (message, type) => {
 </div>`;
 };
 
-export const displayAlert = (message, type) => {
+export const displayAlert = (
+  message,
+  type,
+  timeout = ALERT_TIMEOUT_MILISECONDS
+) => {
   const markup = generateMarkup(message, type);
 
   document.querySelector("body").insertAdjacentHTML("afterbegin", markup);
   setTimeout(function () {
     document.querySelector(".alert-container").remove();
-  }, ALERT_TIMEOUT_MILISECONDS);
+  }, timeout);
 };

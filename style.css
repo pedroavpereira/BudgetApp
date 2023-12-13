@@ -488,7 +488,7 @@ option[disabled] {
 }
 
 .modal__i {
-  /* width: fit-content; */
+  width: 30vw;
   border: 1px solid var(--modal-border);
   border-radius: 10px;
   background-color: var(--modal-background);
@@ -504,7 +504,7 @@ option[disabled] {
   cursor: pointer;
   color: var(--modal-border);
   margin-right: 0.5rem;
-  font-size: 2rem;
+  font-size: 1rem;
 }
 
 .modal__i div {

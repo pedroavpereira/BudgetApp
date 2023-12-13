@@ -7,9 +7,11 @@ import * as filterView from "./Views/filterView.js";
 import * as datePickerView from "./Views/datePickerView.js";
 import * as paginationView from "./Views/paginationView.js";
 import * as budgetModalView from "./Views/modal/budgetModal.js";
+// import * as modalBase from "./Views/modal/modalBase.js";
 import * as modalBase from "./Views/modal/modalBase.js";
 import * as savingsModalView from "./Views/modal/savingsModal.js";
-import * as transactionModalView from "./Views/modal/transactionModal.js";
+import * as transactionModalView from "./Views/modal/transactionModals/transactionModal.js";
+import newTransactionModal from "./Views/modal/transactionModals/newTransactionModal.js";
 import * as movementsNavView from "./Views/movementsNavView.js";
 import * as View from "./Views/movementsView.js";
 import * as overviewView from "./Views/overviewView.js";
@@ -43,11 +45,15 @@ const btnDeleteClicked = (id) => {
 };
 
 const addTransactionClicked = () => {
-  transactionModalView.renderTransactionModal(Model.state);
+  newTransactionModal(
+    Model.state,
+    newTransactionCreated,
+    alertView.displayAlert
+  );
 };
 
-const transactionUpdated = (obj) => {
-  const updatedTransaction = Model.updateTransaction(obj);
+const transactionUpdated = (newTransaction) => {
+  const updatedTransaction = Model.updateTransaction(newTransaction);
   updateAllViews();
 
   if (!Model.isSameMonth(updatedTransaction)) {
@@ -60,7 +66,6 @@ const transactionUpdated = (obj) => {
 };
 
 const newTransactionCreated = (obj) => {
-  debugger;
   const newTransaction = Model.createTransaction(obj);
 
   if (
@@ -92,7 +97,12 @@ const updateBudgetClicked = () => {
 
 const transactionClicked = (id) => {
   const mov = Model.state.currentAccount.movements.find((el) => el.id === id);
-  transactionModalView.renderTransactionModal(Model.state, mov);
+  transactionModalView.renderTransactionModal(
+    Model.state,
+    mov,
+    transactionUpdated,
+    btnDeleteClicked
+  );
 };
 
 const applyFilterClicked = (obj) => {
