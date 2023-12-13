@@ -51,10 +51,11 @@ export const renderUpdateModal = (stateObj, handleUpdateBudget) => {
       e.preventDefault();
 
       const formData = new FormData(this);
-      const dataArr = [...formData].map((el) => {
-        [el[0], Number(el[1])];
-      });
+      const dataArr = [...formData];
       const data = Object.fromEntries(dataArr);
-      console.log(data);
+
+      handleUpdateBudget(data);
+
+      modalBase.destroyModal();
     });
 };

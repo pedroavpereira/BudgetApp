@@ -89,15 +89,11 @@ const newTransactionCreated = (tempTransaction) => {
 
 const budgetSubmited = (obj) => {
   Model.newBudget(obj);
-};
-
-const transferCreated = (obj) => {
-  const transferObj = Model.createTransfer(obj);
-  View.renderTransaction(transferObj);
+  alertView.displayAlert("Budget updated Succesfully", "success");
 };
 
 const updateBudgetClicked = () => {
-  budgetModalView.renderUpdateModal(Model.state);
+  budgetModalView.renderUpdateModal(Model.state, budgetSubmited);
 };
 
 const transactionClicked = (id) => {
@@ -143,14 +139,6 @@ const creatingDateObj = (yearSelected = new Date().getFullYear()) => {
   dateObj.current.year = new Date().getFullYear();
   dateObj.current.month = new Date().getMonth();
   return dateObj;
-};
-
-const savingsModalEvent = (data) => {
-  if (data.type === "withdrawl") {
-    savingsWithdrawn(data);
-  } else if (data.type === "account") {
-    savingsAccountUpdated(data);
-  }
 };
 
 const savingsAccountUpdated = (accObj) => {
