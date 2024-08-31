@@ -1,19 +1,18 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+jobs:
+- job: TriggerAnotherPipeline
+  steps:
+    - bash: |
+        echo "Triggering another pipeline..."
+        curl -u :$(System.AccessToken) -X POST \
+        -H "Content-Type: application/json" \
+        --data '{"resources": {"repositories": {"self": {"refName": "refs/heads/main"}}}}' \
+        https://dev.azure.com/PedroPereira0371/BookNest/_apis/pipelines/21/runs?api-version=6.0-preview.1
+      env:
+        System.AccessToken: $(System.AccessToken)
+      displayName: 'Trigger another pipeline'
